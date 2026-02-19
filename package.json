@@ -1,0 +1,10 @@
+{
+  "name": "allen-site",
+  "version": "1.0.0",
+  "description": "Allen Yang 的个人技术博客",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "preview": "npx serve . -p 8080"
+  }
+}

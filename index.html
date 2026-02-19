@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Allen's Tech - AI 产品经理的技术博客</title>
+<meta name="description" content="杨柳（Allen Yang）的个人技术博客，专注 AI 产品、Agent 技术与前沿探索。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#ffffff;--bg-card:#f8f9fa;--text:#1a1a2e;--text-secondary:#6b7280;--border:#e5e7eb;--nav-bg:rgba(255,255,255,0.85);--primary:#1a1a2e;--accent-green:#22c55e;--accent-orange:#f97316;--shadow:0 1px 3px rgba(0,0,0,0.08);--shadow-hover:0 8px 25px rgba(0,0,0,0.12);--radius:12px}
+[data-theme="dark"]{--bg:#0f0f1a;--bg-card:#1a1a2e;--text:#e5e7eb;--text-secondary:#9ca3af;--border:#2d2d44;--nav-bg:rgba(15,15,26,0.9);--shadow:0 1px 3px rgba(0,0,0,0.3);--shadow-hover:0 8px 25px rgba(0,0,0,0.4)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:background .3s,border .3s}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;letter-spacing:-0.5px}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:border-color .2s,background .2s;color:var(--text)}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+
+/* Hero */
+.hero{max-width:1100px;margin:0 auto;padding:120px 24px 60px;text-align:center}
+.hero h1{font-size:2.4rem;font-weight:700;letter-spacing:-1px;margin-bottom:12px}
+.hero h1 span{background:linear-gradient(135deg,var(--accent-green),var(--accent-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.1rem;color:var(--text-secondary);max-width:520px;margin:0 auto}
+
+/* Cards */
+.cards{max-width:1100px;margin:0 auto;padding:20px 24px 80px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:28px 24px;text-decoration:none;color:var(--text);transition:transform .2s,box-shadow .2s,border-color .2s;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--accent-green)}
+.card-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.card-icon.green{background:rgba(34,197,94,0.12)}
+.card-icon.orange{background:rgba(249,115,22,0.12)}
+.card-icon.blue{background:rgba(59,130,246,0.12)}
+.card-icon.purple{background:rgba(139,92,246,0.12)}
+.card h3{font-size:1.1rem;font-weight:600}
+.card p{font-size:.88rem;color:var(--text-secondary);line-height:1.5}
+.card .badge{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(249,115,22,0.12);color:var(--accent-orange);width:fit-content}
+.card .arrow{margin-top:auto;font-size:.85rem;color:var(--accent-green);font-weight:500}
+
+/* Coming Soon Modal */
+#coming-soon{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);align-items:center;justify-content:center}
+#coming-soon.show{display:flex}
+.modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:40px;text-align:center;max-width:380px;width:90%}
+.modal h3{margin-bottom:8px;font-size:1.2rem}
+.modal p{color:var(--text-secondary);font-size:.9rem;margin-bottom:20px}
+.modal button{background:var(--primary);color:#fff;border:none;padding:8px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:500}
+[data-theme="dark"] .modal button{background:var(--accent-green);color:#0f0f1a}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;color:var(--text-secondary);font-size:.82rem;transition:border-color .3s}
+footer a{color:var(--text-secondary);text-decoration:none;margin:0 8px}
+footer a:hover{color:var(--text)}
+
+/* Mobile */
+@media(max-width:640px){
+  .hero h1{font-size:1.7rem}
+  .hero p{font-size:.95rem}
+  .nav-links{gap:14px}
+  .nav-links a{font-size:.82rem}
+  .cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen's Tech</a>
+    <div class="nav-links">
+      <a href="/" class="active">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="#" onclick="showModal(event)">博客</a>
+      <a href="#" onclick="showModal(event)">关于</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Hi，我是 <span>Allen Yang</span></h1>
+  <p>AI 产品经理 · 技术博客 · 探索 AI 的边界</p>
+</section>
+
+<section class="cards">
+  <a href="/guide/" class="card">
+    <div class="card-icon green">🤖</div>
+    <h3>AI Agent 终极指南</h3>
+    <p>从大模型到 Agent，深入浅出讲透 AI 应用的核心概念与实践。</p>
+    <span class="arrow">阅读指南 →</span>
+  </a>
+  <a href="#" onclick="showModal(event)" class="card">
+    <div class="card-icon orange">✍️</div>
+    <h3>技术博客</h3>
+    <span class="badge">Coming Soon</span>
+    <p>AI、产品思维、技术架构，记录我的思考与实践。</p>
+  </a>
+  <a href="#" onclick="showModal(event)" class="card">
+    <div class="card-icon blue">🛠️</div>
+    <h3>工具推荐</h3>
+    <span class="badge">Coming Soon</span>
+    <p>精选好用的 AI 工具和效率工具，提升你的工作流。</p>
+  </a>
+  <a href="#" onclick="showModal(event)" class="card">
+    <div class="card-icon purple">👤</div>
+    <h3>关于我</h3>
+    <span class="badge">Coming Soon</span>
+    <p>一个在 AI 浪潮中冲浪的产品经理。</p>
+  </a>
+</section>
+
+<div id="coming-soon">
+  <div class="modal">
+    <h3>🚧 正在建设中</h3>
+    <p>这个板块即将上线，敬请期待！</p>
+    <button onclick="hideModal()">知道了</button>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 Allen Yang · 杨柳</p>
+  <p style="margin-top:8px">
+    <a href="https://github.com/Allenyang007" target="_blank">GitHub</a>
+    <a href="mailto:allen@allen00.top">联系我</a>
+  </p>
+</footer>
+
+<script>
+function toggleTheme(){
+  const d=document.documentElement;
+  const next=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.querySelector('.theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  const saved=localStorage.getItem('theme')||
+    (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.theme-btn').textContent='☀️';
+  }
+})();
+function showModal(e){e.preventDefault();document.getElementById('coming-soon').classList.add('show')}
+function hideModal(){document.getElementById('coming-soon').classList.remove('show')}
+document.getElementById('coming-soon').addEventListener('click',function(e){if(e.target===this)hideModal()});
+</script>
+
+</body>
+</html>
