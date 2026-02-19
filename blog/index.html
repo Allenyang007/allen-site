@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>博客 - Allen's Tech</title>
+<meta name="description" content="Allen 的技术博客，AI、Agent、产品思维与技术架构。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fff;--bg-card:#f8f9fa;--text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;--border:#e5e7eb;--nav-bg:rgba(255,255,255,.85);--primary:#1a1a2e;--accent-green:#22c55e;--accent-orange:#f97316;--shadow:0 1px 3px rgba(0,0,0,.08);--shadow-hover:0 8px 25px rgba(0,0,0,.12);--radius:12px}
+[data-theme="dark"]{--bg:#0f0f1a;--bg-card:#1a1a2e;--text:#e5e7eb;--text-secondary:#9ca3af;--text-muted:#6b7280;--border:#2d2d44;--nav-bg:rgba(15,15,26,.9);--shadow:0 1px 3px rgba(0,0,0,.3);--shadow-hover:0 8px 25px rgba(0,0,0,.4)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;letter-spacing:-.5px}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text)}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+.hero{max-width:1100px;margin:0 auto;padding:120px 24px 40px;text-align:center}
+.hero h1{font-size:2.2rem;font-weight:700;letter-spacing:-1px;margin-bottom:12px}
+.hero h1 span{background:linear-gradient(135deg,var(--accent-green),var(--accent-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.05rem;color:var(--text-secondary);max-width:480px;margin:0 auto}
+.posts{max-width:800px;margin:0 auto;padding:20px 24px 80px}
+.post-card{display:block;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;margin-bottom:20px;text-decoration:none;color:var(--text);transition:transform .2s,box-shadow .2s,border-color .2s}
+.post-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover);border-color:var(--accent-green)}
+.post-meta{display:flex;align-items:center;gap:12px;font-size:.82rem;color:var(--text-muted);margin-bottom:12px;flex-wrap:wrap}
+.post-tag{font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(34,197,94,.1);color:var(--accent-green)}
+.post-card h2{font-size:1.3rem;font-weight:700;margin-bottom:8px;letter-spacing:-.3px}
+.post-card p{font-size:.92rem;color:var(--text-secondary);line-height:1.6}
+.post-card .arrow{display:block;margin-top:16px;font-size:.88rem;color:var(--accent-green);font-weight:500}
+footer{border-top:1px solid var(--border);padding:32px 24px;text-align:center;color:var(--text-secondary);font-size:.82rem}
+footer a{color:var(--text-secondary);text-decoration:none;margin:0 8px}
+footer a:hover{color:var(--text)}
+@media(max-width:640px){.hero h1{font-size:1.6rem}.hero p{font-size:.95rem}.nav-links{gap:14px}.nav-links a{font-size:.82rem}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen's Tech</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="/blog/" class="active">博客</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>技术<span>博客</span></h1>
+  <p>AI、产品思维、技术架构——记录我的思考与实践</p>
+</section>
+
+<section class="posts">
+  <a href="/blog/ai-agent-complete-guide/" class="post-card">
+    <div class="post-meta">
+      <span>2025-02-19</span>
+      <span>约 10000 字</span>
+      <span>阅读约 25 分钟</span>
+      <span class="post-tag">AI</span>
+      <span class="post-tag">Agent</span>
+      <span class="post-tag">MCP</span>
+    </div>
+    <h2>从大模型到 Agent：AI 应用的完整技术栈</h2>
+    <p>写给所有人的 AI 技术栈全景指南——从能聊天到能干活，从单兵到团队。深入浅出讲透大模型、RAG、Agent、MCP、Skills 的完整技术链路。</p>
+    <span class="arrow">阅读全文 →</span>
+  </a>
+</section>
+
+<footer>
+  <p>&copy; 2025 Allen</p>
+  <p style="margin-top:8px">
+    <a href="https://github.com/Allenyang007" target="_blank">GitHub</a>
+    <a href="mailto:allen@allen00.top">联系我</a>
+  </p>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement,n=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',n);localStorage.setItem('theme',n);
+  document.querySelector('.theme-btn').textContent=n==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';
+}
+(function(){
+  var s=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.querySelector('.theme-btn').textContent='\u2600\uFE0F';}
+})();
+</script>
+</body>
+</html>
