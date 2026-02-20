@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>Allen's Tech - AI 产品经理的技术博客</title>
 <meta name="description" content="Allen 的个人技术博客，专注 AI 产品、Agent 技术与前沿探索。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,13 +42,14 @@
                   radial-gradient(ellipse 40% 30% at 10% 60%, rgba(59,130,246,0.04), transparent 50%)
 }
 
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 
 body{
   font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
   background:var(--bg);color:var(--text);line-height:1.6;
   transition:background .3s,color .3s;
   min-height:100vh;
+  overflow-x:hidden;
 }
 
 /* Dark mode grid background */
@@ -109,24 +112,25 @@ nav{
 
 /* Mobile menu */
 .mobile-menu{
-  display:none;position:fixed;top:64px;left:0;right:0;
-  background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);padding:16px 24px;
-  flex-direction:column;gap:4px;
-  transform:translateY(-10px);opacity:0;transition:all .3s ease
+  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:var(--bg);
+  padding:16px 24px 40px;
+  flex-direction:column;gap:4px;overflow-y:auto;
+  z-index:1000
 }
-.mobile-menu.show{transform:translateY(0);opacity:1}
+.mobile-menu.show{display:flex !important}
 .mobile-menu a{
-  display:block;text-decoration:none;color:var(--text-secondary);font-size:1rem;
-  font-weight:500;padding:12px 16px;border-radius:10px;transition:all .2s;
-  min-height:44px;display:flex;align-items:center
+  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
+  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
+  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
 }
+.mobile-menu a:last-child{border-bottom:none}
 .mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
 
 /* ─── Hero ─── */
 .hero{
   max-width:1100px;margin:0 auto;padding:140px 24px 60px;text-align:center;
-  position:relative;
+  position:relative;overflow:hidden;
   background:var(--hero-gradient);
 }
 .hero::before{
@@ -206,19 +210,20 @@ nav{
   font-size:5rem;opacity:0.04;pointer-events:none;transition:opacity .3s
 }
 .card:hover{
-  transform:translateY(-6px);box-shadow:var(--shadow-hover);
-  border-color:transparent;background:var(--bg-card-hover)
+  transform:translateY(-4px);box-shadow:var(--shadow-hover);
+  border-color:var(--accent-green);background:var(--bg-card-hover)
 }
 .card:hover::before{opacity:0.07}
-/* Glow border on hover */
-.card::after{
-  content:'';position:absolute;inset:-1px;border-radius:var(--radius);
-  background:linear-gradient(135deg,var(--accent-green),var(--accent-orange),var(--accent-blue));
-  z-index:-1;opacity:0;transition:opacity .3s
+/* Disable card glow on mobile touch */
+@media(hover:hover){
+  .card::after{
+    content:'';position:absolute;inset:-1px;border-radius:var(--radius);
+    background:linear-gradient(135deg,var(--accent-green),var(--accent-orange),var(--accent-blue));
+    z-index:-1;opacity:0;transition:opacity .3s
+  }
+  .card:hover::after{opacity:0.6}
+  .card:hover{border-color:transparent}
 }
-.card:hover::after{opacity:1}
-/* Fix border overlap with glow */
-.card:hover{border-color:transparent}
 
 .card-icon{
   width:48px;height:48px;border-radius:12px;display:flex;align-items:center;
@@ -314,16 +319,15 @@ footer{
 @media(max-width:768px){
   .nav-links{display:none}
   .hamburger{display:flex}
-  .mobile-menu{display:flex}
 
-  .hero{padding:110px 20px 48px}
+  .hero{padding:110px 24px 48px}
   .hero h1{font-size:2rem}
   .hero-subtitle{font-size:1.05rem}
-  .hero-intro{font-size:.88rem}
+  .hero-intro{font-size:.88rem;padding:0 8px}
   .hero-btn{font-size:.85rem;padding:10px 18px}
 
-  .cards{grid-template-columns:1fr;gap:14px;padding:0 20px 80px}
-  .section-header{padding:0 20px 14px}
+  .cards{grid-template-columns:1fr;gap:14px;padding:0 24px 80px}
+  .section-header{padding:0 24px 14px}
   .section-header h2{font-size:1.2rem}
 
   .card{padding:24px 20px}
@@ -334,14 +338,14 @@ footer{
 
 /* Small phone: <480px */
 @media(max-width:480px){
-  .hero{padding:100px 16px 36px}
+  .hero{padding:100px 20px 36px}
   .hero h1{font-size:1.7rem;letter-spacing:-1px}
   .hero-subtitle{font-size:.95rem}
   .hero-intro{font-size:.84rem;margin-bottom:24px}
   .hero-buttons{flex-direction:column;align-items:center}
   .hero-btn{width:100%;max-width:280px;justify-content:center}
 
-  .cards{padding:0 16px 60px;gap:12px}
+  .cards{padding:0 20px 60px;gap:12px}
   .section-header{padding:0 16px 12px}
 
   .card{padding:20px 16px;border-radius:12px}
@@ -368,26 +372,19 @@ footer{
       <span></span><span></span><span></span>
     </button>
   </div>
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="/" class="active">首页</a>
-    <a href="/guide/">AI 指南</a>
-    <a href="/blog/">博客</a>
-    <a href="#" onclick="showModal(event)">关于</a>
-    <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
-  </div>
 </nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/" class="active">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/">博客</a>
+  <a href="#" onclick="showModal(event)">关于</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
 
 <section class="hero">
   <h1>Hi，我是 <span>Allen</span></h1>
   <p class="hero-subtitle">AI 产品经理 · 技术博客 · 探索 AI 的边界</p>
   <p class="hero-intro">热爱技术、热爱产品，专注于 AI Agent 和大模型应用。用简单的语言讲复杂的技术，让每个人都能理解 AI 的力量。</p>
-  <div class="hero-buttons">
-    <a href="mailto:19512249774@gmail.com" class="hero-btn primary">📧 联系我</a>
-    <a href="https://github.com/Allenyang007" target="_blank" class="hero-btn secondary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-      GitHub
-    </a>
-  </div>
 </section>
 
 <div class="section-header fade-in">
