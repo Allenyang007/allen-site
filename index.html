@@ -126,6 +126,13 @@ nav{
 }
 .mobile-menu a:last-child{border-bottom:none}
 .mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+/* 未上线菜单项置灰 */
+.nav-links a.disabled,.mobile-menu a.disabled{
+  opacity:0.4;cursor:default;pointer-events:auto
+}
+.nav-links a.disabled:hover,.mobile-menu a.disabled:hover{
+  background:transparent;color:var(--text-secondary);opacity:0.4
+}
 
 /* ─── Hero ─── */
 .hero{
@@ -365,7 +372,8 @@ footer{
       <a href="/" class="active">首页</a>
       <a href="/guide/">AI 指南</a>
       <a href="/blog/">博客</a>
-      <a href="#" onclick="showModal(event)">关于</a>
+      <a href="javascript:void(0)" class="disabled" onclick="showModal(event)">工具</a>
+      <a href="javascript:void(0)" class="disabled" onclick="showModal(event)">关于</a>
       <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
     </div>
     <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
@@ -377,7 +385,8 @@ footer{
   <a href="/" class="active">首页</a>
   <a href="/guide/">AI 指南</a>
   <a href="/blog/">博客</a>
-  <a href="#" onclick="showModal(event);toggleMenu()">关于</a>
+  <a href="javascript:void(0)" class="disabled" onclick="showModal(event);toggleMenu()">工具 · 即将上线</a>
+  <a href="javascript:void(0)" class="disabled" onclick="showModal(event);toggleMenu()">关于 · 即将上线</a>
   <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
 </div>
 
