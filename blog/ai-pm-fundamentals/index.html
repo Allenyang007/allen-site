@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工具越强，基本功越值钱 - Allen's Tech</title>
+<meta name="description" content="AI 不会淘汰产品经理，但会淘汰没有基本功的产品经理。一个应用型 AI PM 的春节思考。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fff;--bg-card:#f8f9fa;--text:#1a1a2e;--ts:#6b7280;--tm:#9ca3af;--bd:#e5e7eb;--bl:#f0f0f0;--nav-bg:rgba(255,255,255,.85);--primary:#1a1a2e;--green:#22c55e;--orange:#f97316;--blue:#3b82f6;--code-bg:#1e1e2e;--code-text:#cdd6f4}
+[data-theme="dark"]{--bg:#0f0f1a;--bg-card:#1a1a2e;--text:#e5e7eb;--ts:#9ca3af;--tm:#6b7280;--bd:#2d2d44;--bl:#232340;--nav-bg:rgba(15,15,26,.9)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.ni{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nl{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;letter-spacing:-.5px}
+[data-theme="dark"] .nl{color:var(--green)}
+.nk{display:flex;align-items:center;gap:24px}
+.nk a{text-decoration:none;color:var(--ts);font-size:.9rem;font-weight:500;transition:color .2s}
+.nk a:hover,.nk a.active{color:var(--text)}
+.tb{background:none;border:1px solid var(--bd);border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text)}
+.tb:hover{border-color:var(--ts);background:var(--bg-card)}
+.lay{max-width:1200px;margin:0 auto;padding:80px 24px 60px;display:grid;grid-template-columns:220px 1fr;gap:48px}
+@media(max-width:960px){.lay{grid-template-columns:1fr;gap:0;padding-top:72px}}
+.toc{position:sticky;top:80px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:16px}
+.toc h4{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}.toc li{margin-bottom:2px}
+.toc a{display:block;padding:4px 12px;font-size:.82rem;color:var(--ts);text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5}
+.toc a:hover{color:var(--text);border-left-color:var(--bd)}
+.toc a.active{color:var(--green);border-left-color:var(--green);font-weight:500}
+.toc .t2{padding-left:24px;font-size:.78rem}
+@media(max-width:960px){.toc{display:none}}
+.art{max-width:740px}
+.meta{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--bd)}
+.meta .bc{font-size:.82rem;color:var(--tm);margin-bottom:16px}
+.meta .bc a{color:var(--ts);text-decoration:none}.meta .bc a:hover{color:var(--green)}
+.meta h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.meta .sub{font-size:1.05rem;color:var(--ts);margin-bottom:16px}
+.meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--tm);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(34,197,94,.1);color:var(--green)}
+.ct h2{font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--bl);letter-spacing:-.3px}
+.ct h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.ct h3{font-size:1.15rem;font-weight:600;margin:32px 0 12px}
+.ct p{margin-bottom:16px;line-height:1.9}
+.ct a{color:var(--green);text-decoration:none;font-weight:500}.ct a:hover{text-decoration:underline}
+.ct ul,.ct ol{margin:0 0 16px 20px}.ct li{margin-bottom:6px;line-height:1.8}
+.ct blockquote{margin:20px 0;padding:16px 20px;border-left:3px solid var(--green);background:var(--bg-card);border-radius:0 8px 8px 0;font-size:.95rem}
+.ct blockquote p{margin-bottom:0;color:var(--ts)}
+.ct hr{border:none;border-top:1px solid var(--bd);margin:40px 0}
+.ct strong{font-weight:600}
+.co{margin:24px 0;padding:20px 24px;border-radius:10px;border:1px solid;font-size:.92rem;line-height:1.8}
+.co-i{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
+.co-t{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2)}
+.co-w{background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.2)}
+.co b{display:block;margin-bottom:4px}.co p{margin-bottom:0}
+footer{border-top:1px solid var(--bd);padding:32px 24px;text-align:center;color:var(--ts);font-size:.82rem}
+footer a{color:var(--ts);text-decoration:none;margin:0 8px}footer a:hover{color:var(--text)}
+@media(max-width:640px){.meta h1{font-size:1.5rem}.ct h2{font-size:1.25rem}.nk{gap:14px}.nk a{font-size:.82rem}}
+</style>
+</head>
+<body>
+
+<nav><div class="ni">
+  <a href="/" class="nl">Allen's Tech</a>
+  <div class="nk">
+    <a href="/">首页</a>
+    <a href="/guide/">AI 指南</a>
+    <a href="/blog/" class="active">博客</a>
+    <button class="tb" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+  </div>
+</div></nav>
+
+<div class="lay">
+
+<aside class="toc" id="toc">
+  <h4>目录</h4>
+  <ul>
+    <li><a href="#origin">起因</a></li>
+    <li><a href="#illusion">一种危险的错觉</a></li>
+    <li><a href="#fundamentals">拆开"基本功"</a></li>
+    <li><a href="#case" class="t2">聊一个真实的事</a></li>
+    <li><a href="#four-steps" class="t2">四步走</a></li>
+    <li><a href="#domain">你最该花时间的地方</a></li>
+    <li><a href="#openclaw" class="t2">我自己的一个例子</a></li>
+    <li><a href="#amplifier">放大器</a></li>
+    <li><a href="#end">最后</a></li>
+  </ul>
+</aside>
+
+<article class="art">
+
+<div class="meta">
+  <div class="bc"><a href="/">首页</a> / <a href="/blog/">博客</a> / 产品思考</div>
+  <h1>工具越强，基本功越值钱</h1>
+  <div class="sub">AI 不会淘汰产品经理，但会淘汰没有基本功的产品经理</div>
+  <div class="info">
+    <span>Allen</span>
+    <span>2026年2月22日</span>
+    <span>10 分钟阅读</span>
+    <span class="tag">产品思考</span>
+  </div>
+</div>
+
+<div class="ct">
+
+<h2 id="origin">起因</h2>
+
+<p>春节在家，一个做产品的朋友给我发消息。他在做一个文旅策划的 AI 工作台，被业务的复杂度搞得焦头烂额——多角色协作、多环节审批、创意生成和流程管理搅在一起，不知道从哪下手。</p>
+
+<p>我之前做过一个类似的东西——自动化 Meta 分析论文写作工作台，踩过不少坑。我俩聊了大概一个小时，我帮他把思路理了理。</p>
+
+<p>挂了电话我回想了一下，发现一件有意思的事：整个过程中我没用到任何"AI技巧"。我用的全是最老套的那些东西——理需求、拆流程、想链路、画方案。但就是这些老套的东西，把他的结解开了。</p>
+
+<p>这让我认真想了一个问题，想了好几天：在 AI 这么强的今天，一个产品经理最值钱的能力到底是什么？</p>
+
+<h2 id="illusion">一种危险的错觉</h2>
+
+<p>这两年我身边不少产品经理在焦虑自己"不够懂 AI"。学 Prompt Engineering，学模型架构，学 Agent 框架。学了一圈回来，概念倒是记了不少，但坐到工位上还是不知道该拿它怎么办。</p>
+
+<p>我在 Medium 上读到一个特别生动的事：某公司的产品经理在会上提方案，要用最新的大模型做用户分群。想法挺前沿。但他们的客户数据库18个月没清洗过了，一半邮箱是坏的，重复记录满天飞。</p>
+
+<p>地基是烂的，讨论楼盖多高没什么意义。</p>
+
+<p>这事我自己也干过——刚开始做 AI 产品那阵，满脑子想着怎么用上最新的模型，怎么设计最酷的 Agent 架构。后来发现，产品上线后用户不买账的原因跟 AI 没关系，是我对业务流程的理解不够细，有几个关键环节的痛点我根本没摸到。</p>
+
+<p>技术进步制造了一种错觉：好像用上 AI 产品就会变好。但"用不用 AI"从来不是真正的问题。真正的问题是：你到底在解决什么？为谁解决？问题出在哪？</p>
+
+<p>这些问题的答案不在任何模型里。它在你对业务的理解、对用户的感知、对场景的拆解里。换句话说——在你的基本功里。</p>
+
+<h2 id="fundamentals">拆开"基本功"</h2>
+
+<p>我试着把"基本功"这个词拆具体一点，不然它太空了。</p>
+
+<p>对做 AI 产品的人来说，我觉得有四层。</p>
+
+<p><strong>第一层，把问题挖透。</strong>用户说"我要一个搜索功能"。你如果直接开始画原型，大概率会做错。得追着问：什么时候会搜？搜不到怎么办？现在怎么凑合的？凑合的方案差在哪？一直问到碰到真正的痛点。我经历过好几次——产品做出来没人用，回头一看，不是技术的锅，是问题本身没挖对。</p>
+
+<p><strong>第二层，把业务理清。</strong>复杂的业务看着是一团麻，其实有结构。你能不能找到那个结构，决定了你的产品是清晰的还是混乱的。哪些是主线，哪些是分支，哪些得人来做，哪些能交给机器。这些判断靠的不是聪明，是你在真实场景里泡了多久。</p>
+
+<p><strong>第三层，把技术链路想明白。</strong>我不是说你得会写代码。但你得知道每一步用什么技术手段，数据从哪来到哪去，系统之间怎么配合。我以前学建筑设计，有个概念叫"看得懂施工图"——你不一定要自己砌墙，但你画的图纸得能指导别人把房子盖起来。做 AI 产品也是同一个道理。</p>
+
+<p><strong>第四层，把方案做实。</strong>从一个模糊的需求到一个能跑的 MVP，中间全是决策。信息怎么组织、流程怎么走、出错了怎么办、哪些先做哪些砍掉——每一个小决策背后都是判断力。这些东西没有公式，只能靠做得多、想得细。</p>
+
+<p>说实话，这四条没什么新鲜的。但我反复观察下来，做得好的 AI 产品和做得差的，差距几乎都在这些地方。不在模型选得多先进，不在 Prompt 写得多巧妙。</p>
+
+<h3 id="case">聊一个真实的事</h3>
+
+<p>回到开头那个朋友。他的文旅 AI 工作台，卡在哪呢？不是 AI 选型的问题。是整个产品的骨架还没搭起来，就急着往上面贴功能了。</p>
+
+<p>我跟他说了我做 Meta 分析写作工作台时候总结的一套拆法。</p>
+
+<h3 id="four-steps">四步走</h3>
+
+<p><strong>第一步，铺全景。</strong>拿脑图把所有业务需求和功能点先铺出来。不用完美，先完整。我见过太多人跳过这一步直接画原型——你连全貌都没看见，画出来的东西一定缺胳膊少腿。</p>
+
+<p>拿我朋友的文旅策划工作台来说，他一上来就想"怎么让 AI 生成策划方案"。我问他：策划方案包含什么？他说有行程设计、酒店推荐、费用估算、文案撰写……越说越多。我说你看，光"策划方案"这四个字背后就藏了七八个子需求，你不铺开来看，怎么知道先做哪个？</p>
+
+<p><strong>第二步，拆流程。</strong>你既然要让 AI 和程序来干活，说明这事底下一定有 SOP。你的活就是把这个 SOP 翻出来：大流程几步？每步拆成什么子任务？子任务之间谁先谁后？哪些能并行？</p>
+
+<p>怎么拆？我的办法是去找真正在干这个活的人聊。问他从接到需求到交付成果，中间实际走了哪些步骤。你会发现真实的 SOP 和你想象的很不一样——有些你以为很重要的环节其实可以跳过，有些你根本没注意到的环节反而是最耗时的卡点。我做 Meta 分析写作工作台的时候就犯过这个错，我以为文献检索是最难的部分，实际跟医学编辑聊了之后才知道，数据提取和质量评估才是他们最头疼的，每篇论文要反复核对好几遍。如果我没去聊，我做出来的产品一定把力气用错了地方。</p>
+
+<p><strong>第三步，接技术。</strong>有了流程，给每一步配技术方案。这一步我觉得是 AI PM 最需要花心思的地方。</p>
+
+<p>我的习惯是画一张表：左边是流程节点，右边三列——"输入是什么"、"输出是什么"、"中间用什么技术实现"。大多数 AI 应用拆到底就这三样东西。听起来简单，但每一个展开都是硬骨头。</p>
+
+<p>比如"AI 生成策划文案"这个节点，输入是什么？不只是"用户的需求"这么笼统——是目的地信息、客户偏好、预算范围、历史方案参考。这些数据从哪来？有的在系统里，有的要用户手动填，有的可能要调外部 API。输出呢？一段文字还是结构化的数据？格式直接决定了下游环节能不能自动衔接。中间过程呢？通用大模型直出，还是先检索知识库再生成？要不要人审一遍再往下走？</p>
+
+<p>每个节点都这样过一遍，技术链路自然就出来了。你也能清楚地判断：哪些地方 AI 能搞定，哪些还得靠人，哪些需要人机配合——这就是人机协作的边界，也是产品设计的核心。</p>
+
+<p><strong>第四步，落产品。</strong>把前面两步的成果变成用户能看懂、能操作的界面。这步说起来一句话，做起来最磨人。</p>
+
+<p>我的经验是先别想"好看"，先想"能走通"。把核心流程的几个页面串起来，让用户从头到尾跑一遍完整任务。然后拿着原型找两三个真实用户走查——很多你自己觉得没问题的地方，用户一上手就卡壳。再回到第一步的需求全景校验：漏了什么？逻辑对不对？反复改，直到能跑起来。</p>
+
+<p>这四步里面，"AI"只出现在第三步的某些节点。做好一个 AI 产品的关键，往往不在 AI 那部分。</p>
+
+<h2 id="domain">你最该花时间的地方</h2>
+
+<p>除了方法，还有一个东西我越来越觉得被低估了：行业知识。</p>
+
+<p>我是学建筑设计出身的，后来转做产品，现在做医药行业 B 端的数字化营销。刚进这行的时候，"MLR审核"是什么我都不知道（就是药企所有营销内容上线前必须过的医学、法律、合规三道关）。带量采购怎么改变了整个药企的营销打法，医药代表和 MSL 到底有什么区别——这些我全不懂。</p>
+
+<p>你可以问 ChatGPT，它会给你一个看起来挺像回事的答案。但它没法告诉你：你的客户在采购数字化工具时脑子里到底在想什么。它没法告诉你合规部那帮人有一票否决权意味着你的产品设计必须做哪些妥协。它更没法告诉你一线做品牌的人每天真正堵心的事是什么。</p>
+
+<p>这些只能从现场泡出来。没有快捷方式。</p>
+
+<p>有行业知识的人用 AI，知道该问什么问题、怎么判断结果靠不靠谱。没有行业知识的人用 AI，就是在跟一个很会说话的外行聊天——聊得很开心，但什么问题也没解决。</p>
+
+<h3 id="openclaw">我自己的一个例子</h3>
+
+<p>说个最近的事。春节这几天我在折腾 OpenClaw——一个开源的 AI Agent 框架，让 AI 跑在自己的服务器上，能帮你干各种活。</p>
+
+<p>我拿它搭了一套自动化的知识库系统：每周定时去搜医药行业的最新动态，自动读文章、提炼洞察、写入 Notion 数据库，然后把最有价值的几条推给我。听起来挺酷的，对吧？</p>
+
+<p>但搭这个东西的过程让我体会很深。最难的部分不是配 AI——那其实就是写几行 prompt、接几个 API 的事。最难的是：我得想清楚"搜什么"。什么样的信息对我做产品有用？药企的内部决策链长什么样？合规审核在哪个环节会卡住？竞品的产品逻辑是什么？</p>
+
+<p>这些搜索方向不是 AI 帮我定的，是我一条一条根据自己对业务的理解列出来的。如果我对医药行业一无所知，就算给我全世界最好的 AI 工具，搭出来的也只是一个自动收集垃圾的系统。</p>
+
+<p>工具只是手，脑子得是你自己的。</p>
+
+<h2 id="amplifier">放大器</h2>
+
+<p>程序员和产品经理的界限在变模糊，产品经理能用 Cursor 搭原型，程序员能用 Claude 写 PRD。好像谁都能干谁的活了。</p>
+
+<p>但我的体会是：工具是放大器。它放大你已经有的东西。</p>
+
+<p>你对业务理解得深，AI 帮你把效率提10倍。你对业务理解得浅，AI 帮你以10倍速度跑向错误方向——而且生成的东西看起来特别有道理，你可能都意识不到自己错了。</p>
+
+<p>这跟摄影是一回事。手机拍照越来越好，但你看好的摄影师和普通人拍的，还是两个世界。构图、光线、故事感，这些东西不会因为相机进步就不重要。反而相机越好，这些差距越明显。</p>
+
+<p>AI 也是。它放大你的长处，也放大你的短板。</p>
+
+<h2 id="end">最后</h2>
+
+<p>写这篇不是要否定 AI。我自己每天都在用，也确实因为它效率高了不少。</p>
+
+<p>但做了两年多 AI 产品之后，我越来越觉得一件事——大家花在追新工具、新模型上的时间太多了，花在打磨基本功上的时间太少了。什么 Agent 框架又更新了、什么模型又刷榜了，这些我也看，但我更在意的是：我对我所在的行业，理解又深了多少？我拆业务的能力，有没有比上个月强？</p>
+
+<p>多想一步。多挖一层。把事情再做细一点。</p>
+
+<p>听起来像废话，但它是复利。</p>
+
+</div>
+
+</article>
+</div>
+
+<footer>
+  <p>&copy; 2026 Allen</p>
+  <p style="margin-top:8px">
+    <a href="https://github.com/Allenyang007" target="_blank">GitHub</a>
+    <a href="mailto:allen@allen00.top">联系我</a>
+  </p>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement,n=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',n);localStorage.setItem('theme',n);
+  document.querySelector('.tb').textContent=n==='dark'?'☀️':'🌙';
+}
+(function(){
+  var s=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.querySelector('.tb').textContent='☀️';}
+})();
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href').slice(1);
+  var el=document.getElementById(id);
+  if(el)headings.push({el:el,a:a});
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+100;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>
