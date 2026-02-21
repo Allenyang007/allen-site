@@ -22,6 +22,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);bac
 .nk a:hover,.nk a.active{color:var(--text)}
 .tb{background:none;border:1px solid var(--bd);border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text)}
 .tb:hover{border-color:var(--ts);background:var(--bg-card)}
+.hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:6px}
+.hamburger span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--bd);z-index:99}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{padding:14px 24px;text-decoration:none;color:var(--ts);font-size:.9rem;border-bottom:1px solid var(--bd)}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+@media(max-width:640px){.nk{display:none}.hamburger{display:flex}}
 .lay{max-width:1200px;margin:0 auto;padding:80px 24px 60px;display:grid;grid-template-columns:220px 1fr;gap:48px}
 @media(max-width:960px){.lay{grid-template-columns:1fr;gap:0;padding-top:72px}}
 .toc{position:sticky;top:80px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:16px}
@@ -69,8 +79,18 @@ footer a{color:var(--ts);text-decoration:none;margin:0 8px}footer a:hover{color:
     <a href="/guide/">AI 指南</a>
     <a href="/blog/" class="active">博客</a>
     <button class="tb" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-</div></nav>
+</div>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+</nav>
 
 <div class="lay">
 
@@ -244,6 +264,12 @@ function toggleTheme(){
   var s=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
   if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.querySelector('.tb').textContent='☀️';}
 })();
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
 var tocLinks=document.querySelectorAll('.toc a');
 var headings=[];
 tocLinks.forEach(function(a){
