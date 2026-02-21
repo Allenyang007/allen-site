@@ -105,17 +105,19 @@ nav{
 .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 
 .mobile-menu{
-  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  display:none;position:fixed;top:64px;left:0;right:0;
   background:var(--bg);
-  padding:16px 24px 40px;
-  flex-direction:column;gap:4px;overflow-y:auto;
-  z-index:1000
+  padding:8px 24px 16px;
+  flex-direction:column;gap:0;
+  z-index:9999;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 4px 12px rgba(0,0,0,0.1)
 }
 .mobile-menu.show{display:flex !important}
 .mobile-menu a{
-  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
-  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
-  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
+  display:block;text-decoration:none;color:var(--text-secondary);
+  font-size:1rem;font-weight:500;padding:14px 16px;
+  border-bottom:1px solid var(--border)
 }
 .mobile-menu a:last-child{border-bottom:none}
 .mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
@@ -310,13 +312,13 @@ footer{
       <span></span><span></span><span></span>
     </button>
   </div>
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="/">首页</a>
-    <a href="/guide/">AI 指南</a>
-    <a href="/blog/" class="active">博客</a>
-    <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
-  </div>
 </nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
 
 <section class="hero">
   <h1>Allen's<span> Blog</span></h1>
