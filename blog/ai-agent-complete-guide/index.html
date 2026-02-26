@@ -95,8 +95,7 @@ nav{
   font-size:1.1rem;transition:all .2s;color:var(--text)
 }
 .theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
-</style>
-<style>
+
 .hamburger{
   display:none;background:none;border:1px solid var(--border);border-radius:10px;
   width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
@@ -145,7 +144,7 @@ nav{
 .toc .t2{padding-left:24px;font-size:.76rem}
 
 /* ─── Article ─── */
-.article{max-width:800px;width:100%;min-width:0;overflow:hidden;overflow-wrap:break-word;word-wrap:break-word}
+.article{max-width:800px;width:100%;min-width:0;overflow:hidden;margin-left:auto;margin-right:auto;overflow-wrap:break-word;word-wrap:break-word}
 
 /* Meta header */
 .article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
@@ -208,7 +207,7 @@ nav{
 .callout b{display:block;margin-bottom:4px}
 .callout p{margin-bottom:0}
 
-/* Tables */
+/* Comparison table */
 .content table{
   width:100%;border-collapse:collapse;margin:20px 0;font-size:.88rem
 }
@@ -223,44 +222,57 @@ nav{
 .table-wrap table{margin:0;border-radius:0}
 .table-wrap th:first-child,.table-wrap td:first-child{position:sticky;left:0;background:var(--bg);z-index:1}
 
-/* Diagram boxes */
-.diagram{margin:24px 0;padding:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;line-height:2.2;overflow-x:auto}
-.diagram .bx{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:8px;background:var(--bg);margin:4px}
-.diagram .ar{color:var(--text-muted)}
+/* Series navigation */
+.series-nav{
+  margin:48px 0 0;padding:28px 24px;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--radius)
+}
+.series-nav h4{font-size:.88rem;font-weight:700;margin-bottom:16px;color:var(--text-secondary)}
+.series-nav ul{list-style:none;padding:0}
+.series-nav li{margin-bottom:8px}
+.series-nav a{
+  display:flex;align-items:center;gap:8px;text-decoration:none;
+  color:var(--text-secondary);font-size:.88rem;padding:8px 12px;
+  border-radius:8px;transition:all .2s
+}
+.series-nav a:hover{background:var(--bg-card-hover);color:var(--text)}
+.series-nav a.current{color:var(--accent-green);font-weight:600;background:rgba(34,197,94,.06)}
+.series-nav .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:6px;font-size:.72rem;font-weight:700;
+  background:var(--border);color:var(--text-secondary);flex-shrink:0
+}
+.series-nav a.current .num{background:rgba(34,197,94,.15);color:var(--accent-green)}
 
-/* Code block with header */
-.code-block{margin:20px 0;border-radius:12px;overflow:hidden;border:1px solid var(--code-border);background:var(--code-bg)}
-.code-header{display:flex;align-items:center;padding:8px 16px;background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.06);font-size:.78rem;color:#9ca3af}
-.code-header .dots{display:flex;gap:6px}
-.code-header .dots span{width:10px;height:10px;border-radius:50%}
-.code-header .dots .r{background:#ef4444}
-.code-header .dots .y{background:#eab308}
-.code-header .dots .g{background:#22c55e}
-.code-header .fn{margin-left:8px}
-.code-body{padding:16px 20px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.9;color:var(--code-text);white-space:pre}
-.code-body code{background:none;border:none;padding:0;font-size:inherit}
-
-/* Syntax highlight tokens */
+/* Old article custom styles */
+.cb{margin:20px 0;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--code-bg)}
+.chd{display:flex;align-items:center;padding:8px 16px;background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.06);font-size:.78rem;color:#9ca3af}
+.chd .dots{display:flex;gap:6px}.chd .dots span{width:10px;height:10px;border-radius:50%}
+.chd .dots .r{background:#ef4444}.chd .dots .y{background:#eab308}.chd .dots .g{background:#22c55e}
+.chd .fn{margin-left:8px}
+.cbd{padding:16px 20px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.9;color:var(--code-text);white-space:pre}
+.cbd code{background:none;border:none;padding:0;font-size:inherit}
 .kw{color:#cba6f7}.str{color:#a6e3a1}.cmt{color:#6c7086}.fn2{color:#89b4fa}.num{color:#fab387}
-
-/* Comparison table wrapper */
-.cpt{margin:24px 0;overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
+.co{margin:24px 0;padding:20px 24px;border-radius:10px;border:1px solid;font-size:.92rem;line-height:1.8}
+.co-i{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
+.co-t{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2)}
+.co-w{background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.2)}
+.co b{display:block;margin-bottom:4px}.co p{margin-bottom:0}
+.dg{margin:24px 0;padding:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;line-height:2.2;overflow-x:auto}
+.dg .bx{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:8px;background:var(--bg);margin:4px}
+.dg .ar{color:var(--text-muted)}
+.cpt{margin:24px 0;overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
 .cpt table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:600px}
 .cpt th{background:var(--bg-card);padding:12px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--border);font-size:.8rem;white-space:nowrap}
 .cpt td{padding:10px 14px;border-bottom:1px solid var(--border)}
-.cpt tr:last-child td{border-bottom:none}
-.cpt tr:hover td{background:var(--bg-card)}
-.cg{color:#22c55e;font-weight:600}
-.cr2{color:#ef4444;font-weight:600}
-
-/* References */
+.cpt tr:last-child td{border-bottom:none}.cpt tr:hover td{background:var(--bg-card)}
+.cg{color:#22c55e;font-weight:600}.cr2{color:#ef4444;font-weight:600}
 .refs{margin-top:48px;padding-top:24px;border-top:1px solid var(--border)}
 .refs h2{border-top:none;padding-top:0;margin-top:0}
 .refs ol{counter-reset:ref;list-style:none;padding:0}
 .refs li{counter-increment:ref;padding:6px 0;font-size:.88rem;color:var(--text-secondary);display:flex;gap:8px}
 .refs li::before{content:'[' counter(ref) ']';color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:.8rem;min-width:28px}
-.refs a{color:var(--accent-green);text-decoration:none;word-break:break-all}
-.refs a:hover{text-decoration:underline}
+.refs a{color:var(--accent-green);text-decoration:none;word-break:break-all}.refs a:hover{text-decoration:underline}
 
 /* ─── Footer ─── */
 footer{
@@ -345,43 +357,55 @@ footer{
 </div>
 
 <div class="article-layout">
-<aside class="toc"><div class="toc-inner">
-<h4>目录</h4>
-<ul>
-<li><a href="#intro">引言</a></li>
-<li><a href="#llm">一、大模型基础</a></li>
-<li><a href="#llm-token" class="t2">Token 与上下文窗口</a></li>
-<li><a href="#llm-transformer" class="t2">Transformer 架构</a></li>
-<li><a href="#llm-training" class="t2">训练三部曲</a></li>
-<li><a href="#rag">二、RAG 检索增强生成</a></li>
-<li><a href="#rag-why" class="t2">为什么需要 RAG</a></li>
-<li><a href="#rag-vector" class="t2">向量化与检索</a></li>
-<li><a href="#agent">三、Agent 核心概念</a></li>
-<li><a href="#agent-what" class="t2">什么是真正的 Agent</a></li>
-<li><a href="#agent-loop" class="t2">ReAct 循环</a></li>
-<li><a href="#agent-fc" class="t2">工具调用</a></li>
-<li><a href="#mcp" class="t2">MCP 协议</a></li>
-<li><a href="#ptc" class="t2">PTC 程序化工具调用</a></li>
-<li><a href="#skills" class="t2">Skills 技能系统</a></li>
-<li><a href="#memory" class="t2">Agent 记忆系统</a></li>
-</ul>
-</div></aside>
+  <aside class="toc"><div class="toc-inner">
+    <h4>目录</h4>
+    <ul>
+      <li><a href="#intro">引言</a></li>
+      <li><a href="#llm">一、大模型基础</a></li>
+      <li><a href="#llm-token" class="t2">Token 与上下文窗口</a></li>
+      <li><a href="#llm-transformer" class="t2">Transformer 架构</a></li>
+      <li><a href="#llm-training" class="t2">训练三部曲</a></li>
+      <li><a href="#rag">二、RAG 检索增强</a></li>
+      <li><a href="#rag-why" class="t2">为什么需要 RAG</a></li>
+      <li><a href="#rag-vector" class="t2">向量化与检索</a></li>
+      <li><a href="#agent">三、Agent 核心概念</a></li>
+      <li><a href="#agent-what" class="t2">什么是真正的 Agent</a></li>
+      <li><a href="#agent-loop" class="t2">ReAct 循环</a></li>
+      <li><a href="#agent-fc" class="t2">工具调用</a></li>
+      <li><a href="#mcp" class="t2">MCP 协议</a></li>
+      <li><a href="#ptc" class="t2">PTC 程序化工具调用</a></li>
+      <li><a href="#skills" class="t2">Skills 技能系统</a></li>
+      <li><a href="#memory" class="t2">Agent 记忆系统</a></li>
+      <li><a href="#collab" class="t2">多组件协同</a></li>
+      <li><a href="#eng" class="t2">生产级硬核工程</a></li>
+      <li><a href="#products">四、产品深度剖析</a></li>
+      <li><a href="#claude-code" class="t2">Claude Code</a></li>
+      <li><a href="#openclaw" class="t2">OpenClaw</a></li>
+      <li><a href="#compare-two" class="t2">对比与启示</a></li>
+      <li><a href="#other-products" class="t2">其他产品简评</a></li>
+      <li><a href="#compare">五、横向对比</a></li>
+      <li><a href="#future">六、未来展望</a></li>
+      <li><a href="#refs">References</a></li>
+    </ul>
+  </div></aside>
 
-<article class="article">
-<div class="article-meta">
-<div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / 技术博客</div>
-<h1>从大模型到 Agent：AI 应用的完整技术栈</h1>
-<p class="subtitle">写给所有人的 AI 技术栈全景指南——从能聊天到能干活，从单兵到团队。</p>
-<div class="info">
-<span>2026年2月19日</span>
-<span>约 25 分钟</span>
-<span class="tag tag-ai">AI</span>
-<span class="tag tag-agent">Agent</span>
-<span class="tag tag-mcp">MCP</span>
-</div>
-</div>
-<div class="content" id="content">
+  <main class="article">
+    <div class="article-meta">
+      <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / 技术博客</div>
+      <h1>从大模型到 Agent：AI 应用的完整技术栈</h1>
+      <p class="subtitle">写给所有人的 AI 技术栈全景指南——从能聊天到能干活，从单兵到团队。</p>
+      <div class="info">
+        <span>2026年2月19日</span>
+        <span>·</span>
+        <span>约 25 分钟</span>
+        <span>·</span>
+        <span class="tag tag-ai">AI</span>
+        <span class="tag tag-agent">Agent</span>
+        <span class="tag tag-mcp">MCP</span>
+      </div>
+    </div>
 
+    <div class="content">
 <h2 id="intro">引言</h2>
 
 <p>2025 年以来，AI 领域最火的词从"大模型"变成了"Agent"。Anthropic 的 Claude Code 能自主编写整个项目，OpenClaw 让你拥有 7×24 小时在线的私人 AI 助手，各家 AI 应用纷纷从"能聊天"升级为"能干活"。</p>
@@ -390,9 +414,9 @@ footer{
 
 <p>这篇文章试图用一条清晰的线索，把整个 AI 应用技术栈从底层到顶层串起来——不仅讲清概念，更要拆透生产级 Agent 的工程实践。<strong>目标是让你读完后，既知道"是什么"，也理解"为什么"，还知道"怎么做"</strong>。</p>
 
-<div class="diagram">
+<div class="dg">
 <span class="bx">大模型 LLM</span><span class="ar"> &#8594; </span><span class="bx">RAG 检索增强</span><span class="ar"> &#8594; </span><span class="bx">Agent 智能体</span><span class="ar"> &#8594; </span><span class="bx">MCP + PTC</span><span class="ar"> &#8594; </span><span class="bx">Skills 技能</span><br>
-<span style="font-size:.78rem;color:var(--text-muted)">大脑 &#8594; 图书馆 &#8594; 手和脚 &#8594; USB 接口 + 连招 &#8594; App Store</span>
+<span style="font-size:.78rem;color:var(--tm)">大脑 &#8594; 图书馆 &#8594; 手和脚 &#8594; USB 接口 + 连招 &#8594; App Store</span>
 </div>
 
 <p>大模型提供智能；RAG 弥补知识缺口；Agent 把大模型从"聊天者"升级为"执行者"；MCP 统一工具接口、PTC 优化调用效率；Skills 把能力封装成即插即用的模块。这些层次构成了当今 AI 应用的完整技术栈。让我们从最底层的"大脑"开始。</p>
@@ -429,7 +453,7 @@ footer{
 
 <p><strong>第三步：RLHF（基于人类反馈的强化学习）</strong>——人类评估回答质量，模型据此优化，学会生成人类偏好的回答。让模型更有帮助、更无害、更诚实。ChatGPT 的成功，很大程度上来自 RLHF 带来的良好对话体验。</p>
 
-<div class="diagram">
+<div class="dg">
 <span class="bx"><strong>预训练</strong><br><span style="font-size:.75rem">海量数据 → 知识</span></span><span class="ar"> → </span><span class="bx"><strong>SFT</strong><br><span style="font-size:.75rem">标注数据 → 对话</span></span><span class="ar"> → </span><span class="bx"><strong>RLHF</strong><br><span style="font-size:.75rem">人类反馈 → 质量</span></span>
 </div>
 
@@ -453,14 +477,14 @@ footer{
 
 <p>RAG 的核心技术是<strong>向量化（Vector Embedding）</strong>。传统关键词搜索靠词汇匹配——搜"购买"找不到含"买入"的文档。向量化靠<strong>语义相似度</strong>：先把文档切成段落，每段用嵌入模型（Embedding Model）转为高维向量（语义指纹），用户提问也转为向量，在向量数据库中找到语义最接近的文档片段。即使用法和措辞完全不同，只要意思相近就能命中。</p>
 
-<div class="diagram">
+<div class="dg">
 <span class="bx">文档</span><span class="ar"> → </span><span class="bx">切分 Chunk</span><span class="ar"> → </span><span class="bx">Embedding</span><span class="ar"> → </span><span class="bx">向量数据库</span><br>
-<span style="font-size:.78rem;color:var(--text-muted)">——离线索引——</span><br><br>
+<span style="font-size:.78rem;color:var(--tm)">——离线索引——</span><br><br>
 <span class="bx">用户提问</span><span class="ar"> → </span><span class="bx">问题向量化</span><span class="ar"> → </span><span class="bx">向量检索 top-k</span><span class="ar"> → </span><span class="bx">组合 Prompt</span><span class="ar"> → </span><span class="bx">LLM 生成</span><br>
-<span style="font-size:.78rem;color:var(--text-muted)">——在线查询——</span>
+<span style="font-size:.78rem;color:var(--tm)">——在线查询——</span>
 </div>
 
-<div class="callout callout-tip">
+<div class="co co-t">
 <b>RAG 的核心工程挑战</b>
 <p>RAG 看起来简单，但实际落地时有很多细节：<strong>如何切分文档（Chunking Strategy）</strong>——切得太小缺乏上下文，切得太大引入无关信息；<strong>如何处理表格和图片</strong>——结构化数据和图像需要特殊处理；<strong>如何处理多跳问题</strong>——"A 的上司的老家在哪里？"需要多次检索才能回答。切分策略往往决定了 RAG 系统 70% 的效果。</p>
 </div>
@@ -505,8 +529,8 @@ footer{
 
 <p>Agent 的工作方式不是"接收指令 → 输出结果"的单次交互，而是一个持续运转的<strong>感知-规划-执行-反馈循环</strong>。学术界称之为 ReAct（Reasoning + Acting）模式。</p>
 
-<div class="diagram">
-<span class="bx">👁️ 感知 Perceive</span><span class="ar"> → </span><span class="bx">🎯 规划 Plan</span><span class="ar"> → </span><span class="bx">🔧 执行 Act</span><span class="ar"> → </span><span class="bx">📊 反馈 Reflect</span><span class="ar"> → </span><span style="color:var(--text-muted)">(循环)</span>
+<div class="dg">
+<span class="bx">👁️ 感知 Perceive</span><span class="ar"> → </span><span class="bx">🎯 规划 Plan</span><span class="ar"> → </span><span class="bx">🔧 执行 Act</span><span class="ar"> → </span><span class="bx">📊 反馈 Reflect</span><span class="ar"> → </span><span style="color:var(--tm)">(循环)</span>
 </div>
 
 <p><strong>感知</strong>：接收用户指令、环境信息、工具返回结果。<strong>规划</strong>：分析任务，分解步骤，制定执行策略。<strong>执行</strong>：调用工具、运行代码、操作外部系统。<strong>反馈</strong>：评估结果，决定继续还是结束。</p>
@@ -523,8 +547,8 @@ footer{
 
 <p>关键认知：<strong>工具不是"嵌入"在模型里的，而是"描述"给模型听的</strong>。模型本身不会执行任何工具——它只是在合适时机"说"出一个调用指令。真正执行调用的是外围系统（Agent Runtime）。这种"大脑+手脚"的分离设计非常优雅：大脑（LLM）负责理解和决策，手脚（工具系统）负责行动和反馈。</p>
 
-<div class="code-block"><div class="code-header"><div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><span class="fn">function-calling-demo</span></div>
-<div class="code-body"><code><span class="cmt">用户：</span> 帮我查一下北京今天的天气
+<div class="cb"><div class="chd"><div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><span class="fn">function-calling-demo</span></div>
+<div class="cbd"><code><span class="cmt">用户：</span> 帮我查一下北京今天的天气
 <span class="cmt">Agent 思考：</span> <span style="color:#6c7086">用户想知道北京天气，我需要调用天气查询工具</span>
 <span class="str">→ 调用工具：</span> get_weather(city="北京", date="today")
 <span class="fn2">← 工具返回：</span> {"temp": "22°C", "weather": "晴", "wind": "北风3级"}
@@ -550,7 +574,7 @@ footer{
 
 <p><strong>MCP Client 兼容性问题</strong>：你可能注意到一个现象——有些 MCP Client（如 Cline）支持所有大模型，而有些（如 Cherry Studio）只支持部分模型。这不是 MCP 的 Bug，而是 Client 实现方式的差异。<strong>方式一：基于 Function Call</strong>（如 Cherry Studio）——Client 把工具列表转换为 API 的 tools 参数直接传给模型，性能更好但要求模型原生支持 Function Call；<strong>方式二：基于系统提示词</strong>（如 Cline）——Client 把工具列表和调用格式写成一段超长的系统提示词（Cline 的系统提示词高达 4 万多字符），让模型按约定格式输出参数，不依赖模型的 Function Call 能力，理论上任何模型都支持，但 Token 消耗更大。所以<strong>兼容性问题不在模型端，而在 Client 端</strong>——选 MCP Client 时看清楚它的实现方式，就能判断是否支持你想用的模型。</p>
 
-<div class="callout callout-info">
+<div class="co co-i">
 <b>进阶：采样能力（Sampling）</b>
 <p>MCP 还有一个强大的高级能力——<strong>Sampling</strong>。它允许 MCP Server 反向请求 Client 调用 LLM。场景举例：一个代码分析 MCP Server 在扫描代码时发现复杂逻辑需要 AI 帮忙理解，它通过 Sampling 机制请求 Client 的 LLM 分析，拿到结果后继续执行。这种"Server 借用 Client 的大脑"的能力让 MCP Server 保持轻量，同时享受 LLM 的智能。</p>
 </div>
@@ -610,7 +634,7 @@ footer{
 <li><strong>L4 执行操作</strong>（实际执行时）：调用 scripts/ 中的脚本、加载 assets/ 资源。脚本代码本身不进入上下文——Agent 只执行它，不阅读它。就像按照手册指引操作机器，而不是先读完机器的设计图纸。</li>
 </ul>
 
-<div class="callout callout-info">
+<div class="co co-i">
 <b>为什么必须渐进式披露？—— Token 经济学与注意力精度</b>
 <p>假设 Agent 安装了 80 个 Skill，每个完整说明约 2000 Token。全部加载 = 160,000 Token，直接吃掉大部分上下文窗口。而如果用 MCP 实现同等能力，40 个 MCP Server 下 300 个工具，光工具定义就消耗数万 Token——MCP 的架构要求所有工具定义在启动时就全量注入上下文，如果你只是问了"1+1=？"，Agent 已经烧掉了大几万 Token。渐进式披露把启动成本压缩到几千 Token（L1 阶段），只在需要时才"展开"——就像操作系统的虚拟内存：不是所有东西都常驻 RAM，用到时才从硬盘加载。更重要的是，这还提升了 AI 的<strong>注意力精度</strong>——面对几百个 MCP 工具 AI 很容易"分心"（MCP Atlas 基准测试中，即使最强的 Claude Opus 4.5 在 300+ 工具环境下也只有 62% 准确率，且随工具数增加而下降），而 Skills 的"漏斗式"引导让 AI 每次只专注当前任务——先通过目录判断方向，确认要干活了再加载说明，最后通过说明找到详细文档和脚本再执行。即使能力稍弱的模型，在这种机制下也能保持高准确率。</p>
 </div>
@@ -651,9 +675,315 @@ footer{
 
 <p>这套架构的另一个优势是<strong>对人类透明</strong>。所有记忆都是 Markdown 文件，你可以直接打开查看、编辑甚至删除。不喜欢 Agent 记住的某个信息？直接删掉那行。这种透明性和可控性是向量数据库黑箱方案无法比拟的。</p>
 
+<h3 id="collab">多组件协同：MCP + PTC + Skills + SubAgent</h3>
+
+<p>前面讲了每个组件的原理，现在用一个<strong>完整场景</strong>把它们串起来。</p>
+
+<div class="co co-w">
+<b>🎬 场景：「帮我调研 3 个竞品并写一份分析报告」</b>
+<p>① 用户对主 Agent 发出指令 → ② <strong>主 Agent 规划</strong>：任务太复杂，拆分为 3 个子任务，派生 3 个 SubAgent 并行执行 → ③ <strong>SubAgent 加载 Skill</strong>：每个 SubAgent 激活"竞品调研"Skill（L1→L2→L3 渐进加载），获得调研指令和分析模板 → ④ <strong>Skill 通过 MCP 调用工具</strong>：Web 搜索 MCP → 获取产品信息；GitHub MCP → 查仓库数据 → ⑤ <strong>PTC 批量执行</strong>：多个搜索和数据抓取操作被编排成 Python 脚本，在沙箱中一次性执行 → ⑥ <strong>SubAgent 返回精炼结果</strong>给主 Agent → ⑦ <strong>主 Agent 汇总输出</strong>完整报告。</p>
 </div>
-</article>
+
+<p>在这个流程中：SubAgent 提供了并行分工，Skill 提供了领域知识和工作模板，MCP 提供了标准化的工具访问接口，PTC 优化了批量工具调用的效率。四者协同，才让一个看似简单的"写报告"需求，能被高效、高质地执行。</p>
+
+<h3 id="eng">生产级 Agent 的硬核工程</h3>
+
+<p>从"Demo 跑通"到"生产可用"之间，隔着一道巨大的工程鸿沟。Demo 级别的 Agent 只需要处理理想输入、单一用户、稳定网络。但生产环境里，用户消息乱序到来、API 随时超时、上下文悄然溢出、恶意输入试图越权——每一个环节都可能导致 Agent 表现异常甚至崩溃。以下五个核心工程问题，是让 Agent 真正可靠运行的关键。</p>
+
+<p><strong>3.9.1 Lane（车道）调度与并发控制</strong></p>
+
+<p><strong>为什么需要 Lane？</strong>想象这样一个场景：你在微信里连续发了三条消息——"帮我查一下北京天气" → "算了，改查一下特斯拉股价" → "还是查天气吧"。如果这三条消息被并发处理，三个 Agent 循环同时启动、同时读写同一个 Session 的状态，结果会是灾难性的——状态互相覆盖、回复顺序错乱、工具调用冲突。</p>
+
+<blockquote><p><strong>餐厅比喻</strong>：用户消息就像顾客的点单，服务员（高频消息队列）负责在前台接收和整理，但厨房灶台（Lane）同一时间只能炒一盘菜。如果两份订单同时涌入同一个灶台，菜就串味了。Lane 机制确保<strong>每个 Session 同一时刻只有一个 Agent 循环在运行</strong>——一盘炒完，再炒下一盘。</p></blockquote>
+
+<p>但问题远不止"串行化"这么简单。用户在 IM 里发消息是碎片化的——可能连发 5 条消息才表达完一个完整的意思，也可能在 Agent 处理过程中突然改主意。Lane 需要支持<strong>多种排队模式</strong>来应对不同场景：</p>
+
+<ul>
+<li><strong>Steer（转向）</strong>：新消息注入正在运行的当前循环。适合用户在 Agent 执行过程中补充信息——"帮我查天气"（Agent 开始执行）→ "记得查最近一周的"（这条补充消息被注入当前循环，Agent 在下次读取上下文时看到它）。</li>
+<li><strong>Collect（搜集）</strong>：在一个时间窗口内（比如 3 秒）聚合所有消息，合并成一条再处理。适合用户连发碎片消息的场景——"你好" → "在吗" → "帮我查一下明天的天气"，三条合并为一条完整请求后再触发 Agent。</li>
+<li><strong>Followup（跟进）</strong>：FIFO 逐条排队处理。前一条处理完毕后，再处理下一条。适合每条消息都是独立请求的场景——严格保序，不丢消息。</li>
+<li><strong>Interrupt（打断）</strong>：丢弃正在处理的任务，只做最新发来的那一条。适合用户频繁改主意的场景——"查天气" → "不用了，帮我翻译这段话"，Agent 丢弃天气查询，直接处理翻译请求。</li>
+</ul>
+
+<p>不同的消息渠道、不同的用户习惯、不同的任务类型，适合不同的排队模式。一个成熟的 Agent 框架需要让这些模式可配置、可切换，甚至可以根据上下文自动选择。</p>
+
+<p><strong>3.9.2 上下文守卫机制</strong></p>
+
+<p>上下文窗口是 Agent 最宝贵也最脆弱的有限资源。一次长对话中，用户消息、系统指令、工具定义（每个工具的 JSON Schema 描述）、工具调用结果、知识注入（RAG 检索结果）——所有这些都在不断累积。一个挂载了 20 个 MCP 工具的 Agent，光工具定义就可能占掉 15,000-20,000 Token。再加上多轮对话和工具返回结果，上下文在不知不觉中悄然逼近上限。不加管理，很快就会撞顶——轻则截断关键信息、重则请求直接失败。</p>
+
+<p>上下文守卫采用<strong>多阶段防线</strong>，层层拦截：</p>
+
+<p><strong>第一道防线：Token 预检。</strong>每次构建 Prompt 后、调用 LLM 前，先精确计算 Token 总量（包括系统提示 + 工具定义 + 历史消息 + 当前输入），预判是否会超限。如果加入下一条消息后总量超过阈值（通常设为窗口大小的 85%-90%，留出足够的生成空间），就触发下一道防线。预检是低成本操作——只是数 Token，不调用 LLM。</p>
+
+<p><strong>第二道防线：自动压缩。</strong>逼近上限时触发压缩——但<strong>不是简单地截断早期消息</strong>。截断是最粗暴的做法，会丢失关键上下文（"用户之前说过要用 Python 而不是 Java"这种信息一旦丢失，后续回答就可能跑偏）。正确的做法是<strong>智能压缩</strong>：保留最近几轮的原始消息（因为用户很可能正在引用最近的对话），让 LLM 将更早的对话内容压缩为<strong>结构化摘要</strong>——提取关键决策、用户偏好、任务进展等信息，用精炼的文字替代冗长的原始对话。</p>
+
+<p>压缩前还有一个关键步骤：<strong>Memory Flush（记忆刷写）</strong>。在压缩发生之前，先让 Agent 执行一次"把你觉得重要的信息写入记忆文件"的操作。这就像考试前老师说"把重要公式抄到小纸条上"，然后才收走参考书。即使压缩后摘要不够完美，关键信息已经安全地持久化到了记忆文件中。</p>
+
+<p><strong>第三道防线：会话重置。</strong>极端情况下的最后手段——如果压缩后仍然超限（比如单条工具返回了超大的数据块），清空当前上下文，从记忆文件和摘要中恢复关键信息，重新开始一个干净的会话。用户感知到的是"Agent 似乎重新整理了一下思路"，而不是崩溃或丢失所有上下文。</p>
+
+<p><strong>3.9.3 模型故障容错</strong></p>
+
+<p>在生产环境中，<strong>假定 API 不稳定是常态</strong>而非例外。OpenAI 的 API 可能突然返回 429（限流）、Anthropic 的服务可能在高峰期出现 30 秒超时、某些地区的网络可能对特定 Provider 不稳定。如果 Agent 只依赖单一模型的单一 API Key，一旦出问题就彻底卡住——用户发了消息，Agent 没有任何回应，体验灾难性地崩塌。</p>
+
+<p>成熟的 Agent 框架需要<strong>双层容错机制</strong>：</p>
+
+<ul>
+<li><strong>内层：认证轮转（同一 Provider 内）</strong>——为同一个 Provider（如 OpenAI）配置多个 API Key。一个 Key 被限流时，自动切换到下一个 Key 继续服务，同时对被限流的 Key 执行指数退避（等待 1s → 2s → 4s → 8s…）。对用户完全透明——他们感知不到任何中断。</li>
+<li><strong>外层：模型降级（跨 Provider）</strong>——当整个 Provider 不可用时（比如 Anthropic 的 Claude API 全线超时），自动切换到备用 Provider 继续服务（Claude → GPT-4o → Kimi）。整个过程用户感知不到中断，只是回答的"风格"可能微妙变化。</li>
+</ul>
+
+<p>当然，降级不是没有代价的。不同模型的能力谱系不同——Claude 在长文本理解和遵循复杂指令方面表现优异，GPT-4o 在多模态和代码生成方面更强，降级后可能出现<strong>能力差异和风格漂移</strong>。好的容错系统会记录降级事件，并在主模型恢复后自动切回——<strong>降级是临时应急，不是永久替代</strong>。</p>
+
+<p><strong>3.9.4 零信任工具策略</strong></p>
+
+<p>Agent 安全是一个被严重低估的工程问题。很多人认为"在系统提示词里告诉 Agent 不要做危险操作"就够了。但<strong>最大的安全风险恰恰来自工具本身</strong>——Shell 执行、文件读写、网络请求、数据库操作。提示词注入攻击（Prompt Injection）已经反复证明，仅靠"你不能做 XXX"的文字约束是不可靠的——攻击者可以通过精心构造的输入"说服"模型绕过这些软约束。</p>
+
+<p>零信任工具策略的核心理念是：<strong>不信任任何一层的"承诺"，每一层都要独立验证</strong>。具体到实现：</p>
+
+<ul>
+<li><strong>Tool-policy 不是调用时才检查，而是构建上下文时就过滤</strong>。根据当前用户的身份（UserId）、会话渠道（ChannelId）、所在群组（GroupId）和安全等级，在构建 Prompt 之前就决定哪些工具对 Agent 可见。<strong>Agent 看不到的工具，就不可能调用</strong>——因为 Agent 的"世界"就是上下文中的内容。这比在提示词中说"不要使用删除工具"可靠一万倍：提示词注入可以绕过文字约束，但无法凭空创造一个不存在于上下文中的工具定义。</li>
+<li><strong>基于身份和场景的动态白名单</strong>。同一个 Agent，面对管理员用户时可以使用 Shell 执行和文件写入工具；面对普通用户时只能使用搜索和查询工具；在公开群聊中则进一步收缩到只读操作。权限随场景动态变化，而非一刀切。</li>
+<li><strong>SubAgent 最小权限</strong>。即使主 Agent 拥有完整的工具访问权限，它派生的 SubAgent 也只能访问任务所需的最小工具集。一个负责"搜索并汇总信息"的 SubAgent，不会拥有"删除文件"或"发送消息"的能力。更关键的是，SubAgent 默认被收回 <code>sessions_spawn</code> 等危险工具——<strong>防止 SubAgent 递归派生出不受控制的子 Agent 链</strong>。每一层派生都是一次权限收缩，而非继承。</li>
+</ul>
+
+<p><strong>3.9.5 思考分级机制</strong></p>
+
+<p>不是所有问题都值得深度思考——"今天几号？"和"设计一个高可用的分布式架构方案"的计算成本可以差<strong>几十倍甚至上百倍</strong>。如果每个问题都用最高规格的推理资源来处理，成本会迅速失控；反过来，如果所有问题都用最低规格，复杂任务的质量又无法保证。</p>
+
+<p>思考分级机制定义了 <strong>6 个递增等级</strong>：</p>
+
+<div class="cpt"><table>
+<thead><tr><th>等级</th><th>名称</th><th>适用场景</th><th>相对成本</th></tr></thead>
+<tbody>
+<tr><td>L0</td><td>不思考</td><td>纯查询、简单问候</td><td>$</td></tr>
+<tr><td>L1</td><td>极简</td><td>简单问答、格式转换</td><td>$</td></tr>
+<tr><td>L2</td><td>基础</td><td>常规对话、信息整理</td><td>$$</td></tr>
+<tr><td>L3</td><td>标准</td><td>多步骤任务、代码编写</td><td>$$$</td></tr>
+<tr><td>L4</td><td>深度</td><td>复杂分析、架构设计</td><td>$$$$</td></tr>
+<tr><td>L5</td><td>极限</td><td>最高难度推理、学术级问题</td><td>$$$$$</td></tr>
+</tbody></table></div>
+
+<p>系统根据任务复杂度自动选择思考等级，并支持<strong>自动降档重试</strong>：如果高等级思考超时或模型返回错误，自动降到低一级重试，而不是直接报错。简单查询秒回、复杂任务才调动深度推理——在质量和成本之间动态寻找最优平衡。这种机制对于私人 Agent 尤其重要——你不希望每天 100 条日常闲聊的成本和 5 条高难度工作请求一样高。</p>
+
+<hr>
+
+<h2 id="products">四、产品深度剖析</h2>
+
+<p>为什么要花大篇幅深度拆解 Claude Code 和 OpenClaw？因为它们恰好代表了 Agent 产品的<strong>两个典型方向</strong>——Claude Code 是"专业领域深耕型 Agent"的标杆，把编程这一个场景做到极致深度；OpenClaw 是"通用私人 Agent 运行时"的先锋，提供框架和生态，让用户定义自己的 Agent。这两种路线没有优劣之分，但对 AI 产品的设计理念、技术架构、商业模式有着截然不同的启示。深度理解它们，等于理解了当下 Agent 产品设计的两种核心哲学。</p>
+
+<h3 id="claude-code">Claude Code：重新定义编程协作</h3>
+
+<p>Claude Code 不是 Copilot（代码补全）、不是 ChatGPT（问答）——它是 Anthropic 官方打造的<strong>终端原生、Agent 形态的编程助手</strong>，代表了"一个垂直领域做到极致"的产品哲学。</p>
+
+<p><strong>产品定位与战略意图</strong></p>
+
+<p>Claude Code 的交互范式是<strong>"给目标，不给步骤"</strong>——你说"实现用户登录功能，包含 OAuth2 和 JWT"，它自己规划文件结构、编写代码、创建测试、运行测试、修复 Bug，直到功能完整交付。这不是"更好的代码补全"，而是<strong>根本性地改变了人与代码的关系</strong>——从"你写代码"变成"你描述需求，Agent 写代码"。</p>
+
+<p>从 Anthropic 的战略视角看，Claude Code 是公司从"API 提供商"转型为"工具提供商"的关键一步。大模型 API 本质上是同质化的——OpenAI、Google、Anthropic 都提供能力相近的大模型接口，开发者可以随时切换供应商。但当 Claude Code 深度嵌入开发者日常工作流后，迁移成本大幅上升——你的项目配置（CLAUDE.md）、自定义指令、工作习惯全部绑定在 Claude Code 生态中。这是一个极其聪明的策略：<strong>用工具锁定用户，而非用模型锁定用户</strong>。即使未来有更便宜的模型出现，用户也不会轻易离开一个已经"懂"自己代码库的 Agent。</p>
+
+<p><strong>产品形态演进</strong></p>
+
+<p>产品形态经历了一条清晰的演进路径：<strong>Terminal CLI → VS Code 插件 → Desktop App → Web → JetBrains → 全平台覆盖</strong>。核心理念是"同一个引擎，多个界面"——无论你在终端、IDE 还是浏览器中使用，底层的 CLAUDE.md 项目配置、MCP Server 设置、工作偏好全部跨平台同步。你在终端里教会 Claude Code 的项目知识和代码规范，在 VS Code、Desktop App 和 Web 版中同样生效。这种"一次配置，处处可用"的体验，让用户的投入不断累积，产品粘性自然增强。</p>
+
+<p><strong>技术架构解读</strong></p>
+
+<p>回顾前文的 ReAct 循环，Claude Code 正是一个教科书级的实现——<strong>感知</strong>（读取用户指令+代码库状态）→ <strong>规划</strong>（拆解编程任务为步骤）→ <strong>执行</strong>（编写代码、运行命令）→ <strong>反馈</strong>（检查运行结果、测试是否通过），如此循环直到任务完成。核心能力包括：</p>
+
+<ul>
+<li><strong>全代码库级理解</strong>——不只看当前文件，能索引整个代码库的架构，跨数十个文件追踪调用链。你问"这个项目的认证逻辑是怎么实现的？"它能给出完整的跨文件分析。</li>
+<li><strong>原生 MCP 支持</strong>——可连接数据库 MCP、API 文档 MCP、GitHub MCP 等，无限扩展能力边界。</li>
+<li><strong>Shell/Git 执行能力</strong>——直接运行 Shell 命令、操作 Git、运行构建脚本、执行测试套件。不是在沙箱里模拟——是真实地在你的开发环境中执行。</li>
+<li><strong>自我纠错循环</strong>——运行测试发现 Bug → 自动分析错误原因 → 修改代码 → 再次运行测试 → 直到全部通过。这个循环可能转 3 次，也可能转 30 次——Agent 自己决定什么时候停。</li>
+</ul>
+
+<p><strong>用户体验与使用场景</strong></p>
+
+<p>对于高级开发者，Claude Code 是一个能同步理解全局架构的<strong>结对编程搭档</strong>；对于初学者，它几乎消除了从"想法"到"可运行代码"之间的鸿沟。主要使用场景包括：</p>
+
+<ul>
+<li><strong>从零搭建功能模块</strong>——需求理解 → 架构规划 → 编码 → 测试 → 调试，一气呵成</li>
+<li><strong>代码库理解与 Onboarding</strong>——新人入职第一天："这个项目的支付流程怎么实现的？"Claude Code 比任何文档都好用</li>
+<li><strong>自动化运维与 CI/CD</strong>——集成 GitHub Actions 做自动 PR Review、Issue 分诊、代码质量检查，7×24 不间断</li>
+<li><strong>跨平台无缝协作</strong>——桌面端开始任务 → 手机上查看进度 → 回到桌面继续，同一引擎状态完全同步</li>
+</ul>
+
+<p>更值得关注的是 <strong>Agent SDK 的开放</strong>。Anthropic 不仅把 Claude Code 做成一个产品，还把底层引擎开放为 SDK，让开发者可以基于它构建自定义 Agent。这意味着 Claude Code 不只是工具，更是<strong>平台</strong>——生态比产品更有护城河。</p>
+
+<div class="co co-t">
+<b>对产品经理的启发</b>
+<p><strong>"入口无处不在"策略</strong>：同一引擎覆盖 Terminal/IDE/Desktop/Web/Mobile，用户在哪里工作，产品就出现在哪里。<strong>Agent SDK 的开放策略</strong>：不只做产品，还做平台——让开发者在你之上构建，生态比产品更有护城河。<strong>"专注做深一个领域"</strong>：编程这个垂直场景做到极致，比什么都做的"万金油"更有壁垒和口碑。</p>
 </div>
+
+<h3 id="openclaw">OpenClaw：真正属于你的 AI Agent</h3>
+
+<p>如果 Claude Code 是专注编程的极致单点，OpenClaw 走的是完全不同的路——<strong>一个开源、自托管的私人 Agent 运行时框架</strong>，让你拥有一个 7×24 小时在线、完全属于你自己的 AI 助手。</p>
+
+<p><strong>产品定位与市场格局</strong></p>
+
+<p>OpenClaw 不是 SaaS 服务（Manus）、不是编辑器插件（Cursor）——它是一个<strong>私人 Agent 运行时框架</strong>。开源、MIT 协议、完全自托管——你的数据、对话记录、记忆文件全部在你自己的服务器上，不经过任何第三方。核心理念简单而激进：<strong>"你的 Agent 住在你的机器上"</strong>。在当下大多数 AI 产品都要求你把数据交给云端的背景下，OpenClaw 走了一条完全相反的路——它把控制权交还给用户。</p>
+
+<p>理解 OpenClaw 的定位，最好和其他两种产品形态做三角对比：</p>
+
+<ul>
+<li><strong>云端远程型（Manus）</strong>——给 Agent 一台远程沙箱电脑。开箱即用、零部署成本，但数据经过第三方服务器，适合一次性任务和隐私不敏感场景。</li>
+<li><strong>本地协作型（Cowork）</strong>——共享你的电脑给 Agent。深度嵌入工作流，但能力范围限于本地桌面环境。</li>
+<li><strong>混合型（OpenClaw）</strong>——本地运行 Runtime 掌控数据和隐私，通过 API 调用云端模型获得最强推理能力，通过 Skills、MCP 和 Nodes 无限扩展功能边界。兼具数据自主和能力弹性。</li>
+</ul>
+
+<p><strong>Gateway + Agent 分层架构</strong></p>
+
+<p>OpenClaw 采用 <strong>Gateway + Agent 分层架构</strong>——这不是拍脑袋的设计，而是经过深思熟虑的工程决策。Gateway 面对的问题是"千奇百怪的消息平台接入和安全管控"，Agent 面对的问题是"标准化的任务理解与执行"。两者的关注点截然不同，变化频率也不一样——新消息渠道的接入频率远高于 Agent 核心引擎的更新频率。分层后各自独立演进，改一个不动另一个。</p>
+
+<ul>
+<li><strong>Gateway</strong>——"大脑中枢+交通枢纽"。职责包括：消息路由（将不同渠道的消息统一格式后分发）、认证鉴权（验证用户身份和权限）、限流管控（防止滥用）、工具注入（根据身份动态决定可用工具）、安全策略（零信任工具过滤）。</li>
+<li><strong>Agent</strong>——"任务执行者"。职责包括：上下文管理（构建和维护 Prompt）、ReAct 循环驱动、工具调用执行、记忆读写、SubAgent 派生。</li>
+</ul>
+
+<p>为什么要分离？换一个消息渠道？只改 Gateway 配置。升级 Agent 能力？只更新 Runtime。加一个新 Skill？两层都不用动。回顾前文的五大生产级工程问题，OpenClaw 正是这些技术的落地实现——Lane 调度、上下文守卫、故障容错、零信任工具策略、Skills 渐进披露和思考分级，全部内建在这套架构中。</p>
+
+<p><strong>五大独特价值主张</strong></p>
+
+<ul>
+<li><strong>① 多渠道入口</strong>——微信、QQ、飞书、Discord、Telegram、Web——同一个 Agent，任何你习惯的平台都是入口。不需要专门打开一个 App，在你正在使用的 IM 里直接对话。对于大多数人来说，<strong>最好的 AI 入口不是一个新应用，而是他们已经每天打开的那个聊天窗口</strong>。</li>
+<li><strong>② 主动性</strong>——不只是被动等指令。支持定时任务（cron）和数据驱动触发——"每天早上 8 点推送天气和日程"、"GitHub 有新 Issue 时主动通知"、"收到重要邮件时立即提醒"。Agent 从一个需要你主动询问的工具，进化为<strong>主动关心你的协作伙伴</strong>。</li>
+<li><strong>③ 长期记忆</strong>——基于 Markdown 文件 + 向量索引的记忆系统（前文已详述）。跨会话记住你的偏好、项目背景、工作习惯。所有记忆都是人类可读的 Markdown 文件，你可以直接查看、编辑甚至删除——这种透明性是黑箱方案做不到的。越用越懂你，而且你<strong>完全知道它"记住了什么"</strong>。</li>
+<li><strong>④ 高可扩展性</strong>——Skills + MCP + Nodes 三重扩展体系。安装 Skill 获得领域能力，连接 MCP 工具访问外部数据和服务，配对 Nodes 获得物理设备控制力。甚至 Agent 自己都可以从 ClawHub 技能市场自主下载安装新 Skill——当它发现缺少某个能力时，能主动获取。</li>
+<li><strong>⑤ 完全掌控</strong>——开源（MIT 协议）、自托管、本地部署。数据不出门，隐私安全有保障。你不是在用别人的 Agent 服务——你<strong>拥有</strong>这个 Agent。代码可以审计，行为可以控制，数据完全属于你。这是"我的 Agent"和"别人的 Agent 为我服务"的本质区别。</li>
+</ul>
+
+<p><strong>Nodes 机制：赋予 Agent 物理触角</strong></p>
+
+<p>Nodes 是 OpenClaw 最具想象力的扩展机制之一。你可以将旧手机、闲置电脑、甚至树莓派配对为 Agent 的"能力节点"。旧手机作为摄像头节点监控家门口（"有人来了吗？"）、闲置电脑作为计算节点运行 GPU 任务、手机的地理位置功能触发自动化流程（"到公司了自动签到"）。这种<strong>将闲置硬件变成 Agent 能力的设计</strong>，不仅低成本，而且天然适合智能家居和物联网场景。</p>
+
+<p><strong>使用场景</strong></p>
+
+<ul>
+<li><strong>个人效率助手</strong>——邮件筛选与摘要、日程管理、每日定时简报推送、会议纪要整理。Agent 成为你的"数字秘书"。</li>
+<li><strong>智能家居中枢</strong>——结合 Nodes 控制设备："晚上 11 点如果电脑还在用就把灯调暗"、"到家自动开空调"。</li>
+<li><strong>开发者工具</strong>——GitHub 通知监控、项目状态检查、自动化部署、服务器异常告警。开发者的 7×24 运维助手。</li>
+<li><strong>内容创作辅助</strong>——信息收集与整理、文章大纲与起草、多平台内容发布。从灵感到成稿的全流程陪伴。</li>
+</ul>
+
+<div class="co co-t">
+<b>对产品经理的启发</b>
+<p><strong>"核心精简、边缘丰富"的插件化架构</strong>：Channels/Tools/Skills/Hooks 均可扩展，核心框架保持稳定精简，丰富性来自社区和生态。<strong>"让用户自己扩展"</strong>：ClawHub 技能市场 + 用户自建 Skill，产品团队不需要覆盖所有场景，社区会自然填补。<strong>安全与能力的平衡</strong>：Gateway 层统一安全管控（零信任工具策略），Agent 层放开能力，收放自如，而非一刀切。</p>
+</div>
+
+<h3 id="compare-two">两款产品的对比与启示</h3>
+
+<p>Claude Code 和 OpenClaw，两种路线——<strong>不是谁更好，而是代表了 Agent 产品设计的两种核心哲学</strong>。理解这种差异，对于判断 AI 产品的发展方向至关重要。</p>
+
+<p><strong>技术架构对比</strong></p>
+
+<div class="cpt"><table>
+<thead><tr><th>对比维度</th><th>Claude Code</th><th>OpenClaw</th></tr></thead>
+<tbody>
+<tr><td>产品类型</td><td>专业编程 Agent</td><td>通用私人 Agent 运行时</td></tr>
+<tr><td>部署方式</td><td>本地安装 + 云端服务</td><td>完全自托管</td></tr>
+<tr><td>核心场景</td><td>编程开发</td><td>日常工作 + 生活全场景</td></tr>
+<tr><td>入口形态</td><td>Terminal / IDE / Web / Desktop</td><td>微信 / QQ / 飞书 / Discord / Telegram / Web</td></tr>
+<tr><td>开源</td><td class="cr2">否（商业产品）</td><td class="cg">是（MIT 协议）</td></tr>
+<tr><td>扩展方式</td><td>MCP + Agent SDK</td><td>Skills + MCP + Nodes 三重扩展</td></tr>
+<tr><td>商业模式</td><td>订阅制（Max/Pro 计划）</td><td>免费框架（模型费用自付）</td></tr>
+<tr><td>数据控制</td><td>混合（部分数据经云端）</td><td>完全本地，数据不出门</td></tr>
+</tbody></table></div>
+
+<p><strong>两个方向的启示</strong></p>
+
+<p><strong>Claude Code 路线——深耕垂直</strong>：把编程做到极致深度，全平台覆盖、深度代码理解、自我纠错循环、Agent SDK 平台化。不追求广度，追求在一个场景里让 AI 真正替代人类完成工作。壁垒在于：当你的工具深度嵌入用户工作流后，迁移成本极高——项目配置、自定义指令、使用习惯都是沉没投入。竞争优势不来自模型（模型可以换），而来自工具体验和生态锁定。对创业者的启示：如果你选择垂直路线，就必须做到行业内无可争议的第一名。</p>
+
+<p><strong>OpenClaw 路线——通用平台</strong>：提供框架和生态，让社区定义用途——多渠道入口、Skills 市场、Nodes 物理扩展、完全开源。不定义用户该怎么用，而是提供基础设施让每个人构建自己的 Agent。壁垒在于：社区生态一旦形成飞轮，后来者几乎无法追赶——每一个社区贡献的 Skill、每一个用户分享的配置模板，都在加厚护城河。竞争优势来自开发者社区和技能生态的网络效应。对创业者的启示：如果你选择平台路线，社区运营和开发者体验就是你的核心竞争力。</p>
+
+<div class="co co-w">
+<b>💡 对 AI 产品经理的终极启示</b>
+<p>Agent 产品不是"功能越多越好"，而是<strong>"在正确的场景里，让 AI 真正替代人类完成工作"</strong>。Claude Code 证明了一个垂直场景做到极致就能建立壁垒；OpenClaw 证明了开源框架加社区生态同样能创造巨大价值。两者的共同点是：都不是在做"更好的聊天机器人"，而是在做<strong>"能真正干活的数字员工"</strong>。无论选择哪条路线，核心都是同一个问题：你的产品，是让用户"觉得 AI 很酷"，还是真的帮用户<strong>"少干了一件事"</strong>？能回答好这个问题的产品，才能在 Agent 浪潮中存活下来。</p>
+</div>
+
+<h3 id="other-products">其他产品简评</h3>
+
+<p><strong>Cursor</strong>——AI 原生代码编辑器，基于 VS Code 深度改造。Tab 智能补全 + Chat 对话编程 + Composer 多文件协同，学习成本最低、编辑器体验最自然的 AI 编程工具。</p>
+
+<p><strong>Dify</strong>——开源 LLM 应用开发平台。可视化拖拽式构建 AI 应用，内置 RAG 引擎和 Agent 构建器。让不会写代码的产品经理也能 15 分钟搭建一个 AI 客服机器人。</p>
+
+<p><strong>n8n</strong>——开源工作流自动化平台。400+ 预置集成节点连接几乎所有主流服务，AI Agent 节点让 AI 在工作流中做决策者。适合连接多个系统、自动化复杂业务流程的团队。</p>
+
+<p><strong>Manus</strong>——云端通用型 AI Agent。云端沙箱执行，能浏览网页、写代码、处理文件。开箱即用零部署成本，适合一次性任务和隐私不敏感的场景。</p>
+
+<hr>
+
+<h2 id="compare">五、横向对比表</h2>
+
+<p>一张表看清楚这些产品的核心差异，帮你选对工具。</p>
+
+<div class="cpt"><table>
+<thead>
+<tr><th>维度</th><th>Claude Code</th><th>Cursor</th><th>Dify</th><th>n8n</th><th>Manus</th><th>OpenClaw</th></tr>
+</thead>
+<tbody>
+<tr><td>产品类型</td><td>编程 Agent</td><td>AI 编辑器</td><td>应用搭建平台</td><td>自动化平台</td><td>通用 Agent</td><td>Agent 运行时</td></tr>
+<tr><td>技术门槛</td><td>中</td><td>低</td><td>低</td><td>中</td><td>低</td><td>高</td></tr>
+<tr><td>开源</td><td class="cr2">否</td><td class="cr2">否</td><td class="cg">是</td><td class="cg">是</td><td class="cr2">否</td><td class="cg">是</td></tr>
+<tr><td>MCP 支持</td><td class="cg">✅ 原生</td><td class="cg">✅ 支持</td><td class="cr2">❌</td><td class="cg">✅ 支持</td><td class="cr2">❌</td><td class="cg">✅ 原生</td></tr>
+<tr><td>本地部署</td><td class="cg">✅</td><td class="cr2">❌</td><td class="cg">✅</td><td class="cg">✅</td><td class="cr2">❌</td><td class="cg">✅</td></tr>
+<tr><td>长期记忆</td><td class="cr2">有限</td><td class="cr2">❌</td><td class="cr2">❌</td><td class="cr2">❌</td><td class="cr2">有限</td><td class="cg">✅ 完整</td></tr>
+<tr><td>多渠道</td><td class="cr2">终端</td><td class="cr2">编辑器</td><td class="cg">API/Web</td><td class="cg">Webhook</td><td class="cr2">Web</td><td class="cg">✅ 全平台</td></tr>
+<tr><td>主动性</td><td class="cr2">❌</td><td class="cr2">❌</td><td class="cr2">❌</td><td class="cg">✅ 定时</td><td class="cr2">❌</td><td class="cg">✅ 定时+事件</td></tr>
+<tr><td>Skills/插件</td><td class="cr2">MCP 扩展</td><td class="cg">插件市场</td><td class="cg">模板市场</td><td class="cg">400+ 节点</td><td class="cr2">内置</td><td class="cg">✅ Skill 体系</td></tr>
+<tr><td>数据隐私</td><td>本地执行</td><td>云端传输</td><td>可自托管</td><td>可自托管</td><td>云端托管</td><td>完全本地</td></tr>
+<tr><td>核心优势</td><td>深度代码理解</td><td>编辑器体验</td><td>零代码搭建</td><td>海量集成</td><td>开箱即用</td><td>完全掌控</td></tr>
+<tr><td>最佳场景</td><td>编程开发</td><td>日常编码</td><td>快速搭应用</td><td>流程自动化</td><td>一次性任务</td><td>私人 AI 助理</td></tr>
+</tbody>
+</table></div>
+
+<hr>
+
+<h2 id="future">六、未来展望</h2>
+
+<p>Agent 不只是一个技术概念，它正在重塑我们与数字世界交互的方式。</p>
+
+<p><strong>数字分身：7×24 的"你"</strong></p>
+
+<p>想象一个完全了解你工作习惯、知识偏好、社交风格的 AI Agent。它帮你筛选邮件、整理日程、撰写报告、管理项目。它不只是工具，更像你的数字化延伸——一个 7×24 小时不休息的"你"。当你在睡觉时，它在帮你监控系统告警、整理明天的会议资料、回复不紧急的消息。它记得你过去半年所有项目的上下文，能在你问"上次那个问题怎么解决的"时精确找到答案。基于今天的长期记忆、Skills 体系和多渠道接入技术，这个未来已经触手可及。</p>
+
+<p><strong>从工具到伙伴：主动协作</strong></p>
+
+<p>当前的 AI 还是"工具"——你给指令，它执行。未来的 Agent 将更像"伙伴"——它理解你的目标和偏好，能在你没想到的时候主动提供帮助。"我注意到你这周代码提交量翻倍了，要不要我帮你审查一下最近的 PR？"这种主动的、有上下文的协作，是 Agent 进化的方向。</p>
+
+<p><strong>安全、隐私、可控的挑战</strong></p>
+
+<p>Agent 越强大，风险越大。当 AI 能自主操作你的电脑、访问你的数据、代表你发消息时，安全和隐私就是头等大事。谁来监督 Agent 的行为？敏感操作是否需要人类确认？数据存储在哪里？零信任工具策略、本地部署、权限分级——这些工程手段，将决定我们能信任 Agent 走多远。</p>
+
+<p><strong>三种形态趋势</strong></p>
+
+<p>Agent 正在分化为三种形态：<strong>云端远程型</strong>（Manus）——开箱即用但数据经过第三方，适合一次性任务；<strong>本地协作型</strong>（Claude Code、Cursor）——深度融入特定工作流，专业度高但能力范围有限；<strong>混合型</strong>（OpenClaw）——本地部署掌控数据，通过 API 调用云端模型获得最强推理能力，通过 Skills 和 MCP 无限扩展。最终大概率三者长期并存——关键问题不是"哪个好"，而是"你的场景需要什么级别的掌控力和隐私保障"。</p>
+
+<div class="co co-w">
+<b>写在最后</b>
+<p>从大模型到 Agent，我们正在经历 AI 应用的范式转变——从"能聊天"到"能干活"，从"工具"到"伙伴"。底层逻辑是清晰的：<strong>大模型提供智能，RAG 弥补知识缺口，Agent 赋予行动力，MCP 统一连接接口，PTC 优化执行效率，Skills 降低使用门槛</strong>。在生产级工程层面，Lane 调度、上下文守卫、模型容错、零信任工具策略、思考分级，则让 Agent 从 Demo 走向可靠的日常使用。理解了这条技术主线，你就能在这个快速变化的领域中保持方向感。</p>
+</div>
+
+<div class="refs">
+<h2 id="refs">References</h2>
+<ol>
+<li>Vaswani et al. <em>Attention Is All You Need</em>, 2017 - <a href="https://arxiv.org/abs/1706.03762" target="_blank">arxiv.org/abs/1706.03762</a></li>
+<li>Lewis et al. <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em>, 2020 - <a href="https://arxiv.org/abs/2005.11401" target="_blank">arxiv.org/abs/2005.11401</a></li>
+<li>Ouyang et al. <em>Training language models to follow instructions with human feedback</em>, 2022 - <a href="https://arxiv.org/abs/2203.02155" target="_blank">arxiv.org/abs/2203.02155</a></li>
+<li>Anthropic. <em>Model Context Protocol Specification</em> - <a href="https://modelcontextprotocol.io" target="_blank">modelcontextprotocol.io</a></li>
+<li>Yao et al. <em>ReAct: Synergizing Reasoning and Acting in Language Models</em>, 2023 - <a href="https://arxiv.org/abs/2210.03629" target="_blank">arxiv.org/abs/2210.03629</a></li>
+<li>guangzhengli. <em>向量数据库</em> - <a href="https://guangzhengli.com/blog/zh/vector-database" target="_blank">guangzhengli.com/blog/zh/vector-database</a></li>
+<li>OpenAI. <em>Function Calling Guide</em> - <a href="https://platform.openai.com/docs/guides/function-calling" target="_blank">platform.openai.com/docs/guides/function-calling</a></li>
+<li>LangChain Documentation - <a href="https://docs.langchain.com" target="_blank">docs.langchain.com</a></li>
+<li>Pinecone. <em>What is a Vector Database</em> - <a href="https://www.pinecone.io/learn/vector-database/" target="_blank">pinecone.io/learn/vector-database</a></li>
+<li>OpenClaw GitHub - <a href="https://github.com/nicepkg/openclaw" target="_blank">github.com/nicepkg/openclaw</a></li>
+<li>Anthropic. <em>Claude Code Documentation</em> - <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank">docs.anthropic.com/en/docs/claude-code</a></li>
+</ol>
+</div>
+
+</div><!-- end .ct -->
+
+    </div><!-- .content -->
+  </main>
+</div><!-- .article-layout -->
 
 <footer>
   <div class="footer-inner">
