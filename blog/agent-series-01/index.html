@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>AI Agent 到底是什么？从三款产品说起 - Allen's Tech</title>
+<meta name="description" content="从 Chatbot 到 Copilot 到 Agent，用三款真实产品讲透 AI Agent 的本质。系列文章第一篇。">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#ffffff;--bg-card:#f8f9fa;--bg-card-hover:#ffffff;
+  --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+  --border:#e5e7eb;--border-hover:#d1d5db;
+  --nav-bg:rgba(255,255,255,0.85);
+  --primary:#1a1a2e;
+  --accent-green:#22c55e;--accent-orange:#f97316;--accent-blue:#3b82f6;--accent-purple:#8b5cf6;--accent-red:#ef4444;--accent-pink:#ec4899;--accent-cyan:#06b6d4;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.1);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.04);
+  --radius:16px;
+  --grid-color:transparent;
+  --code-bg:#f6f8fa;--code-text:#1a1a2e;--code-border:#e5e7eb
+}
+
+[data-theme="dark"]{
+  --bg:#0a0a14;--bg-card:#141425;--bg-card-hover:#1a1a30;
+  --text:#e5e7eb;--text-secondary:#9ca3af;--text-muted:#6b7280;
+  --border:#1e1e36;--border-hover:#2d2d4a;
+  --nav-bg:rgba(10,10,20,0.88);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.5);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.2);
+  --grid-color:rgba(255,255,255,0.02);
+  --code-bg:#1e1e2e;--code-text:#cdd6f4;--code-border:#2d2d4a
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+
+body{
+  font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  transition:background .3s,color .3s;min-height:100vh;overflow-x:hidden
+}
+
+[data-theme="dark"] body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
+}
+
+/* ─── Nav ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:background .3s,border .3s
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.nav-logo{
+  font-size:1.25rem;font-weight:800;color:var(--primary);
+  text-decoration:none;letter-spacing:-0.5px
+}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;
+  transition:color .2s;padding:4px 0
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{position:relative}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent-green),var(--accent-orange));border-radius:1px
+}
+.nav-links a.disabled{opacity:0.4;cursor:default;pointer-events:auto}
+.nav-links a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+.theme-btn{
+  background:none;border:1px solid var(--border);border-radius:10px;
+  width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .2s;color:var(--text)
+}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+
+.hamburger{
+  display:none;background:none;border:1px solid var(--border);border-radius:10px;
+  width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;transition:all .2s
+}
+.hamburger span{
+  display:block;width:20px;height:2px;background:var(--text);border-radius:2px;
+  transition:all .3s
+}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:var(--bg);
+  padding:16px 24px 40px;
+  flex-direction:column;gap:4px;overflow-y:auto;z-index:1000
+}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{
+  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
+  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
+  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
+}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+.mobile-menu a.disabled{opacity:0.4;cursor:default}
+.mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+
+/* ─── Article Layout ─── */
+.article-layout{
+  max-width:1100px;margin:0 auto;padding:88px 24px 60px;
+  display:grid;grid-template-columns:200px 1fr;gap:48px
+}
+
+/* ─── TOC Sidebar ─── */
+.toc{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:12px}
+.toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:2px}
+.toc a{
+  display:block;padding:5px 12px;font-size:.8rem;color:var(--text-secondary);
+  text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5
+}
+.toc a:hover{color:var(--text);border-left-color:var(--border)}
+.toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
+.toc .t2{padding-left:24px;font-size:.76rem}
+
+/* ─── Article ─── */
+.article{max-width:740px}
+
+/* Meta header */
+.article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.82rem;color:var(--text-muted);margin-bottom:16px}
+.breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.breadcrumb a:hover{color:var(--accent-green)}
+.article-meta h1{font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.article-meta .subtitle{font-size:1.05rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6}
+.article-meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--text-muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px}
+.tag-ai{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.tag-agent{background:rgba(59,130,246,0.1);color:var(--accent-blue)}
+.tag-product{background:rgba(249,115,22,0.1);color:var(--accent-orange)}
+.tag-thinking{background:rgba(236,72,153,0.1);color:var(--accent-pink)}
+.tag-tech{background:rgba(6,182,212,0.1);color:var(--accent-cyan)}
+.tag-mcp{background:rgba(139,92,246,0.1);color:var(--accent-purple)}
+
+/* Content typography */
+.content h2{
+  font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
+  border-top:1px solid var(--border);letter-spacing:-.3px
+}
+.content h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.content h3{font-size:1.15rem;font-weight:600;margin:32px 0 12px}
+.content p{margin-bottom:16px;line-height:1.9}
+.content a{color:var(--accent-green);text-decoration:none;font-weight:500}
+.content a:hover{text-decoration:underline}
+.content ul,.content ol{margin:0 0 16px 20px}
+.content li{margin-bottom:6px;line-height:1.8}
+.content strong{font-weight:600}
+.content blockquote{
+  margin:20px 0;padding:16px 20px;border-left:3px solid var(--accent-green);
+  background:var(--bg-card);border-radius:0 8px 8px 0;font-size:.95rem
+}
+.content blockquote p{margin-bottom:0;color:var(--text-secondary)}
+.content hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+.content img{max-width:100%;border-radius:8px;margin:16px 0}
+
+/* Code blocks */
+.content code{
+  font-family:'JetBrains Mono',monospace;font-size:.85em;
+  background:var(--code-bg);color:var(--code-text);
+  padding:2px 6px;border-radius:4px;border:1px solid var(--code-border)
+}
+.content pre{
+  margin:20px 0;padding:20px 24px;border-radius:12px;overflow-x:auto;
+  background:var(--code-bg);border:1px solid var(--code-border);
+  font-size:.85rem;line-height:1.7
+}
+.content pre code{background:none;border:none;padding:0;font-size:inherit}
+
+/* Callout boxes */
+.callout{
+  margin:24px 0;padding:20px 24px;border-radius:12px;border:1px solid;
+  font-size:.92rem;line-height:1.8
+}
+.callout-info{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
+.callout-tip{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2)}
+.callout-warn{background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.2)}
+.callout b{display:block;margin-bottom:4px}
+.callout p{margin-bottom:0}
+
+/* Comparison table */
+.content table{
+  width:100%;border-collapse:collapse;margin:20px 0;font-size:.88rem
+}
+.content th,.content td{
+  padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)
+}
+.content th{font-weight:600;background:var(--bg-card);font-size:.82rem;color:var(--text-secondary)}
+.content tr:hover{background:var(--bg-card)}
+
+/* Mobile table scroll wrapper */
+.table-wrap{overflow-x:auto;margin:20px 0;border-radius:12px;border:1px solid var(--border)}
+.table-wrap table{margin:0;border-radius:0}
+.table-wrap th:first-child,.table-wrap td:first-child{position:sticky;left:0;background:var(--bg);z-index:1}
+
+/* Series navigation */
+.series-nav{
+  margin:48px 0 0;padding:28px 24px;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--radius)
+}
+.series-nav h4{font-size:.88rem;font-weight:700;margin-bottom:16px;color:var(--text-secondary)}
+.series-nav ul{list-style:none;padding:0}
+.series-nav li{margin-bottom:8px}
+.series-nav a{
+  display:flex;align-items:center;gap:8px;text-decoration:none;
+  color:var(--text-secondary);font-size:.88rem;padding:8px 12px;
+  border-radius:8px;transition:all .2s
+}
+.series-nav a:hover{background:var(--bg-card-hover);color:var(--text)}
+.series-nav a.current{color:var(--accent-green);font-weight:600;background:rgba(34,197,94,.06)}
+.series-nav .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:6px;font-size:.72rem;font-weight:700;
+  background:var(--border);color:var(--text-secondary);flex-shrink:0
+}
+.series-nav a.current .num{background:rgba(34,197,94,.15);color:var(--accent-green)}
+
+/* ─── Footer ─── */
+footer{
+  border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
+  color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
+}
+.footer-inner{max-width:600px;margin:0 auto}
+.footer-brand{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:20px}
+.footer-links{
+  display:flex;justify-content:center;gap:24px;margin-bottom:20px;flex-wrap:wrap
+}
+.footer-links a{
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;color:var(--text-secondary);font-size:.88rem;
+  font-weight:500;transition:color .2s;min-height:44px
+}
+.footer-links a:hover{color:var(--accent-green)}
+.footer-copy{font-size:.8rem;color:var(--text-muted)}
+
+/* ─── Responsive ─── */
+@media(max-width:1024px){
+  .nav-links{gap:18px}
+  .nav-links a{font-size:.85rem}
+  .article-layout{grid-template-columns:180px 1fr;gap:32px}
+}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .toc{display:none}
+  .article-layout{grid-template-columns:1fr;gap:0;padding:80px 20px 48px}
+  .article-meta h1{font-size:1.6rem}
+  .article-meta .subtitle{font-size:.95rem}
+  .content h2{font-size:1.25rem;margin:36px 0 14px;padding-top:20px}
+  .content h3{font-size:1.05rem;margin:24px 0 10px}
+  .content p{font-size:.95rem;line-height:1.85}
+  .content pre{padding:16px;font-size:.8rem;border-radius:8px}
+  .callout{padding:16px 18px;border-radius:8px}
+  .series-nav{padding:22px 18px;border-radius:12px}
+  .footer-links{gap:16px}
+}
+
+@media(max-width:480px){
+  .article-layout{padding:76px 16px 40px}
+  .article-meta h1{font-size:1.4rem;letter-spacing:-.5px}
+  .article-meta .info{gap:10px}
+  .content h2{font-size:1.15rem}
+  .content p{font-size:.9rem}
+  .content pre{padding:14px 12px;font-size:.78rem}
+  .table-wrap{font-size:.82rem}
+  .series-nav a{font-size:.84rem;padding:6px 10px}
+  .footer-links{flex-direction:column;gap:8px}
+  footer{padding:36px 16px 32px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen's Tech</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="/blog/" class="active">博客</a>
+      <a href="javascript:void(0)" class="disabled">工具</a>
+      <a href="/about/">关于</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" class="disabled">工具 · 即将上线</a>
+  <a href="/about/">关于</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+
+<div class="article-layout">
+  <aside class="toc">
+    <h4>目录</h4>
+    <ul>
+      <li><a href="#section-1">一、AI 能力的三个层级</a></li>
+      <li class="t2"><a href="#s1-chatbot">第一层：Chatbot</a></li>
+      <li class="t2"><a href="#s1-copilot">第二层：Copilot</a></li>
+      <li class="t2"><a href="#s1-agent">第三层：Agent</a></li>
+      <li class="t2"><a href="#s1-workflow">Workflow 辨析</a></li>
+      <li><a href="#section-2">二、Agent 的核心公式</a></li>
+      <li class="t2"><a href="#s2-scenario">用场景串起来</a></li>
+      <li><a href="#section-3">三、三款 Agent 产品速览</a></li>
+      <li class="t2"><a href="#s3-claude">Claude Code</a></li>
+      <li class="t2"><a href="#s3-codex">OpenAI Codex</a></li>
+      <li class="t2"><a href="#s3-openclaw">OpenClaw</a></li>
+      <li class="t2"><a href="#s3-compare">三者对比</a></li>
+      <li><a href="#section-4">四、为什么 2026 是 Agent 元年</a></li>
+      <li><a href="#section-next">接下来</a></li>
+    </ul>
+  </aside>
+
+  <main class="article">
+    <div class="article-meta">
+      <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / 技术博客</div>
+      <h1>AI Agent 到底是什么？从三款产品说起</h1>
+      <p class="subtitle">从 Chatbot 到 Copilot 到 Agent，用三款真实产品讲透 AI Agent 的本质。系列文章第一篇。</p>
+      <div class="info">
+        <span>2026年2月25日</span>
+        <span>·</span>
+        <span>约 12 分钟</span>
+        <span>·</span>
+        <span class="tag tag-agent">Agent</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <blockquote><p>系列文章（1/4）| 作者：Allen | allen00.top</p></blockquote>
+
+      <p>2026 年，"Agent"这个词几乎出现在每一场 AI 发布会上。OpenAI 发了 Codex，Anthropic 推了 Claude Code，开源社区冒出了 OpenClaw，大厂小厂都在喊"我们做了 Agent"。</p>
+
+      <p>但我跟身边的产品经理、开发者聊下来，发现大部分人对 Agent 的理解是错的。</p>
+
+      <p>有人觉得 Agent 就是更聪明的 ChatGPT。有人觉得是自动化脚本加了个 AI 外壳。还有人觉得跟 Siri 差不多，只是回答更准了。</p>
+
+      <p>都不是。</p>
+
+      <p>我过去几个月实际用了 Claude Code、OpenAI Codex 和 OpenClaw 这三款产品做开发、写文章、管日程。这篇文章不讲论文，不堆术语，就从真实使用体验出发，把 Agent 这件事说清楚。</p>
+
+      <hr>
+
+      <h2 id="section-1">一、AI 能力的三个层级</h2>
+
+      <p>要理解 Agent，得先搞清楚它跟之前那些 AI 产品有什么本质区别。我把 AI 的能力分成三层，从低到高。</p>
+
+      <h3 id="s1-chatbot">第一层：Chatbot——只能说，不能做</h3>
+
+      <p>这是大部分人最熟悉的 AI 形态。你问它一个问题，它给你一个回答。你再问，它再答。整个过程就是一问一答的循环。</p>
+
+      <p>用建筑行业打个比方（我之前做过建筑设计）：Chatbot 就像一个只会"口头建议"的顾问。你问他"这面承重墙能不能拆？"他给你分析一堆结构力学原理，说得头头是道。但他绝不会帮你去查图纸、找结构工程师确认、写变更申请单。</p>
+
+      <p>动嘴不动手。</p>
+
+      <p>代表产品：ChatGPT 网页版、豆包、Kimi 的基本聊天模式。</p>
+
+      <p>它们能做的事：回答问题、生成文字、翻译、总结。但所有操作都局限在"对话框"里，它碰不到你的文件、打不开你的浏览器、发不了你的邮件。</p>
+
+      <h3 id="s1-copilot">第二层：Copilot——被动辅助，你得一直带着它</h3>
+
+      <p>比 Chatbot 进了一步。它不只是聊天，还能在你工作的时候实时帮忙。你写代码，它帮你补全下一行；你写文档，它帮你润色措辞。</p>
+
+      <p>但关键词是"辅助"。你在前面开车，它坐副驾驶帮你看导航、递水杯。方向盘始终在你手里。</p>
+
+      <p>像一个还不错的实习生——你给明确指令，它能执行得挺好。但你不能把一个大任务扔给它就去吃饭了，回来大概率发现它在原地等你。</p>
+
+      <p>代表产品：GitHub Copilot、Cursor、Office Copilot。</p>
+
+      <p>能力边界：辅助写代码、辅助写文档、辅助分析数据。注意，都是"辅助"。</p>
+
+      <h3 id="s1-agent">第三层：Agent——给目标，自己规划执行</h3>
+
+      <p>这一层的交互方式跟前两层完全不同。</p>
+
+      <p>你不再需要一步步告诉它做什么。你给一个目标——"帮我把这个 bug 修了""帮我写一篇关于 MCP 协议的技术博客""每天早上 9 点帮我检查 GitHub 通知"——然后它自己想办法完成。</p>
+
+      <p>自己拆任务、自己找工具、自己执行、遇到问题自己调整方案。</p>
+
+      <p>还是用建筑行业类比：Agent 相当于项目经理。你说"这栋楼下个月底要封顶"，怎么排工期、怎么调材料、怎么协调各工种、下雨了怎么调整计划，他自己搞定。你只需要在关键节点审核一下。</p>
+
+      <p>代表产品：Claude Code、OpenAI Codex、OpenClaw。</p>
+
+      <p>能力范围：自主规划、使用工具、迭代执行、自我检查。</p>
+
+      <p>我每天用的 OpenClaw 就是典型的 Agent。大模型做大脑，文件系统和浏览器做手脚，记忆文件做长期记忆，任务分解做规划。给它一个目标，它自己拆步骤、一步步执行、遇到问题自己调整。有时候半夜它还在帮我跑定时任务。</p>
+
+      <h3 id="s1-workflow">还有一个容易搞混的：Workflow</h3>
+
+      <p>在聊 Agent 之前，得把 Workflow 也拎出来说一下，因为这两个概念经常被混用。</p>
+
+      <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>Chatbot</th><th>Copilot</th><th>Agent</th><th>Workflow</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>交互方式</strong></td><td>一问一答</td><td>你做它辅助</td><td>给目标自己规划</td><td>触发后自动运行</td></tr>
+          <tr><td><strong>适合场景</strong></td><td>FAQ、内容生成</td><td>编码、写作辅助</td><td>复杂开放任务</td><td>标准化重复任务</td></tr>
+          <tr><td><strong>类比</strong></td><td>顾问（动嘴）</td><td>实习生（你带）</td><td>项目经理（自己干）</td><td>流水线（预设好的）</td></tr>
+          <tr><td><strong>代表产品</strong></td><td>ChatGPT、Kimi</td><td>Cursor、Copilot</td><td>Claude Code、Codex</td><td>Dify 工作流、Zapier</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <p>Workflow 的流程是你提前设计好的——第一步做什么、第二步做什么、遇到 A 走左边、遇到 B 走右边，全部预定义。像工厂的流水线，效率高但不灵活。</p>
+
+      <p>Agent 的流程是它自己规划的。同样一个任务，它可能今天走 A 路线，明天发现 B 路线更好就换了。像一个活人在做判断。</p>
+
+      <p>什么时候用 Workflow？任务标准化、流程固定、需要高可靠性的时候。比如"每天早上抓取 10 个网站的新闻，按分类整理到数据库"。</p>
+
+      <p>什么时候用 Agent？任务开放、需要灵活应对、中间可能出现意外的时候。比如"帮我研究一下竞品的最新动态，写一份分析报告"。</p>
+
+      <p>实际工作中，两者经常配合。Agent 负责思考和决策，Workflow 负责执行标准化的子流程。</p>
+
+      <hr>
+
+      <h2 id="section-2">二、Agent 的核心公式</h2>
+
+      <p>说了半天 Agent 能做什么，现在拆一下它到底是怎么工作的。</p>
+
+      <p>一个公式：</p>
+
+      <p><strong>智能体 = LLM + 观察 + 思考 + 行动 + 记忆</strong></p>
+
+      <p>五个要素，缺一不可。</p>
+
+      <p><strong>LLM（大脑）</strong></p>
+
+      <p>大语言模型是 Agent 的核心引擎。它负责理解你的意图、分析当前状况、决定下一步做什么。没有 LLM，Agent 就是一堆 if-else 脚本。</p>
+
+      <p>但 LLM 本身只会"想"，不会"做"。就像一个大脑离开了身体，再聪明也只能在脑子里转。</p>
+
+      <p><strong>观察（感知环境）</strong></p>
+
+      <p>Agent 需要"眼睛"和"耳朵"。它要能读取文件内容、浏览网页、接收用户消息、查看命令执行结果。</p>
+
+      <p>没有观察能力的 AI 就是闭着眼睛干活，它不知道当前代码长什么样，不知道网页上写了什么，不知道上一步操作成功没有。</p>
+
+      <p><strong>思考（分析决策）</strong></p>
+
+      <p>拿到观察结果后，Agent 要分析：现在进展到哪一步了？下一步该做什么？之前的方案还行不行？需不需要调整？</p>
+
+      <p>这一步是 Agent 跟 Workflow 的核心区别。Workflow 不思考，按预设路径走。Agent 每一步都在重新评估。</p>
+
+      <p><strong>行动（调用工具）</strong></p>
+
+      <p>想好了就动手。Agent 通过调用工具来执行操作：读写文件、运行命令、发送消息、搜索网页、调用 API。</p>
+
+      <p>工具是 Agent 的"手脚"。工具越多，Agent 能做的事越多。这也是为什么 MCP（Model Context Protocol）这个工具连接协议这么重要，它让 Agent 能标准化地接入各种工具。</p>
+
+      <p><strong>记忆（经验积累）</strong></p>
+
+      <p>人如果每天醒来都忘了昨天发生的事，没法正常生活。Agent 也一样。</p>
+
+      <p>记忆让 Agent 能记住之前做过什么、哪些方案有效、用户有什么偏好。短期记忆是当前对话的上下文，长期记忆是写在文件里的经验总结。</p>
+
+      <p>我用的 OpenClaw 有一个 MEMORY.md 文件，Agent 会把重要的事情记在里面。下次醒来先读这个文件，就知道之前发生了什么。</p>
+
+      <h3 id="s2-scenario">用一个场景串起来</h3>
+
+      <p>假设我跟 Agent 说："帮我写一篇关于 MCP 协议的技术博客，发到我的个人网站上。"</p>
+
+      <p>Agent 的工作流程大概是这样的：</p>
+
+      <ol>
+        <li>观察：读取我网站现有的博客，了解写作风格和格式要求</li>
+        <li>思考：MCP 协议涉及哪些内容？读者是谁？应该怎么组织结构？</li>
+        <li>行动：搜索 MCP 的最新资料，读取相关文档</li>
+        <li>观察：拿到搜索结果，看看有什么有价值的信息</li>
+        <li>思考：信息够了，开始规划文章结构</li>
+        <li>行动：写初稿，保存到文件</li>
+        <li>观察：检查字数、格式是否符合要求</li>
+        <li>思考：初稿写完了，需要检查一下有没有事实错误</li>
+        <li>行动：核实关键数据，修改不准确的地方</li>
+        <li>记忆：记住这次写作的经验，下次可以参考</li>
+      </ol>
+
+      <p>这个"观察→思考→行动"的循环会一直转，直到任务完成。中间如果搜索结果不好，它会换个关键词重新搜；如果写到一半发现结构不对，它会回头调整。</p>
+
+      <p>这就是 Agent 跟 Workflow 的区别，它不是按固定脚本走，而是在不断地感知、判断、调整。</p>
+
+      <hr>
+
+      <h2 id="section-3">三、三款 Agent 产品速览</h2>
+
+      <p>理论说完了，来看看实际产品。我挑了三款我真正用过的 Agent 产品，风格完全不同，正好代表了 Agent 产品设计的三种思路。</p>
+
+      <h3 id="s3-claude">Claude Code（Anthropic）</h3>
+
+      <p><strong>一句话定位：开发者的终端 AI 搭档。</strong></p>
+
+      <p>Claude Code 是 Anthropic 做的命令行 Agent。打开终端，输入 <code>claude</code>，就进入了一个 AI 驱动的编程环境。</p>
+
+      <p>你可以跟它说"帮我把这个函数重构一下"或者"这个测试为什么失败了"，它会自己去读代码、分析问题、改代码、跑测试，直到搞定。</p>
+
+      <p>我用它最深的感受是：它特别"专注"。一次只做一件事，但做得很深。它会反复读代码、改代码、验证结果，像一个沉浸在工作中的程序员。</p>
+
+      <p>核心特点：</p>
+      <ul>
+        <li>单会话深度工作，一次专注一个任务</li>
+        <li>权限控制很严格，敏感操作会先问你</li>
+        <li>有项目记忆（CLAUDE.md），能记住项目的约定和偏好</li>
+        <li>工具丰富：读写文件、执行命令、搜索代码、浏览网页</li>
+      </ul>
+
+      <p>适合谁：程序员、技术产品经理、需要 AI 帮忙写代码和调试的人。</p>
+
+      <p>局限：只能在终端里用，不能后台运行，关了终端就停了。一次只能处理一个任务。</p>
+
+      <h3 id="s3-codex">OpenAI Codex</h3>
+
+      <p><strong>一句话定位：云端并行编程 Agent。</strong></p>
+
+      <p>Codex 是 OpenAI 在 2025 年 5 月推出的编程 Agent。跟 Claude Code 最大的区别是：它跑在云端。</p>
+
+      <p>你在 ChatGPT 的侧边栏里点"Codex"，给它一个任务，它就在云端的沙盒环境里开始干活。每个任务有自己独立的环境，预装了你的代码仓库。</p>
+
+      <p>最厉害的是并行。你可以同时给它 5 个任务——修一个 bug、写一个新功能、重构一段代码、写测试、审查一个 PR——它同时在 5 个独立环境里干，互不干扰。</p>
+
+      <p>底层用的是 codex-1 模型，基于 o3 针对编程场景优化的版本。</p>
+
+      <p>Codex 有三种使用方式：</p>
+      <ul>
+        <li><strong>Web 版</strong>：在 chatgpt.com/codex 里用，最方便</li>
+        <li><strong>CLI 版</strong>：在终端里用，<code>npm install -g @openai/codex</code>，开源的</li>
+        <li><strong>IDE 插件</strong>：在 VS Code、Cursor 里直接用</li>
+      </ul>
+
+      <p>跟 GitHub 的集成很深——你可以在 GitHub Issue 或 PR 里 @codex，它就会自动创建任务去处理。</p>
+
+      <p>适合谁：需要同时处理多个编程任务的开发者，已经在用 ChatGPT 的团队。</p>
+
+      <p>局限：主要面向编程场景，不像 OpenClaw 那样能管生活。需要 ChatGPT Plus 或以上的订阅。</p>
+
+      <h3 id="s3-openclaw">OpenClaw（开源）</h3>
+
+      <p><strong>一句话定位：全场景 AI 管家。</strong></p>
+
+      <p>OpenClaw 跟前两个画风完全不同。它不只是编程工具，更像一个 24 小时在线的 AI 助手。</p>
+
+      <p>你把它部署在服务器上（我用的是一台腾讯云 2C4G 的机器），然后通过各种聊天渠道跟它对话——飞书、QQ、钉钉、企业微信、Telegram、Discord，都行。</p>
+
+      <p>它能做的事情远不止写代码：</p>
+      <ul>
+        <li>帮你管理日程和提醒</li>
+        <li>定时检查 GitHub 通知</li>
+        <li>自动整理 Notion 数据库</li>
+        <li>写文章、做研究</li>
+        <li>监控服务器状态</li>
+        <li>甚至能帮你发消息</li>
+      </ul>
+
+      <p>最让我觉得有意思的是它的"自我进化"能力。它有一套记忆系统——MEMORY.md 存长期记忆，每天的工作日志存在 memory/ 目录下，还有 SOUL.md 定义它的"性格"。每次对话它都在学习，慢慢变得更懂你。</p>
+
+      <p>它还有心跳机制——不是你找它它才响应，它会主动定期检查有没有需要处理的事情。半夜帮你跑完定时任务，早上你醒来就能看到结果。</p>
+
+      <p>适合谁：想要一个全天候 AI 助手的人，愿意折腾部署的技术爱好者。</p>
+
+      <p>局限：需要自己部署服务器，配置门槛比较高。不像 Claude Code 和 Codex 那样开箱即用。</p>
+
+      <h3 id="s3-compare">三者对比</h3>
+
+      <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th></th><th>Claude Code</th><th>OpenAI Codex</th><th>OpenClaw</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>定位</strong></td><td>终端编程 Agent</td><td>云端并行编程 Agent</td><td>全场景 AI 管家</td></tr>
+          <tr><td><strong>运行方式</strong></td><td>本地终端</td><td>云端沙盒</td><td>自部署服务器</td></tr>
+          <tr><td><strong>核心场景</strong></td><td>写代码、调试</td><td>并行编程任务</td><td>编程+生活+工作</td></tr>
+          <tr><td><strong>模型</strong></td><td>Claude 系列</td><td>codex-1（o3 优化）</td><td>任意模型（可切换）</td></tr>
+          <tr><td><strong>并发能力</strong></td><td>单任务</td><td>多任务并行</td><td>子代理并行</td></tr>
+          <tr><td><strong>开源</strong></td><td>否</td><td>CLI 开源</td><td>完全开源</td></tr>
+          <tr><td><strong>上手难度</strong></td><td>低</td><td>低</td><td>中高</td></tr>
+        </tbody>
+      </table>
+      </div>
+
+      <hr>
+
+      <h2 id="section-4">四、为什么 2026 是 Agent 元年</h2>
+
+      <p>Agent 的概念不是今年才有的。2023 年 AutoGPT 火过一阵，但当时的 Agent 基本不能用——模型推理能力不够，任务拆解经常跑偏，工具调用不稳定。</p>
+
+      <p>2026 年不一样了，三个条件同时成熟：</p>
+
+      <p><strong>模型能力到位了。</strong> Claude Opus、GPT-5、Gemini 3 这一代模型的推理能力有了质的飞跃。它们能理解复杂指令、做多步规划、在执行过程中自我纠错。这是 Agent 能"自主干活"的基础。</p>
+
+      <p><strong>工具标准化了。</strong> MCP（Model Context Protocol）协议的出现是一个转折点。以前每个 AI 产品接工具都要写一套定制代码，现在有了统一标准。写一次 MCP 适配，所有支持 MCP 的 Agent 都能用。就像 USB-C 统一了充电接口。</p>
+
+      <p><strong>产品形态成熟了。</strong> Claude Code、Codex、OpenClaw 这些产品证明了 Agent 不再是实验室里的 demo，而是能真正用起来的工具。它们各自找到了自己的场景和用户群。</p>
+
+      <p>但也要保持清醒：Agent 不是万能的。</p>
+
+      <p>很多场景根本不需要 Agent。你只是想问个问题？Chatbot 就够了。你只是想让 AI 帮你补全代码？Copilot 就够了。你的流程是固定的？Workflow 更可靠。</p>
+
+      <p>Agent 的价值在于处理那些"开放性的、需要灵活应对的、中间可能出各种状况的"复杂任务。如果你的需求很明确、流程很固定，用 Agent 反而是杀鸡用牛刀。</p>
+
+      <hr>
+
+      <h2 id="section-next">接下来</h2>
+
+      <p>这是系列文章的第一篇，帮你建立对 Agent 的基本认知。后面三篇会逐步深入：</p>
+
+      <ul>
+        <li><strong>第二篇</strong>：拆解 Claude Code、Codex、OpenClaw 的底层架构——它们是怎么实现"自主干活"的</li>
+        <li><strong>第三篇</strong>：产品经理视角的 Agent 设计心得——做 Agent 产品要想清楚哪些问题</li>
+        <li><strong>第四篇</strong>：实战操作指南——手把手教你用这三款产品</li>
+      </ul>
+
+      <p>如果你对 Agent 的技术架构感兴趣，第二篇会讲 Agent Loop、工具系统、记忆机制这些核心设计。</p>
+
+      <p>如果你是产品经理，想知道怎么把 Agent 的设计思路用到自己的产品里，直接跳第三篇。</p>
+
+      <hr>
+
+      <p><em>Allen | AI 产品经理 | allen00.top</em></p>
+
+      <!-- Series Navigation -->
+      <div class="series-nav">
+        <h4>📚 AI Agent 系列文章（共 4 篇）</h4>
+        <ul>
+          <li><a href="/blog/agent-series-01/" class="current"><span class="num">1</span>AI Agent 到底是什么？从三款产品说起</a></li>
+          <li><a href="/blog/agent-series-02/"><span class="num">2</span>三款 Agent 产品架构深度拆解</a></li>
+          <li><a href="/blog/agent-series-03/"><span class="num">3</span>产品经理的 Agent 设计心得</a></li>
+          <li><a href="/blog/agent-series-04/"><span class="num">4</span>实战操作指南</a></li>
+        </ul>
+      </div>
+
+    </div><!-- .content -->
+  </main>
+</div><!-- .article-layout -->
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Allen's Tech</div>
+    <div class="footer-links">
+      <a href="mailto:19512249774yangliu@gmail.com">📧 19512249774yangliu@gmail.com</a>
+      <a href="https://github.com/Allenyang007" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Allenyang007
+      </a>
+    </div>
+    <p class="footer-copy">© 2026 Allen</p>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement;
+  var next=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.querySelector('.theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  var saved=localStorage.getItem('theme')||
+    (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.theme-btn').textContent='☀️';
+  }
+})();
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
+document.querySelectorAll('.mobile-menu a').forEach(function(a){
+  a.addEventListener('click',function(){
+    if(!this.getAttribute('onclick')){
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobile-menu').classList.remove('show');
+    }
+  });
+});
+/* TOC scroll spy */
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href');
+  if(id && id.startsWith('#')){
+    var el=document.getElementById(id.slice(1));
+    if(el)headings.push({el:el,a:a});
+  }
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+120;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>

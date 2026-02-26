@@ -1,0 +1,1035 @@
+<!-- 
+  文章页统一模板 - 基于主页设计系统
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Claude Code、Codex、OpenClaw 实战操作指南 - Allen's Tech</title>
+<meta name="description" content="从安装到进阶，三款 Agent 工具的完整实战教程。系列文章第四篇。">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#ffffff;--bg-card:#f8f9fa;--bg-card-hover:#ffffff;
+  --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+  --border:#e5e7eb;--border-hover:#d1d5db;
+  --nav-bg:rgba(255,255,255,0.85);
+  --primary:#1a1a2e;
+  --accent-green:#22c55e;--accent-orange:#f97316;--accent-blue:#3b82f6;--accent-purple:#8b5cf6;--accent-red:#ef4444;--accent-pink:#ec4899;--accent-cyan:#06b6d4;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.1);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.04);
+  --radius:16px;
+  --grid-color:transparent;
+  --code-bg:#f6f8fa;--code-text:#1a1a2e;--code-border:#e5e7eb
+}
+
+[data-theme="dark"]{
+  --bg:#0a0a14;--bg-card:#141425;--bg-card-hover:#1a1a30;
+  --text:#e5e7eb;--text-secondary:#9ca3af;--text-muted:#6b7280;
+  --border:#1e1e36;--border-hover:#2d2d4a;
+  --nav-bg:rgba(10,10,20,0.88);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.5);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.2);
+  --grid-color:rgba(255,255,255,0.02);
+  --code-bg:#1e1e2e;--code-text:#cdd6f4;--code-border:#2d2d4a
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+
+body{
+  font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  transition:background .3s,color .3s;min-height:100vh;overflow-x:hidden
+}
+
+[data-theme="dark"] body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
+}
+
+/* ─── Nav ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:background .3s,border .3s
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.nav-logo{
+  font-size:1.25rem;font-weight:800;color:var(--primary);
+  text-decoration:none;letter-spacing:-0.5px
+}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;
+  transition:color .2s;padding:4px 0
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{position:relative}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent-green),var(--accent-orange));border-radius:1px
+}
+.nav-links a.disabled{opacity:0.4;cursor:default;pointer-events:auto}
+.nav-links a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+.theme-btn{
+  background:none;border:1px solid var(--border);border-radius:10px;
+  width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .2s;color:var(--text)
+}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+
+.hamburger{
+  display:none;background:none;border:1px solid var(--border);border-radius:10px;
+  width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;transition:all .2s
+}
+.hamburger span{
+  display:block;width:20px;height:2px;background:var(--text);border-radius:2px;
+  transition:all .3s
+}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:var(--bg);
+  padding:16px 24px 40px;
+  flex-direction:column;gap:4px;overflow-y:auto;z-index:1000
+}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{
+  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
+  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
+  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
+}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+.mobile-menu a.disabled{opacity:0.4;cursor:default}
+.mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+
+/* ─── Article Layout ─── */
+.article-layout{
+  max-width:1100px;margin:0 auto;padding:88px 24px 60px;
+  display:grid;grid-template-columns:200px 1fr;gap:48px
+}
+
+/* ─── TOC Sidebar ─── */
+.toc{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:12px}
+.toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:2px}
+.toc a{
+  display:block;padding:5px 12px;font-size:.8rem;color:var(--text-secondary);
+  text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5
+}
+.toc a:hover{color:var(--text);border-left-color:var(--border)}
+.toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
+.toc .t2{padding-left:24px;font-size:.76rem}
+
+/* ─── Article ─── */
+.article{max-width:740px}
+
+/* Meta header */
+.article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.82rem;color:var(--text-muted);margin-bottom:16px}
+.breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.breadcrumb a:hover{color:var(--accent-green)}
+.article-meta h1{font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.article-meta .subtitle{font-size:1.05rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6}
+.article-meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--text-muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px}
+.tag-ai{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.tag-agent{background:rgba(59,130,246,0.1);color:var(--accent-blue)}
+.tag-product{background:rgba(249,115,22,0.1);color:var(--accent-orange)}
+.tag-thinking{background:rgba(236,72,153,0.1);color:var(--accent-pink)}
+.tag-tech{background:rgba(6,182,212,0.1);color:var(--accent-cyan)}
+.tag-mcp{background:rgba(139,92,246,0.1);color:var(--accent-purple)}
+
+/* Content typography */
+.content h2{
+  font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
+  border-top:1px solid var(--border);letter-spacing:-.3px
+}
+.content h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.content h3{font-size:1.15rem;font-weight:600;margin:32px 0 12px}
+.content p{margin-bottom:16px;line-height:1.9}
+.content a{color:var(--accent-green);text-decoration:none;font-weight:500}
+.content a:hover{text-decoration:underline}
+.content ul,.content ol{margin:0 0 16px 20px}
+.content li{margin-bottom:6px;line-height:1.8}
+.content strong{font-weight:600}
+.content blockquote{
+  margin:20px 0;padding:16px 20px;border-left:3px solid var(--accent-green);
+  background:var(--bg-card);border-radius:0 8px 8px 0;font-size:.95rem
+}
+.content blockquote p{margin-bottom:0;color:var(--text-secondary)}
+.content hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+.content img{max-width:100%;border-radius:8px;margin:16px 0}
+
+/* Code blocks */
+.content code{
+  font-family:'JetBrains Mono',monospace;font-size:.85em;
+  background:var(--code-bg);color:var(--code-text);
+  padding:2px 6px;border-radius:4px;border:1px solid var(--code-border)
+}
+.content pre{
+  margin:20px 0;padding:20px 24px;border-radius:12px;overflow-x:auto;
+  background:var(--code-bg);border:1px solid var(--code-border);
+  font-size:.85rem;line-height:1.7
+}
+.content pre code{background:none;border:none;padding:0;font-size:inherit}
+
+/* Callout boxes */
+.callout{
+  margin:24px 0;padding:20px 24px;border-radius:12px;border:1px solid;
+  font-size:.92rem;line-height:1.8
+}
+.callout-info{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
+.callout-tip{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2)}
+.callout-warn{background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.2)}
+.callout b{display:block;margin-bottom:4px}
+.callout p{margin-bottom:0}
+
+/* Comparison table */
+.content table{
+  width:100%;border-collapse:collapse;margin:20px 0;font-size:.88rem
+}
+.content th,.content td{
+  padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)
+}
+.content th{font-weight:600;background:var(--bg-card);font-size:.82rem;color:var(--text-secondary)}
+.content tr:hover{background:var(--bg-card)}
+
+/* Mobile table scroll wrapper */
+.table-wrap{overflow-x:auto;margin:20px 0;border-radius:12px;border:1px solid var(--border)}
+.table-wrap table{margin:0;border-radius:0}
+.table-wrap th:first-child,.table-wrap td:first-child{position:sticky;left:0;background:var(--bg);z-index:1}
+
+/* Series navigation */
+.series-nav{
+  margin:48px 0 0;padding:28px 24px;background:var(--bg-card);
+  border:1px solid var(--border);border-radius:var(--radius)
+}
+.series-nav h4{font-size:.88rem;font-weight:700;margin-bottom:16px;color:var(--text-secondary)}
+.series-nav ul{list-style:none;padding:0}
+.series-nav li{margin-bottom:8px}
+.series-nav a{
+  display:flex;align-items:center;gap:8px;text-decoration:none;
+  color:var(--text-secondary);font-size:.88rem;padding:8px 12px;
+  border-radius:8px;transition:all .2s
+}
+.series-nav a:hover{background:var(--bg-card-hover);color:var(--text)}
+.series-nav a.current{color:var(--accent-green);font-weight:600;background:rgba(34,197,94,.06)}
+.series-nav .num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:6px;font-size:.72rem;font-weight:700;
+  background:var(--border);color:var(--text-secondary);flex-shrink:0
+}
+.series-nav a.current .num{background:rgba(34,197,94,.15);color:var(--accent-green)}
+
+/* ─── Footer ─── */
+footer{
+  border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
+  color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
+}
+.footer-inner{max-width:600px;margin:0 auto}
+.footer-brand{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:20px}
+.footer-links{
+  display:flex;justify-content:center;gap:24px;margin-bottom:20px;flex-wrap:wrap
+}
+.footer-links a{
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;color:var(--text-secondary);font-size:.88rem;
+  font-weight:500;transition:color .2s;min-height:44px
+}
+.footer-links a:hover{color:var(--accent-green)}
+.footer-copy{font-size:.8rem;color:var(--text-muted)}
+
+/* ─── Responsive ─── */
+@media(max-width:1024px){
+  .nav-links{gap:18px}
+  .nav-links a{font-size:.85rem}
+  .article-layout{grid-template-columns:180px 1fr;gap:32px}
+}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .toc{display:none}
+  .article-layout{grid-template-columns:1fr;gap:0;padding:80px 20px 48px}
+  .article-meta h1{font-size:1.6rem}
+  .article-meta .subtitle{font-size:.95rem}
+  .content h2{font-size:1.25rem;margin:36px 0 14px;padding-top:20px}
+  .content h3{font-size:1.05rem;margin:24px 0 10px}
+  .content p{font-size:.95rem;line-height:1.85}
+  .content pre{padding:16px;font-size:.8rem;border-radius:8px}
+  .callout{padding:16px 18px;border-radius:8px}
+  .series-nav{padding:22px 18px;border-radius:12px}
+  .footer-links{gap:16px}
+}
+
+@media(max-width:480px){
+  .article-layout{padding:76px 16px 40px}
+  .article-meta h1{font-size:1.4rem;letter-spacing:-.5px}
+  .article-meta .info{gap:10px}
+  .content h2{font-size:1.15rem}
+  .content p{font-size:.9rem}
+  .content pre{padding:14px 12px;font-size:.78rem}
+  .table-wrap{font-size:.82rem}
+  .series-nav a{font-size:.84rem;padding:6px 10px}
+  .footer-links{flex-direction:column;gap:8px}
+  footer{padding:36px 16px 32px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen's Tech</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="/blog/" class="active">博客</a>
+      <a href="javascript:void(0)" class="disabled">工具</a>
+      <a href="/about/">关于</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" class="disabled">工具 · 即将上线</a>
+  <a href="/about/">关于</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+
+<div class="article-layout">
+  <aside class="toc">
+    <h4>目录</h4>
+    <ul>
+      <li><a href="#sec0">零、前置准备</a></li>
+      <li class="t2"><a href="#sec0-1">终端（Terminal）</a></li>
+      <li class="t2"><a href="#sec0-2">Git</a></li>
+      <li class="t2"><a href="#sec0-3">Node.js</a></li>
+      <li class="t2"><a href="#sec0-4">GitHub 账号</a></li>
+      <li><a href="#sec1">一、Claude Code</a></li>
+      <li class="t2"><a href="#sec1-1">1.1 五分钟上手</a></li>
+      <li class="t2"><a href="#sec1-2">1.2 日常使用</a></li>
+      <li class="t2"><a href="#sec1-3">1.3 进阶：CLAUDE.md 配置</a></li>
+      <li class="t2"><a href="#sec1-4">1.4 进阶：权限配置</a></li>
+      <li class="t2"><a href="#sec1-5">1.5 进阶：子代理</a></li>
+      <li><a href="#sec2">二、OpenAI Codex</a></li>
+      <li class="t2"><a href="#sec2-1">2.1 五分钟上手</a></li>
+      <li class="t2"><a href="#sec2-2">2.2 日常使用</a></li>
+      <li class="t2"><a href="#sec2-3">2.3 进阶：AGENTS.md 配置</a></li>
+      <li class="t2"><a href="#sec2-4">2.4 进阶：环境配置</a></li>
+      <li class="t2"><a href="#sec2-5">2.5 Web 版 vs CLI 版怎么选</a></li>
+      <li><a href="#sec3">三、OpenClaw</a></li>
+      <li class="t2"><a href="#sec3-1">3.1 五分钟上手</a></li>
+      <li class="t2"><a href="#sec3-2">3.2 日常使用</a></li>
+      <li class="t2"><a href="#sec3-3">3.3 进阶：Skill 安装</a></li>
+      <li class="t2"><a href="#sec3-4">3.4 进阶：记忆系统配置</a></li>
+      <li class="t2"><a href="#sec3-5">3.5 进阶：多渠道配置</a></li>
+      <li class="t2"><a href="#sec3-6">3.6 进阶：模型配置和故障转移</a></li>
+      <li class="t2"><a href="#sec3-7">3.7 进阶：心跳和定时任务</a></li>
+      <li class="t2"><a href="#sec3-8">3.8 常见问题排查</a></li>
+      <li><a href="#sec4">四、实用技巧汇总</a></li>
+      <li><a href="#sec5">五、三款产品对比：选哪个？</a></li>
+    </ul>
+  </aside>
+
+  <article class="article">
+    <div class="article-meta">
+      <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">技术博客</a> / 实战操作指南</div>
+      <h1>Claude Code、Codex、OpenClaw 实战操作指南</h1>
+      <p class="subtitle">从安装到进阶，三款 Agent 工具的完整实战教程。系列文章第四篇。</p>
+      <div class="info">
+        <span>2026年2月25日</span>
+        <span>约 25 分钟</span>
+        <span class="tag tag-tech">实战</span>
+        <span class="tag tag-agent">Agent</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+<blockquote><p>系列文章（4/4）| 作者：Allen | allen00.top</p></blockquote>
+
+<hr>
+
+<p>前三篇讲了 Agent 是什么、架构怎么设计的、产品经理能学到什么。这一篇回到实操——手把手教你用这三款产品。</p>
+
+<p>从安装到日常使用，再到进阶配置。每个产品都按"5 分钟上手 → 日常使用 → 进阶技巧"的结构来写。</p>
+
+<hr>
+
+<h2 id="sec0">零、前置准备</h2>
+
+<p>在开始之前，确保你的电脑上有这些基础工具：</p>
+
+<h3 id="sec0-1">终端（Terminal）</h3>
+
+<p>Mac 用户：打开"终端"应用（在 应用程序 → 实用工具 里），或者用 Spotlight 搜索 "Terminal"。</p>
+
+<p>Windows 用户：推荐用 Windows Terminal（微软商店免费下载），或者 PowerShell。</p>
+
+<p>Linux 用户：你应该不需要我教这个。</p>
+
+<p>终端就是一个文字界面，你输入命令，电脑执行。后面所有安装和操作都在终端里完成。</p>
+
+<h3 id="sec0-2">Git</h3>
+
+<p>Git 是代码版本管理工具。即使你不写代码，用 Agent 也经常需要它。</p>
+
+<p>检查是否已安装：</p>
+<pre><code>git --version</code></pre>
+
+<p>如果显示版本号（比如 <code>git version 2.39.0</code>），说明已经装了。</p>
+
+<p>如果没有：</p>
+<ul>
+<li>Mac：终端输入 <code>xcode-select --install</code></li>
+<li>Windows：去 git-scm.com 下载安装</li>
+<li>Linux：<code>sudo apt install git</code> 或 <code>sudo yum install git</code></li>
+</ul>
+
+<h3 id="sec0-3">Node.js</h3>
+
+<p>Codex CLI 和 OpenClaw 都需要 Node.js。</p>
+
+<p>检查是否已安装：</p>
+<pre><code>node --version</code></pre>
+
+<p>需要 v18 或更高版本。没有的话去 nodejs.org 下载 LTS 版本。</p>
+
+<h3 id="sec0-4">GitHub 账号</h3>
+
+<p>三款产品都跟 GitHub 有不同程度的集成。如果还没有 GitHub 账号，去 github.com 注册一个。</p>
+
+<hr>
+
+<h2 id="sec1">一、Claude Code</h2>
+
+<h3 id="sec1-1">1.1 五分钟上手</h3>
+
+<p><strong>安装：</strong></p>
+
+<pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+
+<p>装完后验证：</p>
+<pre><code>claude --version</code></pre>
+
+<p><strong>首次启动：</strong></p>
+
+<pre><code>cd 你的项目目录
+claude</code></pre>
+
+<p>第一次运行会要求你登录 Anthropic 账号。按提示操作就行，会打开浏览器让你授权。</p>
+
+<p>登录成功后，你就进入了 Claude Code 的交互界面。直接用自然语言跟它说话：</p>
+
+<pre><code>&gt; 帮我看看这个项目的目录结构，简单介绍一下每个文件的作用</code></pre>
+
+<p>它会自己去读文件、分析代码，然后给你一个概览。</p>
+
+<p><strong>第一个任务：</strong></p>
+
+<p>试试让它做点实际的事：</p>
+
+<pre><code>&gt; 帮我在 README.md 里加一个"快速开始"章节，包含安装和运行步骤</code></pre>
+
+<p>它会：</p>
+<ol>
+<li>先读现有的 README.md</li>
+<li>分析项目结构，搞清楚怎么安装和运行</li>
+<li>写好新内容</li>
+<li>问你是否确认修改</li>
+</ol>
+
+<p>注意最后一步——它会先让你确认，不会直接改文件。这就是默认的权限控制在起作用。</p>
+
+<h3 id="sec1-2">1.2 日常使用</h3>
+
+<p><strong>常用命令：</strong></p>
+
+<p>在 Claude Code 的交互界面里，除了自然语言，还有一些斜杠命令：</p>
+
+<ul>
+<li><code>/help</code> — 查看帮助</li>
+<li><code>/status</code> — 查看当前状态（模型、上下文使用量等）</li>
+<li><code>/compact</code> — 手动压缩上下文（对话太长时用）</li>
+<li><code>/clear</code> — 清空对话历史</li>
+<li><code>/cost</code> — 查看本次会话的 API 消耗</li>
+</ul>
+
+<p><strong>典型工作流：</strong></p>
+
+<p>我日常用 Claude Code 的流程大概是这样的：</p>
+
+<ol>
+<li><code>cd</code> 到项目目录</li>
+<li><code>claude</code> 启动</li>
+<li>先让它了解项目："读一下项目结构，了解一下这是什么项目"</li>
+<li>给具体任务："帮我把 UserService 里的登录逻辑重构一下，现在太乱了"</li>
+<li>它开始工作——读代码、分析、改代码、可能还会跑测试</li>
+<li>我审查它的改动，确认或要求调整</li>
+<li>满意后 <code>git commit</code></li>
+</ol>
+
+<p><strong>处理复杂任务：</strong></p>
+
+<p>对于大任务，建议分步给指令，而不是一次性扔一个模糊的大目标：</p>
+
+<pre><code># 不太好的方式
+&gt; 帮我重构整个项目
+
+# 更好的方式
+&gt; 先帮我分析一下 src/services/ 目录下哪些文件耦合度最高
+&gt; （看完分析后）好，先重构 UserService，把数据库操作抽到 Repository 层
+&gt; （重构完后）跑一下测试看看有没有问题</code></pre>
+<h3 id="sec1-3">1.3 进阶：CLAUDE.md 配置</h3>
+
+<p>CLAUDE.md 是 Claude Code 的项目级配置文件，放在项目根目录。每次启动 Claude Code 都会自动读取它。</p>
+
+<p>一个实用的 CLAUDE.md 模板：</p>
+
+<pre><code># CLAUDE.md
+
+## 项目简介
+这是一个 Next.js + FastAPI 的全栈项目，前端在 /frontend，后端在 /backend。
+
+## 代码规范
+- TypeScript 严格模式
+- 函数命名用 camelCase
+- 组件命名用 PascalCase
+- 提交信息用中文
+
+## 常用命令
+- 前端开发：cd frontend &amp;&amp; npm run dev
+- 后端开发：cd backend &amp;&amp; uvicorn main:app --reload
+- 跑测试：cd backend &amp;&amp; pytest
+- 类型检查：cd frontend &amp;&amp; npx tsc --noEmit
+
+## 注意事项
+- 不要修改 .env.production 文件
+- 数据库迁移用 alembic
+- API 路由统一放在 /backend/routers/ 目录</code></pre>
+
+<p>有了这个文件，Claude Code 每次启动就知道项目的基本情况，不用你每次都重复交代。</p>
+
+<h3 id="sec1-4">1.4 进阶：权限配置</h3>
+
+<p>如果你觉得每次都要确认太烦，可以在项目的 <code>.claude/settings.json</code> 里配置权限规则：</p>
+
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Edit(*)",
+      "Bash(npm run *)",
+      "Bash(pytest *)",
+      "Bash(git status)",
+      "Bash(git diff *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Read(.env.production)"
+    ]
+  }
+}</code></pre>
+
+<p>这样配置后，读写文件和跑测试会自动通过，不再弹确认框。但删除操作和读生产环境配置会被拒绝。</p>
+
+<h3 id="sec1-5">1.5 进阶：子代理</h3>
+
+<p>处理大任务时，可以让 Claude Code 派子代理：</p>
+
+<pre><code>&gt; 这个任务比较大，帮我拆成几个子任务，用子代理分别处理</code></pre>
+
+<p>Claude Code 会自动创建子代理会话，每个子代理处理一个子任务，完成后把结果汇总回来。</p>
+
+<p>子代理的好处是不会撑爆主会话的上下文。每个子代理有自己独立的上下文窗口。</p>
+
+<hr>
+
+<h2 id="sec2">二、OpenAI Codex</h2>
+
+<h3 id="sec2-1">2.1 五分钟上手</h3>
+
+<p>Codex 有三种用法，选最适合你的：</p>
+
+<p><strong>方式一：Web 版（最简单）</strong></p>
+
+<ol>
+<li>打开 chatgpt.com/codex</li>
+<li>用你的 ChatGPT 账号登录（需要 Plus 或以上）</li>
+<li>连接你的 GitHub 账号</li>
+<li>选一个仓库，给任务，点"Code"</li>
+</ol>
+
+<p>就这么简单。</p>
+
+<p><strong>方式二：CLI 版</strong></p>
+
+<pre><code>npm install -g @openai/codex</code></pre>
+
+<p>安装后运行：</p>
+<pre><code>codex</code></pre>
+
+<p>第一次会让你选择登录方式——推荐"Sign in with ChatGPT"，用你的 ChatGPT 订阅额度。</p>
+
+<p>然后就可以直接给任务了：</p>
+<pre><code>codex "帮我写一个 Python 脚本，批量重命名当前目录下的图片文件"</code></pre>
+
+<p><strong>方式三：IDE 插件</strong></p>
+
+<p>在 VS Code 的扩展商店搜索 "Codex"，安装 OpenAI 官方插件。装完后在编辑器侧边栏就能看到 Codex 面板。</p>
+<h3 id="sec2-2">2.2 日常使用</h3>
+
+<p><strong>Web 版的典型流程：</strong></p>
+
+<ol>
+<li>打开 chatgpt.com/codex</li>
+<li>选择要操作的 GitHub 仓库</li>
+<li>输入任务描述，比如："修复 issue #42 中描述的登录超时问题"</li>
+<li>点"Code"（让它写代码）或"Ask"（让它回答问题）</li>
+<li>Codex 在云端沙盒里开始工作，你可以实时看进度</li>
+<li>完成后审查改动</li>
+<li>满意的话，直接创建 PR 到 GitHub</li>
+</ol>
+
+<p><strong>并行任务：</strong></p>
+
+<p>Codex 最大的优势是并行。你可以同时开多个任务：</p>
+
+<ul>
+<li>任务 1：修复登录超时 bug</li>
+<li>任务 2：给 API 加单元测试</li>
+<li>任务 3：重构数据库查询逻辑</li>
+</ul>
+
+<p>三个任务同时在不同的沙盒里跑，互不干扰。</p>
+
+<p><strong>GitHub 集成：</strong></p>
+
+<p>在 GitHub 的 issue 或 PR 评论里 @codex，它会自动创建任务：</p>
+
+<pre><code>@codex 请根据这个 issue 的描述修复 bug，并添加相关测试</code></pre>
+
+<h3 id="sec2-3">2.3 进阶：AGENTS.md 配置</h3>
+
+<p>跟 Claude Code 的 CLAUDE.md 类似，Codex 用 AGENTS.md 来配置项目信息。放在仓库根目录：</p>
+
+<pre><code># AGENTS.md
+
+## 项目结构
+- /src — 源代码
+- /tests — 测试文件
+- /docs — 文档
+
+## 开发环境
+- Python 3.11
+- 依赖管理：poetry
+- 安装依赖：poetry install
+- 跑测试：poetry run pytest
+- 代码检查：poetry run ruff check .
+
+## 代码规范
+- 遵循 PEP 8
+- 类型注解必须写
+- 每个公开函数必须有 docstring
+- 测试覆盖率不低于 80%
+
+## 注意事项
+- 不要修改 migrations/ 目录下的已有文件
+- 新增 API 端点需要同步更新 docs/api.md</code></pre>
+
+<h3 id="sec2-4">2.4 进阶：环境配置</h3>
+
+<p>Codex 的云端沙盒可以自定义环境。在仓库设置里，你可以指定：</p>
+
+<ul>
+<li>安装哪些系统依赖</li>
+<li>运行哪些初始化命令</li>
+<li>设置环境变量</li>
+</ul>
+
+<p>这样 Codex 的沙盒环境就能跟你的真实开发环境保持一致，减少"在我机器上能跑"的问题。</p>
+
+<h3 id="sec2-5">2.5 Web 版 vs CLI 版怎么选</h3>
+
+<ul>
+<li>日常任务、不想离开浏览器 → Web 版</li>
+<li>喜欢终端、需要跟本地文件交互 → CLI 版</li>
+<li>想在写代码的同时让 Codex 帮忙 → IDE 插件</li>
+</ul>
+
+<p>三种方式共享同一个后端，任务和历史是互通的。</p>
+
+<hr>
+<h2 id="sec3">三、OpenClaw</h2>
+
+<h3 id="sec3-1">3.1 五分钟上手</h3>
+
+<p>OpenClaw 的安装比前两个复杂一些，因为它需要部署在服务器上。但一旦装好，体验是最好的。</p>
+
+<p><strong>安装：</strong></p>
+
+<pre><code>npm install -g openclaw</code></pre>
+
+<p><strong>初始化：</strong></p>
+
+<pre><code>openclaw init</code></pre>
+
+<p>这会创建一个配置文件和工作目录。按提示配置：</p>
+<ul>
+<li>选择模型提供商（推荐先用 Gemini，免费额度够用）</li>
+<li>填入 API Key</li>
+<li>选择要连接的聊天渠道（可以先跳过，后面再配）</li>
+</ul>
+
+<p><strong>启动：</strong></p>
+
+<pre><code>openclaw gateway start</code></pre>
+
+<p>Gateway 会在后台运行。现在你可以在终端里跟它对话：</p>
+
+<pre><code>openclaw chat</code></pre>
+
+<p>或者配置好聊天渠道后，直接在飞书/QQ/钉钉里跟它说话。</p>
+
+<h3 id="sec3-2">3.2 日常使用</h3>
+
+<p><strong>终端对话：</strong></p>
+
+<pre><code>openclaw chat
+&gt; 帮我看看当前目录有什么文件
+&gt; 今天天气怎么样
+&gt; 帮我设一个 30 分钟后的提醒</code></pre>
+
+<p><strong>通过聊天渠道：</strong></p>
+
+<p>配置好飞书/QQ Bot 等渠道后，直接在对应 App 里给它发消息就行。跟跟朋友聊天一样自然。</p>
+
+<p><strong>定时任务：</strong></p>
+
+<pre><code>openclaw cron add \
+  --name "每日新闻整理" \
+  --cron "0 9 * * *" \
+  --tz "Asia/Shanghai" \
+  --session isolated \
+  --message "搜索今天的 AI 行业新闻，整理成摘要发给我"</code></pre>
+
+<p>这样每天早上 9 点，Agent 会自动执行这个任务。</p>
+
+<h3 id="sec3-3">3.3 进阶：Skill 安装</h3>
+
+<p>OpenClaw 的能力通过 Skill 扩展。安装 Skill 很简单：</p>
+
+<pre><code># 搜索可用的 Skill
+openclaw skills search weather
+
+# 安装
+openclaw skills install weather</code></pre>
+
+<p>一些实用的 Skill 推荐：</p>
+<ul>
+<li><code>weather</code> — 天气查询</li>
+<li><code>github</code> — GitHub 操作</li>
+<li><code>summarize</code> — 内容总结</li>
+<li><code>stock-analysis</code> — 股票分析</li>
+<li><code>youtube-watcher</code> — YouTube 字幕提取</li>
+</ul>
+
+<h3 id="sec3-4">3.4 进阶：记忆系统配置</h3>
+
+<p>OpenClaw 的记忆系统是它的核心竞争力。工作目录下有几个关键文件：</p>
+
+<p><strong>MEMORY.md</strong> — 长期记忆</p>
+<p>Agent 会自己维护这个文件，把重要的事情记在里面。你也可以手动编辑，告诉它一些背景信息。</p>
+
+<p><strong>SOUL.md</strong> — Agent 的"性格"</p>
+<p>定义 Agent 的行为风格。比如：</p>
+
+<pre><code># SOUL.md
+- 说话简洁直接，不废话
+- 有自己的观点，不只是附和
+- 遇到不确定的事情先查证再回答
+- 幽默但不刻意</code></pre>
+
+<p><strong>AGENTS.md</strong> — 行为规范</p>
+<p>定义 Agent 的工作流程、安全边界、工具使用规范。</p>
+
+<p><strong>memory/YYYY-MM-DD.md</strong> — 每日日志</p>
+<p>Agent 每天的工作记录。你可以翻看了解它做了什么。</p>
+<h3 id="sec3-5">3.5 进阶：多渠道配置</h3>
+
+<p>OpenClaw 支持同时连接多个聊天渠道。以飞书为例：</p>
+
+<ol>
+<li>在飞书开放平台创建一个应用</li>
+<li>获取 App ID 和 App Secret</li>
+<li>在 OpenClaw 配置文件里添加飞书渠道配置</li>
+<li>重启 Gateway</li>
+</ol>
+
+<p>配置好后，你在飞书里给这个应用发消息，OpenClaw 就会响应。</p>
+
+<p>QQ Bot、钉钉、企业微信的配置流程类似，具体参考 OpenClaw 文档：docs.openclaw.ai</p>
+
+<h3 id="sec3-6">3.6 进阶：模型配置和故障转移</h3>
+
+<p>OpenClaw 支持配置多个模型，设置优先级和故障转移：</p>
+
+<pre><code>主力模型 → 备用模型 1 → 备用模型 2 → ...</code></pre>
+
+<p>主力模型挂了或者达到限额，自动切到下一个。用户无感知。</p>
+
+<p>推荐配置：</p>
+<ul>
+<li>日常对话用便宜的模型（Gemini Flash、GPT-4o-mini）</li>
+<li>复杂任务用强模型（Claude Opus、GPT-5）</li>
+<li>设置 2-3 个备用，确保不会完全断线</li>
+</ul>
+
+<h3 id="sec3-7">3.7 进阶：心跳和定时任务</h3>
+
+<p>心跳是 OpenClaw 最有特色的功能之一。配置好后，Agent 会定期（默认 30 分钟）自己"醒来"检查有没有需要处理的事。</p>
+
+<p>你可以在工作目录下创建 HEARTBEAT.md，写上每次心跳要检查的事项：</p>
+
+<pre><code># HEARTBEAT.md
+- 检查 GitHub 有没有新通知
+- 检查最近的日志有没有需要整理的
+- 如果是工作日早上，看看今天的日程
+- 没什么事就回复 HEARTBEAT_OK</code></pre>
+
+<p>定时任务（Cron）更灵活，可以设置精确的执行时间：</p>
+
+<pre><code># 每天早上 9 点推送天气
+openclaw cron add \
+  --name "早间天气" \
+  --cron "0 9 * * *" \
+  --tz "Asia/Shanghai" \
+  --session isolated \
+  --message "查一下今天上海的天气，简短告诉我需不需要带伞" \
+  --deliver --channel qqbot --to "你的用户ID"
+
+# 每周一早上发周报提醒
+openclaw cron add \
+  --name "周报提醒" \
+  --cron "0 10 * * 1" \
+  --tz "Asia/Shanghai" \
+  --session isolated \
+  --message "提醒：今天要写周报。帮我回顾一下上周的工作日志，列出关键事项" \
+  --deliver --channel feishu --to "你的飞书ID"</code></pre>
+
+<p>管理定时任务：</p>
+<pre><code>openclaw cron list          # 查看所有任务
+openclaw cron remove &lt;id&gt;   # 删除任务</code></pre>
+
+<h3 id="sec3-8">3.8 常见问题排查</h3>
+
+<p><strong>Agent 不回复：</strong></p>
+<ul>
+<li>检查 Gateway 是否在运行：<code>openclaw gateway status</code></li>
+<li>检查模型 API Key 是否有效：<code>openclaw status</code></li>
+<li>查看日志：<code>openclaw logs --follow</code></li>
+</ul>
+
+<p><strong>上下文满了：</strong></p>
+<ul>
+<li>Agent 对话太长会撑满上下文窗口</li>
+<li>发送 <code>/compact</code> 手动压缩，或 <code>/reset</code> 重置会话</li>
+<li>Agent 会自动把重要信息存到 MEMORY.md，重置后不会丢失关键记忆</li>
+</ul>
+
+<p><strong>子代理失败：</strong></p>
+<ul>
+<li>检查是否是模型请求被拒（并发限制）</li>
+<li>看子代理运行时间——如果几秒就结束且 0 token，说明请求没成功</li>
+<li>重试，或者在主会话里直接执行</li>
+</ul>
+
+<p><strong>Skill 安装失败：</strong></p>
+<ul>
+<li>确保 Node.js 版本 &gt;= 18</li>
+<li>尝试 <code>openclaw skills update</code> 更新 Skill 索引</li>
+<li>查看具体错误信息</li>
+</ul>
+
+<hr>
+<h2 id="sec4">四、实用技巧汇总</h2>
+
+<h3>Claude Code 技巧</h3>
+
+<ol>
+<li><strong>善用 CLAUDE.md</strong>：把项目的"潜规则"都写进去，省得每次口头交代</li>
+<li><strong>大任务分步给</strong>：不要一次扔一个模糊的大目标，分成明确的小步骤</li>
+<li><strong>定期 /compact</strong>：长时间工作后手动压缩上下文，避免 Agent 变"健忘"</li>
+<li><strong>用 plan 模式预览</strong>：不确定 Agent 会怎么做时，先用 plan 模式让它只分析不动手</li>
+</ol>
+
+<h3>Codex 技巧</h3>
+
+<ol>
+<li><strong>写好 AGENTS.md</strong>：告诉 Codex 怎么跑测试、代码规范是什么，它的输出质量会明显提升</li>
+<li><strong>善用并行</strong>：把独立的任务同时丢给它，别一个一个排队</li>
+<li><strong>用 @codex 自动化</strong>：在 GitHub issue 里 @codex，省去手动创建任务的步骤</li>
+<li><strong>审查要仔细</strong>：Codex 生成的代码质量不错，但不要盲目合并，测试覆盖率要保证</li>
+</ol>
+
+<h3>OpenClaw 技巧</h3>
+
+<ol>
+<li><strong>养成让 Agent 记笔记的习惯</strong>：重要的事情说完后加一句"记一下"</li>
+<li><strong>定期检查 MEMORY.md</strong>：看看 Agent 记了什么，有错的及时纠正</li>
+<li><strong>善用 Skill 生态</strong>：遇到新需求先搜搜有没有现成的 Skill</li>
+<li><strong>配置故障转移</strong>：至少配两个模型，主力挂了有备用</li>
+<li><strong>心跳不要太频繁</strong>：30 分钟一次够了，太频繁浪费 token</li>
+</ol>
+
+<hr>
+
+<h2 id="sec5">五、三款产品对比：选哪个？</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th>你的需求</th><th>推荐</th></tr>
+</thead>
+<tbody>
+<tr><td>我是程序员，想要一个编程助手</td><td>Claude Code</td></tr>
+<tr><td>我需要同时处理多个编程任务</td><td>Codex</td></tr>
+<tr><td>我想要一个全天候 AI 助手</td><td>OpenClaw</td></tr>
+<tr><td>我不想折腾，开箱即用</td><td>Claude Code 或 Codex Web</td></tr>
+<tr><td>我想完全掌控，自己定制</td><td>OpenClaw</td></tr>
+<tr><td>我的预算有限</td><td>OpenClaw（可以用免费模型）</td></tr>
+<tr><td>我在企业环境里用</td><td>Codex（有企业版）或 Claude Code</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>当然，这三个不是互斥的。我自己就同时用着 Claude Code（写代码）和 OpenClaw（日常助手）。</p>
+
+<hr>
+
+<h2>结尾</h2>
+
+<p>这是系列的最后一篇。四篇文章从概念到架构到设计到实操，希望能帮你建立对 Agent 的完整认知。</p>
+
+<p>Agent 时代才刚开始。现在上手，你就是最早一批真正理解和使用 Agent 的人。</p>
+
+<p>去试试吧。</p>
+
+<hr>
+
+<p><em>Allen | AI 产品经理 | allen00.top</em></p>
+
+    </div><!-- end .content -->
+
+    <div class="series-nav">
+      <h4>📚 AI Agent 系列文章（4/4）</h4>
+      <ul>
+        <li><a href="/blog/agent-series-01/"><span class="num">1</span>AI Agent 到底是什么？从三款产品说起</a></li>
+        <li><a href="/blog/agent-series-02/"><span class="num">2</span>三款 Agent 产品架构深度拆解</a></li>
+        <li><a href="/blog/agent-series-03/"><span class="num">3</span>产品经理的 Agent 设计心得</a></li>
+        <li><a href="/blog/agent-series-04/" class="current"><span class="num">4</span>实战操作指南</a></li>
+      </ul>
+    </div>
+
+  </article>
+</div><!-- end .article-layout -->
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Allen's Tech</div>
+    <div class="footer-links">
+      <a href="mailto:19512249774yangliu@gmail.com">📧 19512249774yangliu@gmail.com</a>
+      <a href="https://github.com/Allenyang007" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Allenyang007
+      </a>
+    </div>
+    <p class="footer-copy">&copy; 2026 Allen</p>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement;
+  var next=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.querySelector('.theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  var saved=localStorage.getItem('theme')||
+    (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.theme-btn').textContent='☀️';
+  }
+})();
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
+document.querySelectorAll('.mobile-menu a').forEach(function(a){
+  a.addEventListener('click',function(){
+    if(!this.getAttribute('onclick')){
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobile-menu').classList.remove('show');
+    }
+  });
+});
+/* TOC scroll spy */
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href');
+  if(id && id.startsWith('#')){
+    var el=document.getElementById(id.slice(1));
+    if(el)headings.push({el:el,a:a});
+  }
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+120;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>
