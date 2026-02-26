@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>从大模型到 Agent：AI 应用的深度技术指南 - Allen's Tech</title>
-<meta name="description" content="一篇文章讲透 LLM、RAG、Agent、MCP、PTC、Skills 与生产级工程实践。">
+<title>从大模型到 Agent：AI 应用的完整技术栈 - Allen's Tech</title>
+<meta name="description" content="写给所有人的 AI 技术栈全景指南——从能聊天到能干活，从单兵到团队。">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 
@@ -61,7 +61,7 @@ body{overflow-x:hidden;
   -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
 }
 
-/* Nav */
+/* ─── Nav ─── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
@@ -95,7 +95,8 @@ nav{
   font-size:1.1rem;transition:all .2s;color:var(--text)
 }
 .theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
-
+</style>
+<style>
 .hamburger{
   display:none;background:none;border:1px solid var(--border);border-radius:10px;
   width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
@@ -126,14 +127,15 @@ nav{
 .mobile-menu a.disabled{opacity:0.4;cursor:default}
 .mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
 
-/* Article Layout */
+/* ─── Article Layout ─── */
 .article-layout{
   max-width:1100px;margin:0 auto;padding:88px 24px 60px;
   display:grid;grid-template-columns:200px 1fr;gap:48px
 }
 
-/* TOC Sidebar */
-.toc{position:sticky;top:88px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:12px}
+/* ─── TOC Sidebar ─── */
+.toc{position:relative;height:100%;padding-right:12px}
+.toc-inner{position:sticky;top:88px;max-height:calc(100vh - 100px);overflow-y:auto}
 .toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
 .toc ul{list-style:none;padding:0}
 .toc li{margin-bottom:2px}
@@ -145,7 +147,7 @@ nav{
 .toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
 .toc .t2{padding-left:24px;font-size:.76rem}
 
-/* Article */
+/* ─── Article ─── */
 .article{max-width:740px;min-width:0;overflow:hidden;overflow-wrap:break-word;word-wrap:break-word}
 
 /* Meta header */
@@ -163,8 +165,7 @@ nav{
 .tag-thinking{background:rgba(236,72,153,0.1);color:var(--accent-pink)}
 .tag-tech{background:rgba(6,182,212,0.1);color:var(--accent-cyan)}
 .tag-mcp{background:rgba(139,92,246,0.1);color:var(--accent-purple)}
-</style>
-<style>
+
 /* Content typography */
 .content h2{
   font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
@@ -225,12 +226,12 @@ nav{
 .table-wrap table{margin:0;border-radius:0}
 .table-wrap th:first-child,.table-wrap td:first-child{position:sticky;left:0;background:var(--bg);z-index:1}
 
-/* Diagram boxes (from original) */
+/* Diagram boxes */
 .diagram{margin:24px 0;padding:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.85rem;line-height:2.2;overflow-x:auto}
 .diagram .bx{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:8px;background:var(--bg);margin:4px}
 .diagram .ar{color:var(--text-muted)}
 
-/* Code block with header (from original) */
+/* Code block with header */
 .code-block{margin:20px 0;border-radius:12px;overflow:hidden;border:1px solid var(--code-border);background:var(--code-bg)}
 .code-header{display:flex;align-items:center;padding:8px 16px;background:rgba(0,0,0,.15);border-bottom:1px solid rgba(255,255,255,.06);font-size:.78rem;color:#9ca3af}
 .code-header .dots{display:flex;gap:6px}
@@ -264,7 +265,7 @@ nav{
 .refs a{color:var(--accent-green);text-decoration:none;word-break:break-all}
 .refs a:hover{text-decoration:underline}
 
-/* Footer */
+/* ─── Footer ─── */
 footer{
   border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
   color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
@@ -282,7 +283,7 @@ footer{
 .footer-links a:hover{color:var(--accent-green)}
 .footer-copy{font-size:.8rem;color:var(--text-muted)}
 
-/* Responsive */
+/* ─── Responsive ─── */
 @media(max-width:1024px){
   .nav-links{gap:18px}
   .nav-links a{font-size:.85rem}
@@ -301,6 +302,7 @@ footer{
   .content p{font-size:.95rem;line-height:1.85}
   .content pre{padding:16px;font-size:.8rem;border-radius:8px}
   .callout{padding:16px 18px;border-radius:8px}
+  .series-nav{padding:22px 18px;border-radius:12px}
   .footer-links{gap:16px}
 }
 
@@ -312,6 +314,7 @@ footer{
   .content p{font-size:.9rem}
   .content pre{padding:14px 12px;font-size:.78rem}
   .table-wrap{font-size:.82rem}
+  .series-nav a{font-size:.84rem;padding:6px 10px}
   .footer-links{flex-direction:column;gap:8px}
   footer{padding:36px 16px 32px}
 }
@@ -345,7 +348,9 @@ footer{
 </div>
 
 <div class="article-layout">
-<aside class="toc" id="toc"><h4>目录</h4><ul>
+<aside class="toc"><div class="toc-inner">
+<h4>目录</h4>
+<ul>
 <li><a href="#intro">引言</a></li>
 <li><a href="#llm">一、大模型基础</a></li>
 <li><a href="#llm-token" class="t2">Token 与上下文窗口</a></li>
@@ -362,24 +367,21 @@ footer{
 <li><a href="#ptc" class="t2">PTC 程序化工具调用</a></li>
 <li><a href="#skills" class="t2">Skills 技能系统</a></li>
 <li><a href="#memory" class="t2">Agent 记忆系统</a></li>
-<li><a href="#collab" class="t2">多组件协同</a></li>
-<li><a href="#eng" class="t2">生产级硬核工程</a></li>
-<li><a href="#products">四、产品深度剖析</a></li>
-<li><a href="#claude-code" class="t2">Claude Code</a></li>
-<li><a href="#openclaw" class="t2">OpenClaw</a></li>
-<li><a href="#compare-two" class="t2">对比与启示</a></li>
-<li><a href="#other-products" class="t2">其他产品简评</a></li>
-<li><a href="#compare">五、横向对比表</a></li>
-<li><a href="#future">六、未来展望</a></li>
-<li><a href="#refs">References</a></li>
-</ul></aside>
+</ul>
+</div></aside>
 
 <article class="article">
 <div class="article-meta">
-<div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / 从大模型到 Agent</div>
-<h1>从大模型到 Agent：AI 应用的深度技术指南</h1>
-<p class="subtitle">一篇文章讲透 LLM、RAG、Agent、MCP、PTC、Skills 与生产级工程实践</p>
-<div class="info"><span>Allen</span><span>2026-02-20</span><span>约 17000 字</span><span>阅读约 50 分钟</span><span class="tag tag-ai">AI</span><span class="tag tag-agent">Agent</span><span class="tag tag-mcp">MCP</span><span class="tag tag-tech">PTC</span><span class="tag tag-tech">Skills</span></div>
+<div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / 技术博客</div>
+<h1>从大模型到 Agent：AI 应用的完整技术栈</h1>
+<p class="subtitle">写给所有人的 AI 技术栈全景指南——从能聊天到能干活，从单兵到团队。</p>
+<div class="info">
+<span>2026年2月19日</span>
+<span>约 25 分钟</span>
+<span class="tag tag-ai">AI</span>
+<span class="tag tag-agent">Agent</span>
+<span class="tag tag-mcp">MCP</span>
+</div>
 </div>
 <div class="content" id="content">
 
@@ -435,123 +437,3 @@ footer{
 </div>
 
 <hr>
-
-<h2 id="rag">二、RAG：给 AI 配一个「图书馆」</h2>
-
-<p>理解了大模型的本质——凭记忆回答问题的"超级学霸"——你就能理解它的三个根本局限：<strong>知识有截止日期</strong>（训练数据有时间截止点）、<strong>不含私有信息</strong>（公司内部文档模型没见过）、<strong>会产生幻觉</strong>（"不知道"时不会坦承，而是编造合理答案）。</p>
-
-<p>RAG（Retrieval-Augmented Generation，检索增强生成）就是为了解决这三个问题。核心思路简单优雅：<strong>不要让模型单靠记忆回答，先让它"查资料"，再基于资料生成回答</strong>。</p>
-
-<blockquote><p>把 RAG 想象成<strong>开卷考试</strong>。聪明的学生参加开卷考试，不需要背教材，只需要知道去哪找、怎么用。RAG 让 AI 在回答之前先"翻书"——答案有依据，可以溯源，不容易"编造"。</p></blockquote>
-
-<h3 id="rag-why">为什么需要 RAG</h3>
-
-<p><strong>企业知识库问答</strong>：公司想让 AI 回答员工的 HR 问题——报销政策、年假制度、晋升机制。这些内容在公司内部文档里，模型训练数据里没有。用 RAG 把 HR 文档索引起来，员工提问时先检索相关段落，再让模型基于段落回答——精准、可溯源、不会幻觉。</p>
-
-<p><strong>实时信息查询</strong>：你问"特斯拉今天的股价？"模型不知道——训练数据早已截止。Agent 配备搜索工具后，可以实时检索财经网站，把最新数据取回来再生成回答。</p>
-
-<h3 id="rag-vector">向量化与语义检索</h3>
-
-<p>RAG 的核心技术是<strong>向量化（Vector Embedding）</strong>。传统关键词搜索靠词汇匹配——搜"购买"找不到含"买入"的文档。向量化靠<strong>语义相似度</strong>：先把文档切成段落，每段用嵌入模型（Embedding Model）转为高维向量（语义指纹），用户提问也转为向量，在向量数据库中找到语义最接近的文档片段。即使用法和措辞完全不同，只要意思相近就能命中。</p>
-
-<div class="diagram">
-<span class="bx">文档</span><span class="ar"> → </span><span class="bx">切分 Chunk</span><span class="ar"> → </span><span class="bx">Embedding</span><span class="ar"> → </span><span class="bx">向量数据库</span><br>
-<span style="font-size:.78rem;color:var(--text-muted)">——离线索引——</span><br><br>
-<span class="bx">用户提问</span><span class="ar"> → </span><span class="bx">问题向量化</span><span class="ar"> → </span><span class="bx">向量检索 top-k</span><span class="ar"> → </span><span class="bx">组合 Prompt</span><span class="ar"> → </span><span class="bx">LLM 生成</span><br>
-<span style="font-size:.78rem;color:var(--text-muted)">——在线查询——</span>
-</div>
-
-<div class="callout callout-tip">
-<b>RAG 的核心工程挑战</b>
-<p>RAG 看起来简单，但实际落地时有很多细节：<strong>如何切分文档（Chunking Strategy）</strong>——切得太小缺乏上下文，切得太大引入无关信息；<strong>如何处理表格和图片</strong>——结构化数据和图像需要特殊处理；<strong>如何处理多跳问题</strong>——"A 的上司的老家在哪里？"需要多次检索才能回答。切分策略往往决定了 RAG 系统 70% 的效果。</p>
-</div>
-
-<p><strong>传统 RAG 的痛点</strong></p>
-
-<p>传统的 Chunk + Embedding + 向量数据库模式虽然有效，但在实际落地中有让人头疼的调优难题：</p>
-
-<p><strong>① 分块策略选择困难</strong>——文档切得太小缺乏上下文，切得太大引入无关信息。更麻烦的是，不同类型的文档（合同、技术文档、财报）需要完全不同的分块策略，没有"万能分法"。Chunk Size 选 256 还是 512？重叠率设多少？每种文档都要反复试验才能找到"还算凑合"的参数。</p>
-
-<p><strong>② Embedding 模型选择与阈值调优</strong>——用哪个 Embedding 模型？通用模型（如 OpenAI text-embedding-3）对专业术语效果差，垂直领域模型覆盖不了多场景。相似度阈值设 0.7 还是 0.8？设高了漏掉答案，设低了引入噪音。整个预处理管道（文档解析 → 分块 → Embedding → 入库）任何一步出问题，最终效果就大打折扣。</p>
-
-<p><strong>③ 向量匹配的语义局限</strong>——Embedding 擅长语义相似度，但对精确数据查询（"三一重工前三大股东持股比例"）和跨文档关联推理（"A 的上司在哪个城市出生？"需要多次检索）力不从心。</p>
-
-<p><strong>④ 大模型只做最后一步</strong>——检索决策完全由固定算法完成，AI 没有机会参与"该搜什么""该看哪个文件""要不要换个策略重试"这些决策。</p>
-
-<p><strong>Agentic RAG 与 RAG 的未来方向</strong></p>
-
-<p><strong>Agentic RAG</strong> 是传统 RAG 的进化方向——让 AI 不只是被动接收检索结果，而是主动参与整个检索过程。它的工作模式更接近人类查资料：定位领域（分析问题，判断答案可能在哪个文件夹）→ 定位文件（用关键词筛选相关文件）→ 定位内容（打开文件只读取相关段落）→ 智能重试（首次不精准就换关键词扩大范围）。这种渐进式检索不需要预建向量索引，更轻量简单。</p>
-
-<p>正如 LlamaIndex 创始人 Jerry Liu 所说：<strong>"RAG / 检索本身没死，但死的是固定 Chunk + Embedding 那套模式。如果 Agent 可以动态地扩展文件周围的上下文，那么过度纠结数据块大小就没有意义了。"</strong>未来的趋势很可能是：固定 Chunk + Embedding 模式逐步被 Skills 这类 <strong>Agent-native 的检索方式</strong>蚕食——AI 自己决定搜什么、怎么搜、结果不好怎么重试，而不是靠工程师手工调优一套脆弱的预处理管道。后文 Skills 章节会详细介绍这种新范式。</p>
-
-<hr>
-
-<h2 id="agent">三、Agent：从"能聊天"到"能干活"的跃迁</h2>
-
-<p>有了大模型提供"大脑"、RAG 提供"图书馆"，AI 已经能回答各种问题了。但它还只是在"说"——无法真正"做"任何事情。<strong>Agent（智能体）的出现，改变了这一切。</strong>这是 AI 应用最激动人心的前沿，也是理解 2026 年 AI 生态的关键。</p>
-
-<h3 id="agent-what">什么是真正的 Agent</h3>
-
-<p>"Agent"这个词在 2025 年被严重滥用了。几乎每个 AI 产品都自称"Agent"，但大多数只是套了个壳的聊天机器人。要判断一个系统是不是真正的 Agent，有三个硬标准：</p>
-
-<p><strong>① 会规划：</strong>能把一个大目标拆解成多个具体步骤。你说"帮我调研竞品并写一份分析报告"，它能自己拆解为：搜索竞品信息 → 整理数据 → 分析优劣势 → 撰写报告。</p>
-
-<p><strong>② 会用工具执行动作：</strong>不只是生成文字，还能实际操作——调用 API、读写文件、执行代码、操作浏览器。能把想法落地为行动。</p>
-
-<p><strong>③ 自我检查与迭代：</strong>执行完一步后，会检查结果是否符合预期。如果代码报错，它会分析错误、修改代码、重新运行。这种"自我纠错循环"是 Agent 与 Chatbot 的本质区别。</p>
-
-<blockquote><p><strong>Chatbot 像一个只能打电话的朋友</strong>——你问他路怎么走，他告诉你方向；<strong>Copilot 像一个副驾驶</strong>——你开车，他帮你看地图，但方向盘在你手里；<strong>Agent 像一个代驾司机</strong>——你告诉他目的地，他自己开车、选路线、加油、处理突发状况，直到把你送到。Agent 与前两者的根本区别在于：<strong>它拥有自主决策权和行动闭环</strong>。</p></blockquote>
-
-<h3 id="agent-loop">ReAct 循环：Agent 的核心引擎</h3>
-
-<p>Agent 的工作方式不是"接收指令 → 输出结果"的单次交互，而是一个持续运转的<strong>感知-规划-执行-反馈循环</strong>。学术界称之为 ReAct（Reasoning + Acting）模式。</p>
-
-<div class="diagram">
-<span class="bx">👁️ 感知 Perceive</span><span class="ar"> → </span><span class="bx">🎯 规划 Plan</span><span class="ar"> → </span><span class="bx">🔧 执行 Act</span><span class="ar"> → </span><span class="bx">📊 反馈 Reflect</span><span class="ar"> → </span><span style="color:var(--text-muted)">(循环)</span>
-</div>
-
-<p><strong>感知</strong>：接收用户指令、环境信息、工具返回结果。<strong>规划</strong>：分析任务，分解步骤，制定执行策略。<strong>执行</strong>：调用工具、运行代码、操作外部系统。<strong>反馈</strong>：评估结果，决定继续还是结束。</p>
-
-<p>关键：这是一个<strong>循环，不是流水线</strong>。普通程序是线性的：输入 → 处理 → 输出。Agent 不同——执行结果会重新进入感知阶段，Agent 自己判断是否需要继续。比如：写一段代码 → 运行报错 → 分析错误 → 修改代码 → 再次运行 → 测试通过 → 任务完成。这个循环可能转 3 次，也可能转 30 次。<strong>Agent 自己决定什么时候停下来</strong>——这正是"自主性"的核心含义。</p>
-
-<p>ReAct 循环的本质是将 LLM 的<strong>"推理能力"</strong>（Reasoning）与<strong>"行动能力"</strong>（Acting）交替结合。每次推理时，模型不仅要思考"应该做什么"，还要解释"为什么这样做"（Chain-of-Thought）。这种显式推理链让 Agent 的行为可追溯、可审查——在生产环境中，这种可解释性对于调试和信任建立至关重要。</p>
-
-<h3 id="agent-fc">工具调用（Function Calling）：Agent 的"手和脚"</h3>
-
-<p>大模型本身不能上网、不能读文件、不能操作数据库——它只是一个文本生成器。Agent 之所以能"干活"，核心秘密就是<strong>工具调用（Function Calling）</strong>。</p>
-
-<p>机制很精巧：我们给模型一份「工具菜单」，描述每个工具的名字、功能和参数格式。模型在推理时，如果判断需要使用某个工具，就不再输出普通文本，而是输出一段<strong>结构化的调用请求</strong>（JSON 格式），包含工具名和参数值。外部系统解析这个请求、执行实际操作、把结果返回给模型。模型拿到结果后，继续推理并生成最终回答。</p>
-
-<p>关键认知：<strong>工具不是"嵌入"在模型里的，而是"描述"给模型听的</strong>。模型本身不会执行任何工具——它只是在合适时机"说"出一个调用指令。真正执行调用的是外围系统（Agent Runtime）。这种"大脑+手脚"的分离设计非常优雅：大脑（LLM）负责理解和决策，手脚（工具系统）负责行动和反馈。</p>
-
-<div class="code-block"><div class="code-header"><div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div><span class="fn">function-calling-demo</span></div>
-<div class="code-body"><code><span class="cmt">用户：</span> 帮我查一下北京今天的天气
-<span class="cmt">Agent 思考：</span> <span style="color:#6c7086">用户想知道北京天气，我需要调用天气查询工具</span>
-<span class="str">→ 调用工具：</span> get_weather(city="北京", date="today")
-<span class="fn2">← 工具返回：</span> {"temp": "22°C", "weather": "晴", "wind": "北风3级"}
-<span class="cmt">Agent：</span> 北京今天天气晴朗，气温 22°C，北风 3 级，适合外出！</code></div></div>
-
-<h3 id="mcp">MCP 协议：AI 世界的 USB-C</h3>
-
-<p>Function Calling 让 AI 能用工具，但随着 AI 应用爆炸式增长，一个新问题出现了：<strong>每个 AI 应用都要为每个工具单独写对接代码，重复劳动极其严重</strong>。</p>
-
-<p><strong>MCP（Model Context Protocol，模型上下文协议）</strong>由 Anthropic 提出并开源，统一了 AI 与外部世界的连接方式。</p>
-
-<blockquote><p>USB-C 出现之前，每个设备有自己的接口——Lightning、Micro-USB、Mini-USB。USB-C 统一了这一切。MCP 做的是同样的事：在 MCP 之前，M 个 AI 应用和 N 个工具需要 M×N 个适配器。有了 MCP，M+N 就够了。</p></blockquote>
-
-<p><strong>MCP 协议架构详解：三层分工。</strong>MCP 不是简单的"客户端调服务端"，而是一个精心设计的三层架构——<strong>MCP Host（宿主应用）</strong>就是你直接使用的 AI 应用（Claude Desktop、Cursor、OpenClaw），负责与用户交互，它本身不懂 MCP 协议的细节；<strong>MCP Client（协议客户端）</strong>是内嵌在 Host 中的"翻译官"，负责与 Server 建立连接、进行初始化握手、获取工具列表、路由调用请求——<strong>一个 Host 可以同时运行多个 Client，每个连接一个 Server</strong>，就像你的电脑有多个 USB 接口，每个连一个外设；<strong>MCP Server（工具提供方）</strong>将具体的外部能力封装为标准化服务，不关心谁在调用它。三层彻底解耦，各自独立演进。</p>
-
-<p><strong>MCP 的完整工作流程</strong>经历四个阶段：① <strong>初始化握手</strong>——Client 向 Server 发送 initialize 请求，声明协议版本，双方"对暗号"确认兼容；② <strong>能力协商</strong>——交换各自支持的 capabilities（如 Client 是否支持 Sampling、Server 提供哪些能力类型），划定后续交互的边界；③ <strong>工具列表交换</strong>——Client 调用 tools/list 获取所有工具定义（名称、描述、参数 Schema），转换为 LLM 理解的格式注入上下文；④ <strong>实际调用执行</strong>——用户提问 → LLM 判断需要哪个工具 → 输出结构化参数 → Client 通过 JSON-RPC 发给 Server → Server 执行 → 结果返回 → LLM 生成最终回答。通信采用 <strong>JSON-RPC 2.0</strong> 协议，天然支持双向通信——不仅 Client 可以调用 Server，Server 也可以反向请求 Client。</p>
-
-<p><strong>传输层演进：三代协议。</strong>MCP 的传输层经历了三代演进：<strong>第一代 Stdio（标准输入输出）</strong>——Server 作为本地子进程运行，通过 stdin/stdout 通信，零网络依赖、延迟极低，适合本地文件操作和本地数据库，但只能运行在同一台机器上；<strong>第二代 SSE（Server-Sent Events）</strong>——基于 HTTP 长连接，支持远程部署和服务端主动推送，但在负载均衡和 Serverless 架构中有兼容性问题；<strong>第三代 Streamable HTTP</strong>——MCP 最新推出的传输协议，无需长连接，使用标准 HTTP 请求即可交互，<strong>天然兼容 CDN、Serverless、负载均衡</strong>，同时向下兼容 SSE 的流式能力，是远程 MCP 部署的未来方向。</p>
-
-<p>MCP 暴露<strong>三种核心能力类型</strong>：<strong>Tools</strong>（可被 AI 主动调用的函数，如"搜索文件"、"执行 SQL"——这是最常用的，AI 通过调用工具来"做事"）；<strong>Resources</strong>（AI 可读取的只读数据源，为 AI 提供上下文信息——就像给实习生一份参考资料，而不是让他去干活）；<strong>Prompts</strong>（预定义的交互流程模板，如"代码审查"模板——Server 向 Client 提供高质量提示词，让 AI 按最佳实践处理特定任务）。</p>
-
-<p><strong>MCP 与 Function Call 的本质区别</strong>：很多人把这两个概念搞混了。它们不是同一层次的东西——<strong>Function Call 是模型内置的能力</strong>，是大模型 API 原生支持的特性，模型被训练过如何根据工具描述生成结构化调用参数，解决的是"AI 如何决定调用工具"；<strong>MCP 是标准化的外部协议</strong>，解决的是"工具从哪来、怎么发现、怎么连接"，模型本身不需要"知道"MCP 的存在。MCP Client 从 Server 获取工具列表后，会将工具描述<strong>转换为</strong>大模型支持的 Function Call 格式塞进 Prompt。大模型做的事没变——还是根据工具描述判断是否调用、生成参数。简单说：<strong>Function Call 是"大脑决定伸哪只手"，MCP 是"手上的工具用什么规格的接口来连接"</strong>。</p>
-
-<p><strong>MCP Client 兼容性问题</strong>：你可能注意到一个现象——有些 MCP Client（如 Cline）支持所有大模型，而有些（如 Cherry Studio）只支持部分模型。这不是 MCP 的 Bug，而是 Client 实现方式的差异。<strong>方式一：基于 Function Call</strong>（如 Cherry Studio）——Client 把工具列表转换为 API 的 tools 参数直接传给模型，性能更好但要求模型原生支持 Function Call；<strong>方式二：基于系统提示词</strong>（如 Cline）——Client 把工具列表和调用格式写成一段超长的系统提示词（Cline 的系统提示词高达 4 万多字符），让模型按约定格式输出参数，不依赖模型的 Function Call 能力，理论上任何模型都支持，但 Token 消耗更大。所以<strong>兼容性问题不在模型端，而在 Client 端</strong>——选 MCP Client 时看清楚它的实现方式，就能判断是否支持你想用的模型。</p>
-
-<div class="callout callout-info">
-<b>进阶：采样能力（Sampling）</b>
-<p>MCP 还有一个强大的高级能力——<strong>Sampling</strong>。它允许 MCP Server 反向请求 Client 调用 LLM。场景举例：一个代码分析 MCP Server 在扫描代码时发现复杂逻辑需要 AI 帮忙理解，它通过 Sampling 机制请求 Client 的 LLM 分析，拿到结果后继续执行。这种"Server 借用 Client 的大脑"的能力让 MCP Server 保持轻量，同时享受 LLM 的智能。</p>
-</div>
