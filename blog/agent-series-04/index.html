@@ -386,29 +386,29 @@ footer{
 
 <hr>
 
-<p>前三篇讲了 Agent 是什么、架构怎么设计的、产品经理能学到什么。这一篇回到实操——手把手教你用这三款产品。</p>
+<p>前三篇聊了 Agent 的概念、架构和产品设计。这篇不讲理论了，直接上手——我把自己用这三款产品的安装过程、日常操作和踩过的坑都整理出来了。</p>
 
-<p>从安装到日常使用，再到进阶配置。每个产品都按"5 分钟上手 → 日常使用 → 进阶技巧"的结构来写。</p>
+<p>每个产品按"5 分钟上手 → 日常怎么用 → 进阶玩法"的顺序写。中间穿插了不少我自己摸索出来的技巧和遇到的问题，希望能帮你少走弯路。</p>
 
 <hr>
 
 <h2 id="sec0">零、前置准备</h2>
 
-<p>在开始之前，确保你的电脑上有这些基础工具：</p>
+<p>三款产品对环境的要求不太一样，但有几个基础工具是通用的。我建议先花几分钟把这些搞定，免得后面装到一半卡住。</p>
 
 <h3 id="sec0-1">终端（Terminal）</h3>
 
-<p>Mac 用户：打开"终端"应用（在 应用程序 → 实用工具 里），或者用 Spotlight 搜索 "Terminal"。</p>
+<p>Mac 用户：打开"终端"应用（Spotlight 搜 "Terminal" 最快），或者装个 iTerm2，体验好很多。</p>
 
-<p>Windows 用户：推荐用 Windows Terminal（微软商店免费下载），或者 PowerShell。</p>
+<p>Windows 用户：推荐 Windows Terminal（微软商店免费），比自带的 cmd 好用太多。PowerShell 也行。</p>
 
 <p>Linux 用户：你应该不需要我教这个。</p>
 
-<p>终端就是一个文字界面，你输入命令，电脑执行。后面所有安装和操作都在终端里完成。</p>
+<p>如果你之前没怎么用过终端也别慌，后面的命令都是复制粘贴就能跑的。</p>
 
 <h3 id="sec0-2">Git</h3>
 
-<p>Git 是代码版本管理工具。即使你不写代码，用 Agent 也经常需要它。</p>
+<p>Git 是代码版本管理工具。哪怕你不写代码，Agent 操作文件时也依赖它来做版本追踪——改坏了能回滚，这很重要。</p>
 
 <p>检查是否已安装：</p>
 <pre><code>git --version</code></pre>
@@ -424,16 +424,62 @@ footer{
 
 <h3 id="sec0-3">Node.js</h3>
 
-<p>Codex CLI 和 OpenClaw 都需要 Node.js。</p>
+<p>Claude Code 和 OpenClaw 都需要 Node.js（Codex CLI 也需要）。</p>
 
 <p>检查是否已安装：</p>
 <pre><code>node --version</code></pre>
 
-<p>需要 v18 或更高版本。没有的话去 nodejs.org 下载 LTS 版本。</p>
+<p>需要 v18 或更高版本。没有的话去 nodejs.org 下载 LTS 版本。我个人推荐用 <a href="https://github.com/nvm-sh/nvm">nvm</a> 来管理 Node 版本，后面升级方便，也不容易遇到权限问题。</p>
 
 <h3 id="sec0-4">GitHub 账号</h3>
 
-<p>三款产品都跟 GitHub 有不同程度的集成。如果还没有 GitHub 账号，去 github.com 注册一个。</p>
+<p>三款产品都跟 GitHub 有不同程度的集成。如果还没有 GitHub 账号，去 github.com 注册一个。Codex 对 GitHub 的依赖最深——它直接从你的仓库拉代码、提 PR，没有 GitHub 基本没法用。</p>
+
+<!-- 安装流程对比图 -->
+<div style="margin:32px 0;padding:28px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;">
+<p style="font-weight:700;font-size:1.05rem;margin-bottom:20px;text-align:center;">三款产品安装流程对比</p>
+<div style="display:flex;flex-direction:column;gap:16px;">
+
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+<span style="display:inline-block;min-width:110px;font-weight:600;color:var(--accent-green);">Claude Code</span>
+<span style="display:inline-flex;align-items:center;gap:8px;font-size:.88rem;flex-wrap:wrap;">
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-green);border-radius:8px;white-space:nowrap;">npm install</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-green);border-radius:8px;white-space:nowrap;">claude 登录</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:rgba(34,197,94,0.12);border:1px solid var(--accent-green);border-radius:8px;font-weight:600;white-space:nowrap;">开始用 ✓</span>
+</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+<span style="display:inline-block;min-width:110px;font-weight:600;color:var(--accent-blue);">Codex</span>
+<span style="display:inline-flex;align-items:center;gap:8px;font-size:.88rem;flex-wrap:wrap;">
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-blue);border-radius:8px;white-space:nowrap;">网页登录</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-blue);border-radius:8px;white-space:nowrap;">连 GitHub</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-blue);border-radius:8px;white-space:nowrap;">选仓库</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:rgba(59,130,246,0.12);border:1px solid var(--accent-blue);border-radius:8px;font-weight:600;white-space:nowrap;">提任务 ✓</span>
+</span>
+</div>
+
+<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+<span style="display:inline-block;min-width:110px;font-weight:600;color:var(--accent-orange);">OpenClaw</span>
+<span style="display:inline-flex;align-items:center;gap:8px;font-size:.88rem;flex-wrap:wrap;">
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-orange);border-radius:8px;white-space:nowrap;">npm install</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-orange);border-radius:8px;white-space:nowrap;">配置模型</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:var(--bg);border:1px solid var(--accent-orange);border-radius:8px;white-space:nowrap;">连渠道</span>
+<span style="color:var(--text-muted);">→</span>
+<span style="padding:6px 14px;background:rgba(249,115,22,0.12);border:1px solid var(--accent-orange);border-radius:8px;font-weight:600;white-space:nowrap;">7×24 运行 ✓</span>
+</span>
+</div>
+
+</div>
+<p style="margin-top:16px;margin-bottom:0;font-size:.82rem;color:var(--text-muted);text-align:center;">Claude Code 最快上手，Codex 零安装，OpenClaw 配置最多但能力也最全</p>
+</div>
 
 <hr>
 
@@ -448,14 +494,21 @@ footer{
 <p>装完后验证：</p>
 <pre><code>claude --version</code></pre>
 
+<div class="callout callout-warn">
+<b>⚠️ 踩坑提醒：npm 全局安装权限问题</b>
+<p>我第一次装 Claude Code 时就卡在了 <code>EACCES: permission denied</code>。Mac 和 Linux 上用系统自带的 Node.js 经常遇到这个。两个解法：一是 <code>sudo npm install -g</code>（简单粗暴），二是用 nvm 管理 Node.js（推荐，一劳永逸）。Windows 用户一般不会遇到这个问题。</p>
+</div>
+
 <p><strong>首次启动：</strong></p>
 
 <pre><code>cd 你的项目目录
 claude</code></pre>
 
-<p>第一次运行会要求你登录 Anthropic 账号。按提示操作就行，会打开浏览器让你授权。</p>
+<p>第一次运行会弹浏览器让你登录 Anthropic 账号。授权完回到终端就能用了。</p>
 
-<p>登录成功后，你就进入了 Claude Code 的交互界面。直接用自然语言跟它说话：</p>
+<p>有一点要注意：Claude Code 用的是 Anthropic API 的额度，不是 Claude.ai 的订阅。你需要在 Anthropic Console 里充值，或者用 Claude Max 订阅（$100/月或 $200/月的那个）。我自己用的是 Max 订阅，日常写代码够用了。</p>
+
+<p>登录成功后，直接用自然语言跟它说话：</p>
 
 <pre><code>&gt; 帮我看看这个项目的目录结构，简单介绍一下每个文件的作用</code></pre>
 
@@ -467,88 +520,103 @@ claude</code></pre>
 
 <pre><code>&gt; 帮我在 README.md 里加一个"快速开始"章节，包含安装和运行步骤</code></pre>
 
-<p>它会：</p>
-<ol>
-<li>先读现有的 README.md</li>
-<li>分析项目结构，搞清楚怎么安装和运行</li>
-<li>写好新内容</li>
-<li>问你是否确认修改</li>
-</ol>
+<p>它会先读现有的 README.md，分析项目结构搞清楚怎么安装和运行，写好新内容，然后问你是否确认修改。</p>
 
-<p>注意最后一步——它会先让你确认，不会直接改文件。这就是默认的权限控制在起作用。</p>
+<p>注意最后一步——它会先让你确认，不会直接改文件。这是默认的权限控制，刚开始用的时候别急着关掉，等你熟悉了它的行为模式再放开权限。</p>
 
 <h3 id="sec1-2">1.2 日常使用</h3>
 
 <p><strong>常用命令：</strong></p>
 
-<p>在 Claude Code 的交互界面里，除了自然语言，还有一些斜杠命令：</p>
+<p>在 Claude Code 的交互界面里，除了自然语言，有几个斜杠命令我天天在用：</p>
 
 <ul>
-<li><code>/help</code> — 查看帮助</li>
-<li><code>/status</code> — 查看当前状态（模型、上下文使用量等）</li>
-<li><code>/compact</code> — 手动压缩上下文（对话太长时用）</li>
-<li><code>/clear</code> — 清空对话历史</li>
-<li><code>/cost</code> — 查看本次会话的 API 消耗</li>
+<li><code>/status</code> — 看当前上下文用了多少。我一般超过 60% 就 compact 一次</li>
+<li><code>/compact</code> — 压缩上下文。长时间干活必备，不然 Agent 会开始"忘事"</li>
+<li><code>/cost</code> — 看本次会话花了多少钱。用 Max 订阅的话这个数字仅供参考</li>
+<li><code>/clear</code> — 清空对话，从头开始</li>
 </ul>
 
-<p><strong>典型工作流：</strong></p>
+<p><strong>我的日常工作流：</strong></p>
 
-<p>我日常用 Claude Code 的流程大概是这样的：</p>
+<p>拿一个真实场景举例——上周我要给博客网站加暗色模式。整个过程大概是这样的：</p>
 
 <ol>
-<li><code>cd</code> 到项目目录</li>
-<li><code>claude</code> 启动</li>
-<li>先让它了解项目："读一下项目结构，了解一下这是什么项目"</li>
-<li>给具体任务："帮我把 UserService 里的登录逻辑重构一下，现在太乱了"</li>
-<li>它开始工作——读代码、分析、改代码、可能还会跑测试</li>
-<li>我审查它的改动，确认或要求调整</li>
-<li>满意后 <code>git commit</code></li>
+<li><code>cd ~/projects/allen-site && claude</code></li>
+<li>"读一下项目结构，重点看 CSS 部分是怎么组织的"</li>
+<li>它扫完告诉我 CSS 都写在各页面的 <code>&lt;style&gt;</code> 标签里，没有统一的变量系统</li>
+<li>"帮我设计一套 CSS 变量，支持亮色和暗色两套主题，先改首页试试"</li>
+<li>它改完首页后我在浏览器里看了看效果，发现代码块的背景色不对</li>
+<li>"代码块在暗色模式下背景太亮了，调暗一点"</li>
+<li>调好后："把这套变量同步到其他页面"</li>
 </ol>
 
-<p><strong>处理复杂任务：</strong></p>
+<p>整个过程大概 20 分钟。如果我自己手写，光是设计变量体系就得半小时。</p>
 
-<p>对于大任务，建议分步给指令，而不是一次性扔一个模糊的大目标：</p>
+<p><strong>处理复杂任务的经验：</strong></p>
 
-<pre><code># 不太好的方式
+<p>用了几个月，我总结出一个原则：<strong>给 Claude Code 的指令越具体，结果越好</strong>。</p>
+
+<pre><code># 这样说它会很迷茫，改出来的东西你大概率不满意
 &gt; 帮我重构整个项目
 
-# 更好的方式
+# 这样说它知道该干什么
 &gt; 先帮我分析一下 src/services/ 目录下哪些文件耦合度最高
 &gt; （看完分析后）好，先重构 UserService，把数据库操作抽到 Repository 层
 &gt; （重构完后）跑一下测试看看有没有问题</code></pre>
+
+<p>另一个技巧：如果你发现它改着改着方向不对，直接说"停，回到上一步"或者 <code>Ctrl+C</code> 打断它。别等它改完一大堆再推翻，浪费时间也浪费 token。</p>
 <h3 id="sec1-3">1.3 进阶：CLAUDE.md 配置</h3>
 
-<p>CLAUDE.md 是 Claude Code 的项目级配置文件，放在项目根目录。每次启动 Claude Code 都会自动读取它。</p>
+<p>CLAUDE.md 是 Claude Code 的项目级配置文件，放在项目根目录。每次启动时自动加载。</p>
 
-<p>一个实用的 CLAUDE.md 模板：</p>
+<p>我一开始觉得这个文件可有可无，后来发现差别很大——没有它，你每次开新会话都得重新交代一遍"这个项目用什么框架""测试怎么跑""别动那个文件"。写好 CLAUDE.md 之后，Claude Code 一启动就知道这些，省了很多重复沟通。</p>
+
+<p>分享一下我自己项目里在用的 CLAUDE.md（脱敏版）：</p>
 
 <pre><code># CLAUDE.md
 
 ## 项目简介
-这是一个 Next.js + FastAPI 的全栈项目，前端在 /frontend，后端在 /backend。
+这是一个 Next.js + FastAPI 的全栈项目。
+前端在 /frontend（Next.js 14, App Router），后端在 /backend（FastAPI + SQLAlchemy）。
+数据库是 PostgreSQL，缓存用 Redis。
 
 ## 代码规范
-- TypeScript 严格模式
-- 函数命名用 camelCase
-- 组件命名用 PascalCase
-- 提交信息用中文
+- TypeScript 严格模式，不要用 any
+- 函数命名 camelCase，组件命名 PascalCase
+- 后端 Python 用 type hints，不要省略返回值类型
+- Git 提交信息用中文，格式：feat/fix/refactor: 简短描述
 
 ## 常用命令
 - 前端开发：cd frontend &amp;&amp; npm run dev
 - 后端开发：cd backend &amp;&amp; uvicorn main:app --reload
-- 跑测试：cd backend &amp;&amp; pytest
-- 类型检查：cd frontend &amp;&amp; npx tsc --noEmit
+- 跑测试：cd backend &amp;&amp; pytest -v
+- 前端类型检查：cd frontend &amp;&amp; npx tsc --noEmit
+- 数据库迁移：cd backend &amp;&amp; alembic upgrade head
 
-## 注意事项
-- 不要修改 .env.production 文件
-- 数据库迁移用 alembic
-- API 路由统一放在 /backend/routers/ 目录</code></pre>
+## 禁区（不要碰的文件）
+- .env.production — 生产环境配置，改了会出事
+- alembic/versions/ 下已有的迁移文件 — 只能新增不能改
+- frontend/public/fonts/ — 字体文件是买的授权，别删
 
-<p>有了这个文件，Claude Code 每次启动就知道项目的基本情况，不用你每次都重复交代。</p>
+## 项目里的坑
+- frontend 的 next.config.js 里有个自定义 webpack 配置，别轻易改
+- backend 的 auth 模块用了自定义中间件，改登录逻辑前先读 middleware/auth.py
+- 数据库连接池大小写死了 20，压测时可能不够</code></pre>
+
+<p>几个写 CLAUDE.md 的心得：</p>
+<ul>
+<li>"禁区"很重要——明确告诉它哪些文件不能动，比事后回滚省心多了</li>
+<li>"项目里的坑"这一节是我后来加的，因为 Claude Code 踩了两次同样的坑之后我烦了</li>
+<li>常用命令写全，它需要跑测试或构建时会直接用这些命令，不用猜</li>
+<li>别写太长，几十行就够了。写成小作文它反而抓不住重点</li>
+</ul>
 
 <h3 id="sec1-4">1.4 进阶：权限配置</h3>
 
-<p>如果你觉得每次都要确认太烦，可以在项目的 <code>.claude/settings.json</code> 里配置权限规则：</p>
+<p>刚开始用的时候，每次改文件都要点确认，安全但确实烦。用了一周之后我就开始配权限规则了。</p>
+
+<p>在项目的 <code>.claude/settings.json</code> 里写：</p>
 
 <pre><code>{
   "permissions": {
@@ -567,17 +635,21 @@ claude</code></pre>
   }
 }</code></pre>
 
-<p>这样配置后，读写文件和跑测试会自动通过，不再弹确认框。但删除操作和读生产环境配置会被拒绝。</p>
+<p>这套配置的思路是：读写文件和跑测试放行（这是它最常做的事），但删除操作和生产环境配置一律拦截。</p>
+
+<p>我的建议是渐进式放开——先只放开 Read，用几天没问题再放开 Edit，再放开特定的 Bash 命令。一上来就全放开，万一它执行了什么奇怪的命令，你可能都不知道。</p>
 
 <h3 id="sec1-5">1.5 进阶：子代理</h3>
 
-<p>处理大任务时，可以让 Claude Code 派子代理：</p>
+<p>这个功能是我用了一个月之后才真正理解它的价值的。</p>
 
-<pre><code>&gt; 这个任务比较大，帮我拆成几个子任务，用子代理分别处理</code></pre>
+<p>问题是这样的：Claude Code 的上下文窗口是有限的。你跟它聊了很久、改了很多文件之后，它会开始"忘"前面的内容。子代理就是解决这个问题的——把大任务拆成小块，每块在独立的上下文里跑。</p>
 
-<p>Claude Code 会自动创建子代理会话，每个子代理处理一个子任务，完成后把结果汇总回来。</p>
+<pre><code>&gt; 这个重构任务比较大，涉及 5 个文件。帮我拆成子任务分别处理，每个子任务改一个文件。</code></pre>
 
-<p>子代理的好处是不会撑爆主会话的上下文。每个子代理有自己独立的上下文窗口。</p>
+<p>Claude Code 会自动创建子代理，每个子代理处理一个子任务，完成后汇总结果。</p>
+
+<p>我踩过的坑：子代理有时候会因为上下文不够而"理解偏差"——它不知道主会话里讨论过的细节。所以拆任务的时候，每个子任务的描述要写得足够清楚，把必要的背景信息带上，别假设它知道你之前说了什么。</p>
 
 <hr>
 
@@ -585,18 +657,18 @@ claude</code></pre>
 
 <h3 id="sec2-1">2.1 五分钟上手</h3>
 
-<p>Codex 有三种用法，选最适合你的：</p>
+<p>Codex 有三种用法，门槛从低到高：</p>
 
-<p><strong>方式一：Web 版（最简单）</strong></p>
+<p><strong>方式一：Web 版（零安装，最快）</strong></p>
 
 <ol>
 <li>打开 chatgpt.com/codex</li>
-<li>用你的 ChatGPT 账号登录（需要 Plus 或以上）</li>
+<li>用你的 ChatGPT 账号登录（需要 Plus 或 Pro）</li>
 <li>连接你的 GitHub 账号</li>
-<li>选一个仓库，给任务，点"Code"</li>
+<li>选一个仓库，写任务描述，点"Code"</li>
 </ol>
 
-<p>就这么简单。</p>
+<p>真的就这么简单。不用装任何东西，浏览器里就能用。我第一次用的时候有点不敢相信——选个仓库、写句话、点一下，它就在云端开始改代码了。</p>
 
 <p><strong>方式二：CLI 版</strong></p>
 
@@ -605,31 +677,29 @@ claude</code></pre>
 <p>安装后运行：</p>
 <pre><code>codex</code></pre>
 
-<p>第一次会让你选择登录方式——推荐"Sign in with ChatGPT"，用你的 ChatGPT 订阅额度。</p>
+<p>第一次会让你选登录方式——选"Sign in with ChatGPT"，直接用你的 ChatGPT 订阅额度，不用单独充值。</p>
 
-<p>然后就可以直接给任务了：</p>
+<p>CLI 版可以直接操作本地文件，适合喜欢在终端里干活的人：</p>
 <pre><code>codex "帮我写一个 Python 脚本，批量重命名当前目录下的图片文件"</code></pre>
 
 <p><strong>方式三：IDE 插件</strong></p>
 
-<p>在 VS Code 的扩展商店搜索 "Codex"，安装 OpenAI 官方插件。装完后在编辑器侧边栏就能看到 Codex 面板。</p>
+<p>VS Code 扩展商店搜 "Codex"，装 OpenAI 官方插件。装完后侧边栏会多一个 Codex 面板，写代码的时候随时可以让它帮忙。</p>
 <h3 id="sec2-2">2.2 日常使用</h3>
 
 <p><strong>Web 版的典型流程：</strong></p>
 
 <ol>
-<li>打开 chatgpt.com/codex</li>
-<li>选择要操作的 GitHub 仓库</li>
+<li>打开 chatgpt.com/codex，选择要操作的 GitHub 仓库</li>
 <li>输入任务描述，比如："修复 issue #42 中描述的登录超时问题"</li>
-<li>点"Code"（让它写代码）或"Ask"（让它回答问题）</li>
-<li>Codex 在云端沙盒里开始工作，你可以实时看进度</li>
-<li>完成后审查改动</li>
-<li>满意的话，直接创建 PR 到 GitHub</li>
+<li>点"Code"（让它写代码）或"Ask"（只问问题不动代码）</li>
+<li>Codex 在云端沙盒里开始工作，页面上能实时看到它在读哪些文件、改了什么</li>
+<li>完成后审查改动，满意的话直接创建 PR 到 GitHub</li>
 </ol>
 
-<p><strong>并行任务：</strong></p>
+<p><strong>并行任务——Codex 最大的杀手锏：</strong></p>
 
-<p>Codex 最大的优势是并行。你可以同时开多个任务：</p>
+<p>这是 Codex 跟 Claude Code 最大的区别。Claude Code 同一时间只能做一件事，Codex 可以同时跑好几个任务：</p>
 
 <ul>
 <li>任务 1：修复登录超时 bug</li>
@@ -637,17 +707,21 @@ claude</code></pre>
 <li>任务 3：重构数据库查询逻辑</li>
 </ul>
 
-<p>三个任务同时在不同的沙盒里跑，互不干扰。</p>
+<p>三个任务在不同的云端沙盒里同时跑，互不干扰。我试过同时开 5 个任务，都能正常完成。这对于要赶进度的时候太有用了——把 issue 列表里的任务批量丢给它，自己去做别的事。</p>
 
-<p><strong>GitHub 集成：</strong></p>
+<p><strong>GitHub 深度集成：</strong></p>
 
 <p>在 GitHub 的 issue 或 PR 评论里 @codex，它会自动创建任务：</p>
 
 <pre><code>@codex 请根据这个 issue 的描述修复 bug，并添加相关测试</code></pre>
 
+<p>这个功能在团队协作里很好用。产品经理提了 issue，直接 @codex 让它先出个初版 PR，开发再在这个基础上 review 和调整。</p>
+
 <h3 id="sec2-3">2.3 进阶：AGENTS.md 配置</h3>
 
-<p>跟 Claude Code 的 CLAUDE.md 类似，Codex 用 AGENTS.md 来配置项目信息。放在仓库根目录：</p>
+<p>跟 Claude Code 的 CLAUDE.md 一个思路，Codex 用 AGENTS.md 来了解项目。放在仓库根目录就行。</p>
+
+<p>但 Codex 的 AGENTS.md 有个特别重要的用途：<strong>告诉它怎么验证自己的改动</strong>。因为 Codex 在云端沙盒里跑，它改完代码后会自己跑测试。如果你不告诉它测试命令，它可能猜错，或者干脆不跑测试就交差了。</p>
 
 <pre><code># AGENTS.md
 
@@ -660,47 +734,60 @@ claude</code></pre>
 - Python 3.11
 - 依赖管理：poetry
 - 安装依赖：poetry install
-- 跑测试：poetry run pytest
+- 跑测试：poetry run pytest -v
 - 代码检查：poetry run ruff check .
+- 类型检查：poetry run mypy src/
+
+## 验证清单（每次改完代码必须做）
+1. poetry run pytest -v — 所有测试必须通过
+2. poetry run ruff check . — 不能有 lint 错误
+3. poetry run mypy src/ — 类型检查必须通过
 
 ## 代码规范
 - 遵循 PEP 8
-- 类型注解必须写
+- 类型注解必须写，不要用 Any
 - 每个公开函数必须有 docstring
 - 测试覆盖率不低于 80%
 
 ## 注意事项
 - 不要修改 migrations/ 目录下的已有文件
-- 新增 API 端点需要同步更新 docs/api.md</code></pre>
+- 新增 API 端点需要同步更新 docs/api.md
+- PR 标题格式：feat/fix/refactor: 简短描述</code></pre>
+
+<p>写好这个文件之后，Codex 生成的 PR 质量会明显提升——它会自己跑完验证清单里的命令，通过了才提交。</p>
 
 <h3 id="sec2-4">2.4 进阶：环境配置</h3>
 
-<p>Codex 的云端沙盒可以自定义环境。在仓库设置里，你可以指定：</p>
+<p>Codex 的云端沙盒默认是一个干净的 Linux 环境。如果你的项目需要特殊依赖（比如系统级的库、特定版本的数据库客户端），需要在仓库设置里配置 setup 脚本。</p>
 
-<ul>
-<li>安装哪些系统依赖</li>
-<li>运行哪些初始化命令</li>
-<li>设置环境变量</li>
-</ul>
+<p>在仓库根目录创建 <code>codex-setup.sh</code>：</p>
 
-<p>这样 Codex 的沙盒环境就能跟你的真实开发环境保持一致，减少"在我机器上能跑"的问题。</p>
+<pre><code>#!/bin/bash
+# Codex 沙盒初始化脚本
+apt-get update &amp;&amp; apt-get install -y libpq-dev  # PostgreSQL 客户端库
+poetry install                                    # 安装 Python 依赖
+npm ci --prefix frontend                          # 安装前端依赖</code></pre>
+
+<p>这样每次 Codex 创建沙盒时都会先跑这个脚本，环境就跟你本地一致了。我之前有个任务一直失败，查了半天发现是沙盒里没装 <code>libpq-dev</code>，加了这个脚本就好了。</p>
 
 <h3 id="sec2-5">2.5 Web 版 vs CLI 版怎么选</h3>
 
+<p>我两个都用过一段时间，说说体感：</p>
+
 <ul>
-<li>日常任务、不想离开浏览器 → Web 版</li>
-<li>喜欢终端、需要跟本地文件交互 → CLI 版</li>
-<li>想在写代码的同时让 Codex 帮忙 → IDE 插件</li>
+<li><strong>Web 版</strong>适合"甩手掌柜"模式——丢个任务过去，过一会儿回来看结果。不用开终端，不用在本地跑任何东西。我在手机上都能用 Web 版给 Codex 派任务。</li>
+<li><strong>CLI 版</strong>适合需要跟本地文件交互的场景。比如你想让它改一个还没推到 GitHub 的本地文件，CLI 版可以直接操作。</li>
+<li><strong>IDE 插件</strong>适合写代码时随手问问题或者让它补全一段逻辑。</li>
 </ul>
 
-<p>三种方式共享同一个后端，任务和历史是互通的。</p>
+<p>三种方式共享同一个后端，任务和历史互通。我的习惯是：批量任务用 Web 版，本地调试用 CLI 版。</p>
 
 <hr>
 <h2 id="sec3">三、OpenClaw</h2>
 
 <h3 id="sec3-1">3.1 五分钟上手</h3>
 
-<p>OpenClaw 的安装比前两个复杂一些，因为它需要部署在服务器上。但一旦装好，体验是最好的。</p>
+<p>OpenClaw 的安装比前两个多几步，因为它不只是一个命令行工具——它是一个要 7×24 小时跑着的服务。但别被吓到，跟着走就行。</p>
 
 <p><strong>安装：</strong></p>
 
@@ -710,35 +797,53 @@ claude</code></pre>
 
 <pre><code>openclaw init</code></pre>
 
-<p>这会创建一个配置文件和工作目录。按提示配置：</p>
+<p>这一步会引导你做三件事：</p>
 <ul>
-<li>选择模型提供商（推荐先用 Gemini，免费额度够用）</li>
-<li>填入 API Key</li>
-<li>选择要连接的聊天渠道（可以先跳过，后面再配）</li>
+<li><strong>选模型</strong>：推荐先用 Gemini，Google 给的免费额度很大方，够你玩一阵子。后面觉得不够好再换 Claude 或 GPT</li>
+<li><strong>填 API Key</strong>：去对应模型厂商的控制台拿。Gemini 的在 Google AI Studio 里，30 秒就能搞定</li>
+<li><strong>连聊天渠道</strong>：可以先跳过，用终端对话也行。等你确定要长期用了再配飞书/QQ</li>
 </ul>
 
 <p><strong>启动：</strong></p>
 
 <pre><code>openclaw gateway start</code></pre>
 
-<p>Gateway 会在后台运行。现在你可以在终端里跟它对话：</p>
+<p>Gateway 会在后台运行。检查一下状态：</p>
+
+<pre><code>openclaw gateway status</code></pre>
+
+<p>看到 "running" 就说明启动成功了。现在可以在终端里跟它聊天：</p>
 
 <pre><code>openclaw chat</code></pre>
 
-<p>或者配置好聊天渠道后，直接在飞书/QQ/钉钉里跟它说话。</p>
+<div class="callout callout-tip">
+<b>💡 部署建议</b>
+<p>OpenClaw 最好跑在一台长期在线的机器上——云服务器、NAS、甚至一台吃灰的旧笔记本都行。我自己是跑在一台腾讯云轻量服务器上，2 核 4G 的配置绑绑有余。如果只是试玩，本地跑也没问题，关机了它就休息。</p>
+</div>
 
 <h3 id="sec3-2">3.2 日常使用</h3>
+
+<p>OpenClaw 跟前两个产品最大的不同是：它不只是一个编程工具，更像一个全能助手。我日常用它做的事情五花八门：</p>
 
 <p><strong>终端对话：</strong></p>
 
 <pre><code>openclaw chat
 &gt; 帮我看看当前目录有什么文件
-&gt; 今天天气怎么样
-&gt; 帮我设一个 30 分钟后的提醒</code></pre>
+&gt; 总结一下这篇文章的要点（粘贴 URL）
+&gt; 帮我写一封请假邮件，明天有事</code></pre>
 
-<p><strong>通过聊天渠道：</strong></p>
+<p><strong>通过聊天渠道（这才是主要用法）：</strong></p>
 
-<p>配置好飞书/QQ Bot 等渠道后，直接在对应 App 里给它发消息就行。跟跟朋友聊天一样自然。</p>
+<p>配置好飞书或 QQ Bot 之后，直接在手机上给它发消息就行。我现在的使用习惯是这样的：</p>
+
+<ul>
+<li>早上通勤时在 QQ 上问它："今天天气怎么样？需要带伞吗？"</li>
+<li>工作中让它帮忙查资料："帮我搜一下 React Server Components 的最新进展"</li>
+<li>想到什么事情随手记："记一下，下周三要交项目方案"</li>
+<li>晚上让它帮忙整理："把今天的工作日志整理一下"</li>
+</ul>
+
+<p>因为它 7×24 小时在线，而且有记忆系统，用起来就像有个随时待命的私人助理。</p>
 
 <p><strong>定时任务：</strong></p>
 
@@ -749,91 +854,133 @@ claude</code></pre>
   --session isolated \
   --message "搜索今天的 AI 行业新闻，整理成摘要发给我"</code></pre>
 
-<p>这样每天早上 9 点，Agent 会自动执行这个任务。</p>
+<p>这样每天早上 9 点，它会自动搜新闻、整理摘要、推送给你。我设了三个定时任务：早间天气、AI 新闻摘要、每周五下午的周报提醒。省了不少重复劳动。</p>
 
 <h3 id="sec3-3">3.3 进阶：Skill 安装</h3>
 
-<p>OpenClaw 的能力通过 Skill 扩展。安装 Skill 很简单：</p>
+<p>Skill 是 OpenClaw 的能力扩展包。默认装完的 OpenClaw 能聊天、能搜索、能读写文件，但如果你想让它查天气、操作 GitHub、分析股票，就需要装对应的 Skill。</p>
 
 <pre><code># 搜索可用的 Skill
 openclaw skills search weather
 
 # 安装
-openclaw skills install weather</code></pre>
+openclaw skills install weather
 
-<p>一些实用的 Skill 推荐：</p>
+# 查看已安装的 Skill
+openclaw skills list</code></pre>
+
+<p>装完之后不需要重启，Agent 下次对话时会自动加载新 Skill。</p>
+
+<p>我目前装了这些，都是实际在用的：</p>
 <ul>
-<li><code>weather</code> — 天气查询</li>
-<li><code>github</code> — GitHub 操作</li>
-<li><code>summarize</code> — 内容总结</li>
-<li><code>stock-analysis</code> — 股票分析</li>
-<li><code>youtube-watcher</code> — YouTube 字幕提取</li>
+<li><code>weather</code> — 天气查询，配合定时任务每天早上推送</li>
+<li><code>github</code> — 查 issue、看 PR、管理仓库，不用打开网页</li>
+<li><code>summarize</code> — 丢个链接给它就能出摘要，看长文章的利器</li>
+<li><code>stock-analysis</code> — 股票行情和简单分析，盯盘用（不构成投资建议哈）</li>
+<li><code>youtube-watcher</code> — 提取 YouTube 视频字幕并总结，看英文技术视频时特别有用</li>
 </ul>
+
+<p>每个 Skill 安装后，在工作目录的 <code>skills/</code> 文件夹下会有一个对应的目录，里面有 <code>SKILL.md</code> 说明文件。如果你想了解某个 Skill 的具体能力和配置项，直接看这个文件就行。</p>
+
+<div class="callout callout-info">
+<b>💡 自己写 Skill</b>
+<p>如果现有的 Skill 不能满足你的需求，可以自己写。一个 Skill 本质上就是一个目录加一个 SKILL.md 描述文件。OpenClaw 文档里有详细的 Skill 开发指南：docs.openclaw.ai</p>
+</div>
 
 <h3 id="sec3-4">3.4 进阶：记忆系统配置</h3>
 
-<p>OpenClaw 的记忆系统是它的核心竞争力。工作目录下有几个关键文件：</p>
+<p>记忆系统是 OpenClaw 跟普通 AI 聊天最大的区别。ChatGPT 关掉窗口就忘了你是谁，OpenClaw 不会。</p>
 
-<p><strong>MEMORY.md</strong> — 长期记忆</p>
-<p>Agent 会自己维护这个文件，把重要的事情记在里面。你也可以手动编辑，告诉它一些背景信息。</p>
+<p>工作目录下有几个关键文件，理解它们的作用很重要：</p>
 
-<p><strong>SOUL.md</strong> — Agent 的"性格"</p>
-<p>定义 Agent 的行为风格。比如：</p>
+<p><strong>MEMORY.md — 长期记忆</strong></p>
+<p>Agent 会自己维护这个文件，把它认为重要的事情记下来。比如你告诉它"我对花生过敏"，下次你让它推荐餐厅时它会自动避开。你也可以手动编辑这个文件，主动告诉它一些背景信息：</p>
+
+<pre><code># MEMORY.md
+- Allen 是产品经理，在上海工作
+- 常用的编程语言是 Python 和 TypeScript
+- 喜欢简洁的写作风格，讨厌废话
+- 每周三下午有固定的团队会议
+- 对 AI Agent 领域特别关注</code></pre>
+
+<p><strong>SOUL.md — Agent 的"性格"</strong></p>
+<p>这个文件定义 Agent 怎么跟你说话。我调了好几版才找到满意的风格：</p>
 
 <pre><code># SOUL.md
-- 说话简洁直接，不废话
-- 有自己的观点，不只是附和
-- 遇到不确定的事情先查证再回答
-- 幽默但不刻意</code></pre>
+- 说话简洁直接，不要客套话
+- 有自己的判断，不要什么都说"好的"
+- 不确定的事情先查证再回答，别瞎编
+- 可以适当幽默，但别硬凹
+- 用中文回复，技术术语保留英文</code></pre>
 
-<p><strong>AGENTS.md</strong> — 行为规范</p>
-<p>定义 Agent 的工作流程、安全边界、工具使用规范。</p>
+<p>这个文件的效果比你想象的大。没配 SOUL.md 之前，Agent 回复总是一股"AI 客服味"——"好的，我来帮您处理"。配了之后明显自然多了。</p>
 
-<p><strong>memory/YYYY-MM-DD.md</strong> — 每日日志</p>
-<p>Agent 每天的工作记录。你可以翻看了解它做了什么。</p>
+<p><strong>AGENTS.md — 行为规范</strong></p>
+<p>定义 Agent 的工作流程、安全边界、工具使用规范。这个文件比较长，建议参考 OpenClaw 文档里的模板，根据自己的需求改。</p>
+
+<p><strong>memory/YYYY-MM-DD.md — 每日日志</strong></p>
+<p>Agent 每天的工作记录，自动生成的。偶尔翻翻能看到它做了什么、记了什么。我有时候会发现它记了一些有意思的东西——比如它注意到我连续三天问天气，就自己在日志里写了"考虑建议 Allen 设一个天气定时任务"。</p>
 <h3 id="sec3-5">3.5 进阶：多渠道配置</h3>
 
-<p>OpenClaw 支持同时连接多个聊天渠道。以飞书为例：</p>
+<p>渠道就是你跟 Agent 聊天的入口。OpenClaw 支持不少渠道，我用过的有飞书、QQ Bot 和 Discord。</p>
+
+<p>以飞书为例，配置过程大概是：</p>
 
 <ol>
-<li>在飞书开放平台创建一个应用</li>
-<li>获取 App ID 和 App Secret</li>
-<li>在 OpenClaw 配置文件里添加飞书渠道配置</li>
+<li>在飞书开放平台创建一个自建应用</li>
+<li>开启机器人能力，配置事件订阅</li>
+<li>把 App ID 和 App Secret 填到 OpenClaw 的配置里</li>
 <li>重启 Gateway</li>
 </ol>
 
-<p>配置好后，你在飞书里给这个应用发消息，OpenClaw 就会响应。</p>
+<pre><code># 配置飞书渠道
+openclaw config set feishu.appId "cli_xxxx"
+openclaw config set feishu.appSecret "your-secret"
+openclaw gateway restart</code></pre>
 
-<p>QQ Bot、钉钉、企业微信的配置流程类似，具体参考 OpenClaw 文档：docs.openclaw.ai</p>
+<p>配好之后，在飞书里搜索你的机器人名字，发消息就能聊了。</p>
+
+<div class="callout callout-warn">
+<b>⚠️ 踩坑提醒：飞书事件订阅</b>
+<p>飞书的事件订阅配置有点绕。你需要在飞书开放平台的"事件与回调"里添加 <code>im.message.receive_v1</code> 事件，然后把 OpenClaw 的回调地址填进去。如果你的服务器没有公网 IP 或者在 NAT 后面，需要用 OpenClaw 的内置穿透功能或者自己配 ngrok。我第一次配的时候在这里卡了半小时。</p>
+</div>
+
+<p>QQ Bot 的配置更简单一些，因为 OpenClaw 对 QQ 官方机器人 API 做了封装。具体步骤看文档就行，这里不展开了。</p>
+
+<p>一个 OpenClaw 实例可以同时连多个渠道。我现在是飞书和 QQ 同时连着——工作时间用飞书，下班后用 QQ。Agent 的记忆是跨渠道共享的，不管你从哪个渠道跟它说话，它都记得之前的对话。</p>
 
 <h3 id="sec3-6">3.6 进阶：模型配置和故障转移</h3>
 
-<p>OpenClaw 支持配置多个模型，设置优先级和故障转移：</p>
+<p>OpenClaw 支持配置多个模型，这是它作为"长期运行服务"的一个重要设计——你不会希望凌晨 3 点某个模型 API 挂了，你的 Agent 就彻底罢工。</p>
 
 <pre><code>主力模型 → 备用模型 1 → 备用模型 2 → ...</code></pre>
 
 <p>主力模型挂了或者达到限额，自动切到下一个。用户无感知。</p>
 
-<p>推荐配置：</p>
+<p>我自己的配置策略，供参考：</p>
 <ul>
-<li>日常对话用便宜的模型（Gemini Flash、GPT-4o-mini）</li>
-<li>复杂任务用强模型（Claude Opus、GPT-5）</li>
-<li>设置 2-3 个备用，确保不会完全断线</li>
+<li><strong>日常对话</strong>：Gemini Flash 打底（免费额度大，速度快），Claude Sonnet 备用</li>
+<li><strong>复杂任务</strong>：Claude Opus 主力（推理能力强），GPT-4o 备用</li>
+<li><strong>至少配 2 个不同厂商的模型</strong>，这样一家挂了另一家还能顶上</li>
 </ul>
+
+<p>为什么不全用最强的模型？因为贵，而且慢。日常闲聊和简单查询用 Flash 级别的模型完全够了，响应还快。只有写长文、做分析这种需要深度思考的任务才值得用 Opus/GPT-4o。OpenClaw 可以根据任务复杂度自动选模型，但你也可以手动指定。</p>
 
 <h3 id="sec3-7">3.7 进阶：心跳和定时任务</h3>
 
-<p>心跳是 OpenClaw 最有特色的功能之一。配置好后，Agent 会定期（默认 30 分钟）自己"醒来"检查有没有需要处理的事。</p>
+<p>心跳是让我觉得 OpenClaw 真正"活着"的功能。配置好后，Agent 会定期（默认 30 分钟）自己"醒来"，检查有没有需要处理的事。不是你找它，是它主动找你。</p>
 
-<p>你可以在工作目录下创建 HEARTBEAT.md，写上每次心跳要检查的事项：</p>
+<p>在工作目录下创建 HEARTBEAT.md，写上每次心跳要检查的事项：</p>
 
 <pre><code># HEARTBEAT.md
-- 检查 GitHub 有没有新通知
+- 检查 GitHub 有没有新的 issue 或 PR 需要关注
 - 检查最近的日志有没有需要整理的
 - 如果是工作日早上，看看今天的日程
-- 没什么事就回复 HEARTBEAT_OK</code></pre>
+- 没什么事就回复 HEARTBEAT_OK，别打扰我</code></pre>
 
-<p>定时任务（Cron）更灵活，可以设置精确的执行时间：</p>
+<p>最后那句"别打扰我"很重要——不然它每 30 分钟给你发一条"一切正常"，烦死了。</p>
+
+<p>定时任务（Cron）更精确，适合固定时间要做的事：</p>
 
 <pre><code># 每天早上 9 点推送天气
 openclaw cron add \
@@ -841,8 +988,7 @@ openclaw cron add \
   --cron "0 9 * * *" \
   --tz "Asia/Shanghai" \
   --session isolated \
-  --message "查一下今天上海的天气，简短告诉我需不需要带伞" \
-  --deliver --channel qqbot --to "你的用户ID"
+  --message "查一下今天上海的天气，简短告诉我需不需要带伞"
 
 # 每周一早上发周报提醒
 openclaw cron add \
@@ -850,8 +996,9 @@ openclaw cron add \
   --cron "0 10 * * 1" \
   --tz "Asia/Shanghai" \
   --session isolated \
-  --message "提醒：今天要写周报。帮我回顾一下上周的工作日志，列出关键事项" \
-  --deliver --channel feishu --to "你的飞书ID"</code></pre>
+  --message "提醒：今天要写周报。帮我回顾一下上周的工作日志，列出关键事项"</code></pre>
+
+<p>心跳和 Cron 的区别：心跳是"有空就看看"，Cron 是"准时执行"。我的经验是，检查类的任务用心跳（邮件、通知），推送类的任务用 Cron（天气、提醒）。</p>
 
 <p>管理定时任务：</p>
 <pre><code>openclaw cron list          # 查看所有任务
@@ -859,32 +1006,28 @@ openclaw cron remove &lt;id&gt;   # 删除任务</code></pre>
 
 <h3 id="sec3-8">3.8 常见问题排查</h3>
 
+<p>用了几个月，踩过的坑整理一下：</p>
+
 <p><strong>Agent 不回复：</strong></p>
 <ul>
-<li>检查 Gateway 是否在运行：<code>openclaw gateway status</code></li>
-<li>检查模型 API Key 是否有效：<code>openclaw status</code></li>
-<li>查看日志：<code>openclaw logs --follow</code></li>
+<li>先看 Gateway 是不是挂了：<code>openclaw gateway status</code></li>
+<li>再看模型 API Key 是不是过期了：<code>openclaw status</code></li>
+<li>还不行就看日志：<code>openclaw logs --follow</code>，一般日志里会有明确的错误信息</li>
+<li>最常见的原因其实是模型厂商那边限流了，等几分钟再试就好</li>
 </ul>
 
-<p><strong>上下文满了：</strong></p>
+<p><strong>上下文满了（Agent 开始"忘事"或者胡说八道）：</strong></p>
 <ul>
-<li>Agent 对话太长会撑满上下文窗口</li>
-<li>发送 <code>/compact</code> 手动压缩，或 <code>/reset</code> 重置会话</li>
-<li>Agent 会自动把重要信息存到 MEMORY.md，重置后不会丢失关键记忆</li>
+<li>发 <code>/compact</code> 压缩上下文，它会保留关键信息丢掉细节</li>
+<li>如果 compact 后还是不行，<code>/reset</code> 重置会话</li>
+<li>别担心丢信息——重要的东西 Agent 已经存到 MEMORY.md 了，重置后它还记得你是谁</li>
 </ul>
 
-<p><strong>子代理失败：</strong></p>
+<p><strong>Skill 装了但不生效：</strong></p>
 <ul>
-<li>检查是否是模型请求被拒（并发限制）</li>
-<li>看子代理运行时间——如果几秒就结束且 0 token，说明请求没成功</li>
-<li>重试，或者在主会话里直接执行</li>
-</ul>
-
-<p><strong>Skill 安装失败：</strong></p>
-<ul>
-<li>确保 Node.js 版本 &gt;= 18</li>
-<li>尝试 <code>openclaw skills update</code> 更新 Skill 索引</li>
-<li>查看具体错误信息</li>
+<li>确认 Skill 目录下有 SKILL.md 文件</li>
+<li>试试重启 Gateway：<code>openclaw gateway restart</code></li>
+<li>直接问 Agent："你现在有哪些 Skill？"看它能不能列出来</li>
 </ul>
 
 <hr>
@@ -893,29 +1036,30 @@ openclaw cron remove &lt;id&gt;   # 删除任务</code></pre>
 <h3>Claude Code 技巧</h3>
 
 <ol>
-<li><strong>善用 CLAUDE.md</strong>：把项目的"潜规则"都写进去，省得每次口头交代</li>
-<li><strong>大任务分步给</strong>：不要一次扔一个模糊的大目标，分成明确的小步骤</li>
-<li><strong>定期 /compact</strong>：长时间工作后手动压缩上下文，避免 Agent 变"健忘"</li>
-<li><strong>用 plan 模式预览</strong>：不确定 Agent 会怎么做时，先用 plan 模式让它只分析不动手</li>
+<li><strong>CLAUDE.md 是你最好的投资</strong>：花 10 分钟写好这个文件，能省你后面几十个小时的重复沟通。特别是"禁区"和"项目里的坑"这两节</li>
+<li><strong>大任务拆着给</strong>：别说"重构整个项目"，说"先分析耦合度，然后从 UserService 开始"。Agent 跟人一样，目标越清晰干得越好</li>
+<li><strong>定期 /compact</strong>：我的习惯是每改完一个功能就 compact 一次。不然上下文满了它会开始犯低级错误</li>
+<li><strong>不确定就先问</strong>：在让它动手之前，先说"分析一下这个问题，给我方案但先别改代码"。看完方案再决定要不要执行</li>
+<li><strong>Ctrl+C 是你的好朋友</strong>：发现方向不对立刻打断，别等它改完一大堆再推翻</li>
 </ol>
 
 <h3>Codex 技巧</h3>
 
 <ol>
-<li><strong>写好 AGENTS.md</strong>：告诉 Codex 怎么跑测试、代码规范是什么，它的输出质量会明显提升</li>
-<li><strong>善用并行</strong>：把独立的任务同时丢给它，别一个一个排队</li>
-<li><strong>用 @codex 自动化</strong>：在 GitHub issue 里 @codex，省去手动创建任务的步骤</li>
-<li><strong>审查要仔细</strong>：Codex 生成的代码质量不错，但不要盲目合并，测试覆盖率要保证</li>
+<li><strong>AGENTS.md 里写验证命令</strong>：这是提升 Codex PR 质量最有效的一招。它改完代码会自己跑验证，通过了才提交</li>
+<li><strong>并行是杀手锏</strong>：有 5 个独立的 bug 要修？一次全丢给它，别排队。我试过同时跑 5 个任务都没问题</li>
+<li><strong>在 GitHub 里 @codex</strong>：产品经理提 issue，直接 @codex 让它出初版 PR，开发在这个基础上 review。这个工作流在我们团队跑得很顺</li>
+<li><strong>别盲目合并</strong>：Codex 的代码质量不错，但它不了解你的业务上下文。每个 PR 都要认真 review，特别是涉及业务逻辑的部分</li>
 </ol>
 
 <h3>OpenClaw 技巧</h3>
 
 <ol>
-<li><strong>养成让 Agent 记笔记的习惯</strong>：重要的事情说完后加一句"记一下"</li>
-<li><strong>定期检查 MEMORY.md</strong>：看看 Agent 记了什么，有错的及时纠正</li>
-<li><strong>善用 Skill 生态</strong>：遇到新需求先搜搜有没有现成的 Skill</li>
-<li><strong>配置故障转移</strong>：至少配两个模型，主力挂了有备用</li>
-<li><strong>心跳不要太频繁</strong>：30 分钟一次够了，太频繁浪费 token</li>
+<li><strong>"记一下"三个字很有用</strong>：跟 Agent 说完重要的事，加一句"记一下"。它会写进 MEMORY.md，下次不用重复</li>
+<li><strong>定期翻 MEMORY.md</strong>：看看 Agent 记了什么，有错的及时纠正。我发现过它把我的生日记错了一天</li>
+<li><strong>先搜 Skill 再自己做</strong>：想让它干什么新事情之前，先 <code>openclaw skills search</code> 看看有没有现成的</li>
+<li><strong>模型故障转移必须配</strong>：别只配一个模型。凌晨 3 点 API 挂了你不会想爬起来修的</li>
+<li><strong>SOUL.md 值得花时间调</strong>：Agent 的"性格"直接影响你跟它相处的体验。多试几版，找到你舒服的风格</li>
 </ol>
 
 <hr>
@@ -925,31 +1069,84 @@ openclaw cron remove &lt;id&gt;   # 删除任务</code></pre>
 <div class="table-wrap">
 <table>
 <thead>
-<tr><th>你的需求</th><th>推荐</th></tr>
+<tr><th>你的场景</th><th>推荐</th><th>原因</th></tr>
 </thead>
 <tbody>
-<tr><td>我是程序员，想要一个编程助手</td><td>Claude Code</td></tr>
-<tr><td>我需要同时处理多个编程任务</td><td>Codex</td></tr>
-<tr><td>我想要一个全天候 AI 助手</td><td>OpenClaw</td></tr>
-<tr><td>我不想折腾，开箱即用</td><td>Claude Code 或 Codex Web</td></tr>
-<tr><td>我想完全掌控，自己定制</td><td>OpenClaw</td></tr>
-<tr><td>我的预算有限</td><td>OpenClaw（可以用免费模型）</td></tr>
-<tr><td>我在企业环境里用</td><td>Codex（有企业版）或 Claude Code</td></tr>
+<tr><td>日常写代码，想要个结对编程的搭档</td><td>Claude Code</td><td>终端里直接用，跟你的开发流程无缝衔接</td></tr>
+<tr><td>一堆 bug 要修，想并行处理</td><td>Codex</td><td>同时跑多个任务，改完直接提 PR</td></tr>
+<tr><td>想要一个 7×24 在线的私人助手</td><td>OpenClaw</td><td>不只是编程，生活工作都能帮上忙</td></tr>
+<tr><td>不想折腾，5 分钟就要能用</td><td>Claude Code 或 Codex Web</td><td>安装最简单，上手最快</td></tr>
+<tr><td>想完全掌控，深度定制</td><td>OpenClaw</td><td>记忆、性格、Skill、渠道全都能自定义</td></tr>
+<tr><td>预算有限</td><td>OpenClaw + Gemini</td><td>Google 的免费额度很大方，日常够用</td></tr>
+<tr><td>团队协作</td><td>Codex</td><td>GitHub 深度集成，@codex 工作流很顺</td></tr>
 </tbody>
 </table>
 </div>
 
-<p>当然，这三个不是互斥的。我自己就同时用着 Claude Code（写代码）和 OpenClaw（日常助手）。</p>
+<p>说实话，这三个不是互斥的。我自己就同时用着 Claude Code 和 OpenClaw——写代码时开 Claude Code，其他时间跟 OpenClaw 聊。Codex 在需要批量处理 issue 的时候拿出来用。</p>
+
+<!-- 决策流程图 -->
+<div style="margin:32px 0;padding:28px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;">
+<p style="font-weight:700;font-size:1.05rem;margin-bottom:24px;text-align:center;">不知道选哪个？看这个 👇</p>
+
+<div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+
+<!-- 起点 -->
+<div style="padding:12px 24px;background:var(--bg);border:2px solid var(--text-secondary);border-radius:24px;font-weight:600;text-align:center;">你的主要需求是什么？</div>
+
+<div style="width:2px;height:24px;background:var(--border);"></div>
+
+<!-- 三个分支 -->
+<div style="display:flex;gap:16px;width:100%;justify-content:center;flex-wrap:wrap;">
+
+<!-- 分支1: 写代码 -->
+<div style="flex:1;min-width:200px;max-width:280px;display:flex;flex-direction:column;align-items:center;gap:0;">
+<div style="padding:10px 18px;background:var(--bg);border:1px solid var(--border);border-radius:12px;font-size:.9rem;text-align:center;">写代码、改 bug、重构</div>
+<div style="width:2px;height:16px;background:var(--border);"></div>
+<div style="padding:10px 18px;background:var(--bg);border:1px solid var(--border);border-radius:12px;font-size:.88rem;text-align:center;">需要同时处理多个任务吗？</div>
+<div style="display:flex;gap:8px;margin-top:8px;width:100%;justify-content:center;">
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+<span style="font-size:.78rem;color:var(--text-muted);">不需要</span>
+<div style="padding:10px 16px;background:rgba(34,197,94,0.12);border:2px solid var(--accent-green);border-radius:12px;font-weight:700;font-size:.9rem;color:var(--accent-green);text-align:center;">Claude Code</div>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+<span style="font-size:.78rem;color:var(--text-muted);">需要</span>
+<div style="padding:10px 16px;background:rgba(59,130,246,0.12);border:2px solid var(--accent-blue);border-radius:12px;font-weight:700;font-size:.9rem;color:var(--accent-blue);text-align:center;">Codex</div>
+</div>
+</div>
+</div>
+
+<!-- 分支2: 批量任务 -->
+<div style="flex:1;min-width:200px;max-width:280px;display:flex;flex-direction:column;align-items:center;gap:0;">
+<div style="padding:10px 18px;background:var(--bg);border:1px solid var(--border);border-radius:12px;font-size:.9rem;text-align:center;">批量处理 GitHub issue</div>
+<div style="width:2px;height:16px;background:var(--border);"></div>
+<div style="padding:10px 16px;background:rgba(59,130,246,0.12);border:2px solid var(--accent-blue);border-radius:12px;font-weight:700;font-size:.9rem;color:var(--accent-blue);text-align:center;">Codex</div>
+</div>
+
+<!-- 分支3: 生活助手 -->
+<div style="flex:1;min-width:200px;max-width:280px;display:flex;flex-direction:column;align-items:center;gap:0;">
+<div style="padding:10px 18px;background:var(--bg);border:1px solid var(--border);border-radius:12px;font-size:.9rem;text-align:center;">全能助手、定时任务、多渠道</div>
+<div style="width:2px;height:16px;background:var(--border);"></div>
+<div style="padding:10px 16px;background:rgba(249,115,22,0.12);border:2px solid var(--accent-orange);border-radius:12px;font-weight:700;font-size:.9rem;color:var(--accent-orange);text-align:center;">OpenClaw</div>
+</div>
+
+</div>
+</div>
+
+<p style="margin-top:20px;margin-bottom:0;font-size:.82rem;color:var(--text-muted);text-align:center;">选择困难？从 Claude Code 开始，它上手最快。等你有更多需求了再加其他的。</p>
+</div>
 
 <hr>
 
 <h2>结尾</h2>
 
-<p>这是系列的最后一篇。四篇文章从概念到架构到设计到实操，希望能帮你建立对 Agent 的完整认知。</p>
+<p>这是系列的最后一篇。从第一篇的"Agent 到底是什么"到这篇的实战操作，四篇写下来，我自己对这三款产品的理解也更清晰了。</p>
 
-<p>Agent 时代才刚开始。现在上手，你就是最早一批真正理解和使用 Agent 的人。</p>
+<p>说几句真心话：Agent 工具现在还在早期，每个产品都有各自的毛病——Claude Code 偶尔会犯迷糊改错文件，Codex 的沙盒环境有时候跟本地不一致，OpenClaw 的配置确实有点多。但它们已经实实在在地改变了我的工作方式。我现在写代码的效率大概是一年前的 3 倍，不夸张。</p>
 
-<p>去试试吧。</p>
+<p>别光看教程，打开终端试试。装一个 Claude Code 只要一分钟，跑起来之后你就知道 Agent 到底能帮你做什么了。</p>
+
+<p>有问题欢迎来我的博客留言，或者直接在 GitHub 上找我。</p>
 
 <hr>
 

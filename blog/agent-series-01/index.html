@@ -368,15 +368,15 @@ footer{
 
       <blockquote><p>系列文章（1/4）| 作者：Allen | allen00.top</p></blockquote>
 
-      <p>2026 年，"Agent"这个词几乎出现在每一场 AI 发布会上。OpenAI 发了 Codex，Anthropic 推了 Claude Code，开源社区冒出了 OpenClaw，大厂小厂都在喊"我们做了 Agent"。</p>
+      <p>2026 年，打开任何一场 AI 发布会，你都会听到"Agent"这个词。OpenAI 发了 Codex，Anthropic 推了 Claude Code，开源社区冒出了 OpenClaw。大厂小厂都在喊"我们做了 Agent"。</p>
 
       <p>但我跟身边的产品经理、开发者聊下来，发现大部分人对 Agent 的理解是错的。</p>
 
-      <p>有人觉得 Agent 就是更聪明的 ChatGPT。有人觉得是自动化脚本加了个 AI 外壳。还有人觉得跟 Siri 差不多，只是回答更准了。</p>
+      <p>有人觉得 Agent 就是更聪明的 ChatGPT。有人觉得是自动化脚本套了个 AI 壳子。还有人觉得跟 Siri 差不多，只是回答更准了。</p>
 
-      <p>都不是。</p>
+      <p>都不是。差远了。</p>
 
-      <p>我过去几个月实际用了 Claude Code、OpenAI Codex 和 OpenClaw 这三款产品做开发、写文章、管日程。这篇文章不讲论文，不堆术语，就从真实使用体验出发，把 Agent 这件事说清楚。</p>
+      <p>我过去几个月同时用着 Claude Code、OpenAI Codex 和 OpenClaw 三款产品——用 Claude Code 重构了一整个前端项目，用 Codex 同时跑五六个编程任务，用 OpenClaw 管日程、写文章、半夜帮我跑定时脚本。这篇文章不讲论文，不堆术语，就从我的真实使用体验出发，把 Agent 这件事说清楚。</p>
 
       <hr>
 
@@ -386,31 +386,29 @@ footer{
 
       <h3 id="s1-chatbot">第一层：Chatbot——只能说，不能做</h3>
 
-      <p>这是大部分人最熟悉的 AI 形态。你问它一个问题，它给你一个回答。你再问，它再答。整个过程就是一问一答的循环。</p>
+      <p>这是大部分人最熟悉的 AI 形态。你问一个问题，它给一个回答。再问，再答。就是一问一答的循环。</p>
 
-      <p>用建筑行业打个比方（我之前做过建筑设计）：Chatbot 就像一个只会"口头建议"的顾问。你问他"这面承重墙能不能拆？"他给你分析一堆结构力学原理，说得头头是道。但他绝不会帮你去查图纸、找结构工程师确认、写变更申请单。</p>
+      <p>打个比方：Chatbot 就像一个只会"口头建议"的顾问。你问他"这面承重墙能不能拆？"他给你分析一堆结构力学原理，说得头头是道。但他绝不会帮你去查图纸、找结构工程师确认、写变更申请单。</p>
 
       <p>动嘴不动手。</p>
 
-      <p>代表产品：ChatGPT 网页版、豆包、Kimi 的基本聊天模式。</p>
+      <p>我之前经常用 ChatGPT 网页版查技术方案。它确实能给出不错的思路，但每次我都得自己去执行——自己打开编辑器改代码、自己去跑命令验证、自己去搜索补充信息。它就像一个坐在旁边的参谋，说完就完了，剩下全靠你。</p>
 
-      <p>它们能做的事：回答问题、生成文字、翻译、总结。但所有操作都局限在"对话框"里，它碰不到你的文件、打不开你的浏览器、发不了你的邮件。</p>
+      <p>代表产品：ChatGPT 网页版、豆包、Kimi 的基本聊天模式。所有操作都局限在"对话框"里，它碰不到你的文件、打不开你的浏览器、发不了你的邮件。</p>
 
-      <h3 id="s1-copilot">第二层：Copilot——被动辅助，你得一直带着它</h3>
+      <h3 id="s1-copilot">第二层：Copilot——被动辅助，你得一直盯着它</h3>
 
       <p>比 Chatbot 进了一步。它不只是聊天，还能在你工作的时候实时帮忙。你写代码，它帮你补全下一行；你写文档，它帮你润色措辞。</p>
 
       <p>但关键词是"辅助"。你在前面开车，它坐副驾驶帮你看导航、递水杯。方向盘始终在你手里。</p>
 
-      <p>像一个还不错的实习生——你给明确指令，它能执行得挺好。但你不能把一个大任务扔给它就去吃饭了，回来大概率发现它在原地等你。</p>
+      <p>我用 Cursor 写代码的时候感受很明显。它能帮我补全函数、生成测试用例，有时候甚至能猜到我接下来要写什么。挺爽的。但你不能把一个完整的需求扔给它就去吃饭了——回来大概率发现它在原地等你下一步指令。它需要你一直在场，一直引导。</p>
 
-      <p>代表产品：GitHub Copilot、Cursor、Office Copilot。</p>
-
-      <p>能力边界：辅助写代码、辅助写文档、辅助分析数据。注意，都是"辅助"。</p>
+      <p>代表产品：GitHub Copilot、Cursor、Office Copilot。能力边界很清楚：辅助写代码、辅助写文档、辅助分析数据。注意，都是"辅助"。</p>
 
       <h3 id="s1-agent">第三层：Agent——给目标，自己规划执行</h3>
 
-      <p>这一层的交互方式跟前两层完全不同。</p>
+      <p>这一层跟前两层完全不同。</p>
 
       <p>你不再需要一步步告诉它做什么。你给一个目标——"帮我把这个 bug 修了""帮我写一篇关于 MCP 协议的技术博客""每天早上 9 点帮我检查 GitHub 通知"——然后它自己想办法完成。</p>
 
@@ -420,13 +418,13 @@ footer{
 
       <p>代表产品：Claude Code、OpenAI Codex、OpenClaw。</p>
 
-      <p>能力范围：自主规划、使用工具、迭代执行、自我检查。</p>
+      <p>我第一次真正感受到 Agent 的威力，是用 Claude Code 重构一个前端组件。我只说了一句"把这个 class 组件改成 hooks"，它自己读了整个文件、分析了依赖关系、改了代码、跑了测试、发现一个类型错误又自己修了。整个过程我就看着它干，像看一个程序员在 pair programming。</p>
 
-      <p>我每天用的 OpenClaw 就是典型的 Agent。大模型做大脑，文件系统和浏览器做手脚，记忆文件做长期记忆，任务分解做规划。给它一个目标，它自己拆步骤、一步步执行、遇到问题自己调整。有时候半夜它还在帮我跑定时任务。</p>
+      <p>我每天用的 OpenClaw 更夸张。大模型做大脑，文件系统和浏览器做手脚，记忆文件做长期记忆。给它一个目标，它自己拆步骤、一步步执行、遇到问题自己调整。有时候半夜它还在帮我跑定时任务，早上醒来看到它的工作日志，有种"这家伙比我还勤快"的感觉。</p>
 
       <h3 id="s1-workflow">还有一个容易搞混的：Workflow</h3>
 
-      <p>在聊 Agent 之前，得把 Workflow 也拎出来说一下，因为这两个概念经常被混用。</p>
+      <p>聊 Agent 之前，得把 Workflow 也拎出来说一下，因为这两个概念经常被混用。</p>
 
       <div class="table-wrap">
       <table>
@@ -436,21 +434,17 @@ footer{
         <tbody>
           <tr><td><strong>交互方式</strong></td><td>一问一答</td><td>你做它辅助</td><td>给目标自己规划</td><td>触发后自动运行</td></tr>
           <tr><td><strong>适合场景</strong></td><td>FAQ、内容生成</td><td>编码、写作辅助</td><td>复杂开放任务</td><td>标准化重复任务</td></tr>
-          <tr><td><strong>类比</strong></td><td>顾问（动嘴）</td><td>实习生（你带）</td><td>项目经理（自己干）</td><td>流水线（预设好的）</td></tr>
+          <tr><td><strong>类比</strong></td><td>顾问（动嘴）</td><td>副驾驶（你开车）</td><td>项目经理（自己干）</td><td>流水线（预设好的）</td></tr>
           <tr><td><strong>代表产品</strong></td><td>ChatGPT、Kimi</td><td>Cursor、Copilot</td><td>Claude Code、Codex</td><td>Dify 工作流、Zapier</td></tr>
         </tbody>
       </table>
       </div>
 
-      <p>Workflow 的流程是你提前设计好的——第一步做什么、第二步做什么、遇到 A 走左边、遇到 B 走右边，全部预定义。像工厂的流水线，效率高但不灵活。</p>
+      <p>简单说：Workflow 的流程是你提前画好的流程图——第一步做什么、第二步做什么、遇到 A 走左边、遇到 B 走右边，全部预定义。像工厂流水线，效率高但不灵活。</p>
 
-      <p>Agent 的流程是它自己规划的。同样一个任务，它可能今天走 A 路线，明天发现 B 路线更好就换了。像一个活人在做判断。</p>
+      <p>Agent 不一样。同样一个任务，它可能今天走 A 路线，明天发现 B 路线更好就换了。像一个活人在做判断。</p>
 
-      <p>什么时候用 Workflow？任务标准化、流程固定、需要高可靠性的时候。比如"每天早上抓取 10 个网站的新闻，按分类整理到数据库"。</p>
-
-      <p>什么时候用 Agent？任务开放、需要灵活应对、中间可能出现意外的时候。比如"帮我研究一下竞品的最新动态，写一份分析报告"。</p>
-
-      <p>实际工作中，两者经常配合。Agent 负责思考和决策，Workflow 负责执行标准化的子流程。</p>
+      <p>我自己的经验是：固定流程用 Workflow，比如"每天早上抓取 10 个网站的新闻，按分类整理到数据库"；开放任务用 Agent，比如"帮我研究一下竞品的最新动态，写一份分析报告"。实际工作中两者经常配合——Agent 负责思考和决策，Workflow 负责执行标准化的子流程。</p>
 
       <hr>
 
@@ -462,11 +456,11 @@ footer{
 
       <p><strong>智能体 = LLM + 观察 + 思考 + 行动 + 记忆</strong></p>
 
-      <p>五个要素，缺一不可。</p>
+      <p>五个要素，缺一个都跑不起来。我拿自己的使用经验逐个说。</p>
 
       <p><strong>LLM（大脑）</strong></p>
 
-      <p>大语言模型是 Agent 的核心引擎。它负责理解你的意图、分析当前状况、决定下一步做什么。没有 LLM，Agent 就是一堆 if-else 脚本。</p>
+      <p>大语言模型是 Agent 的核心引擎。它负责理解你的意图、分析当前状况、决定下一步做什么。没有 LLM，Agent 就是一堆 if-else 脚本——2023 年那批 AutoGPT 类项目之所以不好用，很大程度上就是因为当时的模型推理能力撑不起复杂的任务规划。</p>
 
       <p>但 LLM 本身只会"想"，不会"做"。就像一个大脑离开了身体，再聪明也只能在脑子里转。</p>
 
@@ -474,56 +468,85 @@ footer{
 
       <p>Agent 需要"眼睛"和"耳朵"。它要能读取文件内容、浏览网页、接收用户消息、查看命令执行结果。</p>
 
-      <p>没有观察能力的 AI 就是闭着眼睛干活，它不知道当前代码长什么样，不知道网页上写了什么，不知道上一步操作成功没有。</p>
+      <p>我用 Claude Code 的时候感受很深：它在改代码之前，会先把相关文件全读一遍，搞清楚项目结构和依赖关系，然后才动手。没有这个观察步骤，它就是闭着眼睛写代码，写出来的东西大概率跑不通。</p>
 
       <p><strong>思考（分析决策）</strong></p>
 
       <p>拿到观察结果后，Agent 要分析：现在进展到哪一步了？下一步该做什么？之前的方案还行不行？需不需要调整？</p>
 
-      <p>这一步是 Agent 跟 Workflow 的核心区别。Workflow 不思考，按预设路径走。Agent 每一步都在重新评估。</p>
+      <p>这一步是 Agent 跟 Workflow 的核心区别。Workflow 不思考，按预设路径走。Agent 每一步都在重新评估。我见过 Claude Code 在修 bug 的时候，试了第一种方案发现不行，自己回退代码换了另一种思路——这种"遇到问题自己调整"的能力，就是思考在起作用。</p>
 
       <p><strong>行动（调用工具）</strong></p>
 
       <p>想好了就动手。Agent 通过调用工具来执行操作：读写文件、运行命令、发送消息、搜索网页、调用 API。</p>
 
-      <p>工具是 Agent 的"手脚"。工具越多，Agent 能做的事越多。这也是为什么 MCP（Model Context Protocol）这个工具连接协议这么重要，它让 Agent 能标准化地接入各种工具。</p>
+      <p>工具是 Agent 的"手脚"。工具越多，Agent 能做的事越多。这也是为什么 MCP（Model Context Protocol）这个工具连接协议这么重要——它让 Agent 能标准化地接入各种工具，写一次适配，所有支持 MCP 的 Agent 都能用。就像 USB-C 统一了充电接口。</p>
 
       <p><strong>记忆（经验积累）</strong></p>
 
       <p>人如果每天醒来都忘了昨天发生的事，没法正常生活。Agent 也一样。</p>
 
-      <p>记忆让 Agent 能记住之前做过什么、哪些方案有效、用户有什么偏好。短期记忆是当前对话的上下文，长期记忆是写在文件里的经验总结。</p>
+      <p>记忆分两种：短期记忆是当前对话的上下文（聊到一半它还记得前面说了什么），长期记忆是写在文件里的经验总结。我用的 OpenClaw 有一个 MEMORY.md 文件，Agent 会把重要的事情记在里面——我的写作风格偏好、常用的项目路径、上次犯过的错误。下次醒来先读这个文件，就知道之前发生了什么。用了两个月后，它明显比刚开始更懂我了。</p>
 
-      <p>我用的 OpenClaw 有一个 MEMORY.md 文件，Agent 会把重要的事情记在里面。下次醒来先读这个文件，就知道之前发生了什么。</p>
+      <p>这五个要素组合在一起，形成了一个不断循环的工作流——Agent Loop：</p>
 
-      <h3 id="s2-scenario">用一个场景串起来</h3>
+      <!-- Agent Loop 流程图 -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:28px 0;padding:24px 16px;background:var(--bg-card);border-radius:12px;border:1px solid var(--border)">
+        <div style="padding:10px 16px;background:var(--accent-blue);color:#fff;border-radius:8px;font-weight:600;font-size:.85rem;text-align:center">🔍 感知输入</div>
+        <span style="color:var(--text-muted);font-size:1.2rem;flex-shrink:0">→</span>
+        <div style="padding:10px 16px;background:var(--accent-purple);color:#fff;border-radius:8px;font-weight:600;font-size:.85rem;text-align:center">🧠 思考规划</div>
+        <span style="color:var(--text-muted);font-size:1.2rem;flex-shrink:0">→</span>
+        <div style="padding:10px 16px;background:var(--accent-orange);color:#fff;border-radius:8px;font-weight:600;font-size:.85rem;text-align:center">🔧 调用工具</div>
+        <span style="color:var(--text-muted);font-size:1.2rem;flex-shrink:0">→</span>
+        <div style="padding:10px 16px;background:var(--accent-cyan);color:#fff;border-radius:8px;font-weight:600;font-size:.85rem;text-align:center">👀 观察结果</div>
+        <span style="color:var(--text-muted);font-size:1.2rem;flex-shrink:0">→</span>
+        <div style="padding:10px 16px;background:var(--accent-green);color:#fff;border-radius:8px;font-weight:600;font-size:.85rem;text-align:center">✅ 继续/完成</div>
+      </div>
+      <p style="text-align:center;font-size:.82rem;color:var(--text-muted);margin-top:-16px;margin-bottom:24px">↻ 未完成则回到"感知输入"，继续循环直到任务结束</p>
 
-      <p>假设我跟 Agent 说："帮我写一篇关于 MCP 协议的技术博客，发到我的个人网站上。"</p>
+      <h3 id="s2-scenario">用一个真实场景串起来</h3>
 
-      <p>Agent 的工作流程大概是这样的：</p>
+      <p>这不是假设——我真的让 OpenClaw 帮我写过一篇关于 MCP 协议的技术博客。整个过程是这样的：</p>
 
-      <ol>
-        <li>观察：读取我网站现有的博客，了解写作风格和格式要求</li>
-        <li>思考：MCP 协议涉及哪些内容？读者是谁？应该怎么组织结构？</li>
-        <li>行动：搜索 MCP 的最新资料，读取相关文档</li>
-        <li>观察：拿到搜索结果，看看有什么有价值的信息</li>
-        <li>思考：信息够了，开始规划文章结构</li>
-        <li>行动：写初稿，保存到文件</li>
-        <li>观察：检查字数、格式是否符合要求</li>
-        <li>思考：初稿写完了，需要检查一下有没有事实错误</li>
-        <li>行动：核实关键数据，修改不准确的地方</li>
-        <li>记忆：记住这次写作的经验，下次可以参考</li>
-      </ol>
+      <p>它先读了我网站上已有的几篇博客，搞清楚我的写作风格（口语化、爱用类比、段落短）。然后搜索了 MCP 的最新资料，读了 Anthropic 的官方文档和几篇技术分析。接着规划了文章结构，写了初稿，保存到文件里。写完还自己检查了一遍，发现有个版本号写错了，又去官网核实后改过来。最后把写作经验记到了 MEMORY.md 里，说"Allen 喜欢用生活类比解释技术概念"。</p>
 
-      <p>这个"观察→思考→行动"的循环会一直转，直到任务完成。中间如果搜索结果不好，它会换个关键词重新搜；如果写到一半发现结构不对，它会回头调整。</p>
+      <p>整个过程大概跑了十几轮"感知→思考→行动"的循环。中间搜索结果不好，它自己换了关键词重新搜；写到一半发现结构不对，它自己回头调整了大纲。</p>
 
-      <p>这就是 Agent 跟 Workflow 的区别，它不是按固定脚本走，而是在不断地感知、判断、调整。</p>
+      <p>这就是 Agent 跟 Workflow 的本质区别——它不是按固定脚本走，而是在不断地感知、判断、调整。像一个活人在做事。</p>
 
       <hr>
 
       <h2 id="section-3">三、三款 Agent 产品速览</h2>
 
-      <p>理论说完了，来看看实际产品。我挑了三款我真正用过的 Agent 产品，风格完全不同，正好代表了 Agent 产品设计的三种思路。</p>
+      <p>理论说完了，来看看实际产品。我挑了三款我真正在用的 Agent 产品，风格完全不同，正好代表了 Agent 产品设计的三种思路。</p>
+
+      <!-- 三款产品定位对比图 -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0;padding:20px;background:var(--bg-card);border-radius:12px;border:1px solid var(--border)">
+        <div style="padding:16px;border-radius:10px;border:1px solid var(--border);background:var(--bg)">
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:10px;color:var(--accent-purple)">🖥️ Claude Code</div>
+          <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.7">
+            <div>📍 本地终端</div>
+            <div>🎯 单任务深度</div>
+            <div>⚡ 代码专精</div>
+          </div>
+        </div>
+        <div style="padding:16px;border-radius:10px;border:1px solid var(--border);background:var(--bg)">
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:10px;color:var(--accent-blue)">☁️ Codex</div>
+          <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.7">
+            <div>📍 云端沙盒</div>
+            <div>🎯 多任务并行</div>
+            <div>⚡ GitHub 集成</div>
+          </div>
+        </div>
+        <div style="padding:16px;border-radius:10px;border:1px solid var(--border);background:var(--bg)">
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:10px;color:var(--accent-green)">🤖 OpenClaw</div>
+          <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.7">
+            <div>📍 7×24 在线</div>
+            <div>🎯 生活助手</div>
+            <div>⚡ 多渠道连接</div>
+          </div>
+        </div>
+      </div>
 
       <h3 id="s3-claude">Claude Code（Anthropic）</h3>
 
@@ -533,19 +556,19 @@ footer{
 
       <p>你可以跟它说"帮我把这个函数重构一下"或者"这个测试为什么失败了"，它会自己去读代码、分析问题、改代码、跑测试，直到搞定。</p>
 
-      <p>我用它最深的感受是：它特别"专注"。一次只做一件事，但做得很深。它会反复读代码、改代码、验证结果，像一个沉浸在工作中的程序员。</p>
+      <p>我用了一个多月，最深的感受是：它特别"专注"。一次只做一件事，但做得很深。有一次我让它重构一个 200 多行的 React 组件，它先花了好几分钟读完所有相关文件，理清了 props 传递链路，然后才开始改。改完还自己跑了测试，发现一个 edge case 没覆盖到，又补了一个测试用例。整个过程像看一个沉浸在心流状态的程序员。</p>
+
+      <p>但它也有让我抓狂的时候。有时候它会过度谨慎，一个简单的改动也要问你"确定要执行吗？"。还有就是它只能在终端里用，关了终端就停了，没法后台运行。你不能说"帮我把这个需求做了，我先去开会"——它需要你在场。</p>
 
       <p>核心特点：</p>
       <ul>
         <li>单会话深度工作，一次专注一个任务</li>
-        <li>权限控制很严格，敏感操作会先问你</li>
+        <li>权限控制严格，敏感操作会先问你</li>
         <li>有项目记忆（CLAUDE.md），能记住项目的约定和偏好</li>
         <li>工具丰富：读写文件、执行命令、搜索代码、浏览网页</li>
       </ul>
 
       <p>适合谁：程序员、技术产品经理、需要 AI 帮忙写代码和调试的人。</p>
-
-      <p>局限：只能在终端里用，不能后台运行，关了终端就停了。一次只能处理一个任务。</p>
 
       <h3 id="s3-codex">OpenAI Codex</h3>
 
@@ -555,9 +578,9 @@ footer{
 
       <p>你在 ChatGPT 的侧边栏里点"Codex"，给它一个任务，它就在云端的沙盒环境里开始干活。每个任务有自己独立的环境，预装了你的代码仓库。</p>
 
-      <p>最厉害的是并行。你可以同时给它 5 个任务——修一个 bug、写一个新功能、重构一段代码、写测试、审查一个 PR——它同时在 5 个独立环境里干，互不干扰。</p>
+      <p>最让我兴奋的是并行能力。有一次我同时开了四个任务——修一个 CSS 布局 bug、给一个 API 加参数校验、写一组单元测试、审查一个同事的 PR。四个任务在四个独立沙盒里同时跑，互不干扰。我去倒了杯咖啡回来，三个已经做完了，第四个正在跑测试。这种体验 Claude Code 给不了，因为它一次只能做一件事。</p>
 
-      <p>底层用的是 codex-1 模型，基于 o3 针对编程场景优化的版本。</p>
+      <p>底层用的是 codex-1 模型，基于 o3 针对编程场景优化的版本。说实话，单任务的代码质量我觉得 Claude Code 略胜一筹，但 Codex 赢在吞吐量——适合那种"手头一堆活要同时推进"的场景。</p>
 
       <p>Codex 有三种使用方式：</p>
       <ul>
@@ -566,37 +589,36 @@ footer{
         <li><strong>IDE 插件</strong>：在 VS Code、Cursor 里直接用</li>
       </ul>
 
-      <p>跟 GitHub 的集成很深——你可以在 GitHub Issue 或 PR 里 @codex，它就会自动创建任务去处理。</p>
+      <p>跟 GitHub 的集成很深——你可以在 GitHub Issue 或 PR 里 @codex，它就会自动创建任务去处理。这个功能对团队协作特别有用。</p>
 
       <p>适合谁：需要同时处理多个编程任务的开发者，已经在用 ChatGPT 的团队。</p>
 
-      <p>局限：主要面向编程场景，不像 OpenClaw 那样能管生活。需要 ChatGPT Plus 或以上的订阅。</p>
+      <p>不足：主要面向编程场景，不像 OpenClaw 那样能管生活。需要 ChatGPT Plus 或以上的订阅，成本不低。</p>
 
       <h3 id="s3-openclaw">OpenClaw（开源）</h3>
 
       <p><strong>一句话定位：全场景 AI 管家。</strong></p>
 
-      <p>OpenClaw 跟前两个画风完全不同。它不只是编程工具，更像一个 24 小时在线的 AI 助手。</p>
+      <p>OpenClaw 跟前两个画风完全不同。它不只是编程工具，更像一个 24 小时在线的 AI 管家。</p>
 
-      <p>你把它部署在服务器上（我用的是一台腾讯云 2C4G 的机器），然后通过各种聊天渠道跟它对话——飞书、QQ、钉钉、企业微信、Telegram、Discord，都行。</p>
+      <p>我把它部署在一台腾讯云 2C4G 的机器上，然后通过 QQ 跟它对话。飞书、钉钉、企业微信、Telegram、Discord 也都支持，你用什么聊天工具就接什么渠道。</p>
 
-      <p>它能做的事情远不止写代码：</p>
+      <p>它能做的事情远超写代码。举几个我日常真实在用的场景：</p>
       <ul>
-        <li>帮你管理日程和提醒</li>
-        <li>定时检查 GitHub 通知</li>
-        <li>自动整理 Notion 数据库</li>
-        <li>写文章、做研究</li>
-        <li>监控服务器状态</li>
-        <li>甚至能帮你发消息</li>
+        <li>每天早上自动检查 GitHub 通知，有重要的 PR 会主动提醒我</li>
+        <li>帮我写博客文章——你现在看的这篇，初稿就是它帮我起的</li>
+        <li>管理日程提醒，到点了在 QQ 上 ping 我</li>
+        <li>半夜帮我跑定时任务，早上醒来看工作日志就行</li>
+        <li>搜索资料、整理信息、生成报告</li>
       </ul>
 
-      <p>最让我觉得有意思的是它的"自我进化"能力。它有一套记忆系统——MEMORY.md 存长期记忆，每天的工作日志存在 memory/ 目录下，还有 SOUL.md 定义它的"性格"。每次对话它都在学习，慢慢变得更懂你。</p>
+      <p>最让我觉得有意思的是它的"自我进化"能力。它有一套记忆系统——MEMORY.md 存长期记忆，每天的工作日志存在 memory/ 目录下，还有 SOUL.md 定义它的"性格"。刚开始用的时候，它的回复比较生硬。用了两个月后，它知道我喜欢简短直接的回答、知道我的项目结构、知道我写文章爱用类比。这种"越用越懂你"的感觉，是 Claude Code 和 Codex 给不了的。</p>
 
-      <p>它还有心跳机制——不是你找它它才响应，它会主动定期检查有没有需要处理的事情。半夜帮你跑完定时任务，早上你醒来就能看到结果。</p>
+      <p>它还有心跳机制——不是你找它它才响应，它会主动定期检查有没有需要处理的事情。有一次我忘了一个会议，它在 QQ 上提醒了我。那一刻我觉得这东西是真的有用，不是玩具。</p>
 
       <p>适合谁：想要一个全天候 AI 助手的人，愿意折腾部署的技术爱好者。</p>
 
-      <p>局限：需要自己部署服务器，配置门槛比较高。不像 Claude Code 和 Codex 那样开箱即用。</p>
+      <p>不足：需要自己部署服务器，配置门槛比较高。不像 Claude Code 和 Codex 那样开箱即用。但如果你愿意花半天时间搞定部署，回报是很值的。</p>
 
       <h3 id="s3-compare">三者对比</h3>
 
@@ -621,37 +643,33 @@ footer{
 
       <h2 id="section-4">四、为什么 2026 是 Agent 元年</h2>
 
-      <p>Agent 的概念不是今年才有的。2023 年 AutoGPT 火过一阵，但当时的 Agent 基本不能用——模型推理能力不够，任务拆解经常跑偏，工具调用不稳定。</p>
+      <p>Agent 的概念不是今年才有的。2023 年 AutoGPT 在 GitHub 上两周拿了 10 万 star，全网都在喊"自主 AI 来了"。但实际用过的人都知道，那时候的 Agent 基本是玩具——GPT-4 的推理能力撑不起复杂任务规划，让它自己拆步骤经常跑偏到离谱的方向，工具调用十次能失败三次。</p>
 
-      <p>2026 年不一样了，三个条件同时成熟：</p>
+      <p>2026 年不一样了。三个条件在过去一年里同时成熟，形成了一个临界点：</p>
 
-      <p><strong>模型能力到位了。</strong> Claude Opus、GPT-5、Gemini 3 这一代模型的推理能力有了质的飞跃。它们能理解复杂指令、做多步规划、在执行过程中自我纠错。这是 Agent 能"自主干活"的基础。</p>
+      <p><strong>第一，模型能力到位了。</strong> 2025 年是模型能力爆发的一年。Anthropic 发了 Claude 3.5 和 Claude 4 系列，推理能力比 Claude 3 提升了一个量级；OpenAI 的 o3 模型在编程基准测试 SWE-bench 上的通过率从之前的 30% 出头飙到了 70% 以上；Google 的 Gemini 2.0 也在多步推理上有了质的突破。这意味着模型终于能"想清楚再动手"了——理解复杂指令、做多步规划、执行过程中发现错误自己纠正。这是 Agent 能自主干活的基础。</p>
 
-      <p><strong>工具标准化了。</strong> MCP（Model Context Protocol）协议的出现是一个转折点。以前每个 AI 产品接工具都要写一套定制代码，现在有了统一标准。写一次 MCP 适配，所有支持 MCP 的 Agent 都能用。就像 USB-C 统一了充电接口。</p>
+      <p><strong>第二，工具标准化了。</strong> 2024 年底 Anthropic 发布了 MCP（Model Context Protocol）协议，这是一个转折点。以前每个 AI 产品接工具都要写一套定制代码，A 产品的插件 B 产品用不了。MCP 定义了一套统一标准——写一次适配，所有支持 MCP 的 Agent 都能用。到 2025 年底，MCP 生态已经有上千个工具服务，从数据库查询到日历管理到代码部署，几乎覆盖了开发者的日常需求。就像 USB-C 统一了充电接口，MCP 统一了 AI 的工具接口。</p>
 
-      <p><strong>产品形态成熟了。</strong> Claude Code、Codex、OpenClaw 这些产品证明了 Agent 不再是实验室里的 demo，而是能真正用起来的工具。它们各自找到了自己的场景和用户群。</p>
+      <p><strong>第三，产品形态成熟了。</strong> 2025 年 2 月 Claude Code 发布，5 月 Codex 上线，开源社区的 OpenClaw 也在同期成型。这三款产品证明了 Agent 不再是实验室里的 demo，而是能真正用起来、每天用、离不开的工具。它们各自找到了自己的场景和用户群，形成了差异化的产品定位。</p>
 
-      <p>但也要保持清醒：Agent 不是万能的。</p>
+      <p>但我也想说一句清醒话：Agent 不是万能的。</p>
 
-      <p>很多场景根本不需要 Agent。你只是想问个问题？Chatbot 就够了。你只是想让 AI 帮你补全代码？Copilot 就够了。你的流程是固定的？Workflow 更可靠。</p>
-
-      <p>Agent 的价值在于处理那些"开放性的、需要灵活应对的、中间可能出各种状况的"复杂任务。如果你的需求很明确、流程很固定，用 Agent 反而是杀鸡用牛刀。</p>
+      <p>你只是想问个问题？Chatbot 就够了。想让 AI 帮你补全代码？Copilot 就够了。流程是固定的？Workflow 更可靠。Agent 的价值在于处理那些"开放性的、需要灵活应对的、中间可能出各种状况的"复杂任务。如果你的需求很明确、流程很固定，用 Agent 反而是杀鸡用牛刀。</p>
 
       <hr>
 
       <h2 id="section-next">接下来</h2>
 
-      <p>这是系列文章的第一篇，帮你建立对 Agent 的基本认知。后面三篇会逐步深入：</p>
+      <p>这是系列文章的第一篇，算是把 Agent 的基本概念和产品格局理清楚了。后面三篇会逐步深入：</p>
 
       <ul>
-        <li><strong>第二篇</strong>：拆解 Claude Code、Codex、OpenClaw 的底层架构——它们是怎么实现"自主干活"的</li>
-        <li><strong>第三篇</strong>：产品经理视角的 Agent 设计心得——做 Agent 产品要想清楚哪些问题</li>
-        <li><strong>第四篇</strong>：实战操作指南——手把手教你用这三款产品</li>
+        <li><strong>第二篇</strong>：拆解 Claude Code、Codex、OpenClaw 的底层架构——它们到底是怎么实现"自主干活"的？Agent Loop 怎么转？工具系统怎么设计？记忆机制怎么做？</li>
+        <li><strong>第三篇</strong>：产品经理视角的 Agent 设计心得——做 Agent 产品要想清楚哪些问题，踩过哪些坑</li>
+        <li><strong>第四篇</strong>：实战操作指南——手把手教你用这三款产品，从安装到上手到日常使用</li>
       </ul>
 
-      <p>如果你对 Agent 的技术架构感兴趣，第二篇会讲 Agent Loop、工具系统、记忆机制这些核心设计。</p>
-
-      <p>如果你是产品经理，想知道怎么把 Agent 的设计思路用到自己的产品里，直接跳第三篇。</p>
+      <p>对技术架构感兴趣的直接等第二篇。产品经理跳第三篇。想赶紧上手用的跳第四篇。</p>
 
       <hr>
 
