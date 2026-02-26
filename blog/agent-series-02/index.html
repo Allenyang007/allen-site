@@ -130,7 +130,8 @@ nav{
   display:grid;grid-template-columns:200px 1fr;gap:48px
 }
 
-.toc{position:sticky;top:88px;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:12px}
+.toc{position:relative;height:100%;padding-right:12px}
+.toc-inner{position:sticky;top:88px;max-height:calc(100vh - 100px);overflow-y:auto}
 .toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
 .toc ul{list-style:none;padding:0}
 .toc li{margin-bottom:2px}
@@ -316,7 +317,7 @@ footer{
 </div>
 
 <div class="article-layout">
-  <aside class="toc">
+  <aside class="toc"><div class="toc-inner">
     <h4>目录</h4>
     <ul>
       <li><a href="#s1">一、Agent 的通用架构</a></li>
@@ -349,7 +350,7 @@ footer{
       <li><a href="#s6">六、MCP 协议</a></li>
       <li><a href="#s7">七、写在最后</a></li>
     </ul>
-  </aside>
+  </div></aside>
 
   <article class="article">
     <div class="article-meta">

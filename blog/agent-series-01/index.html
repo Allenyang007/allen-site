@@ -133,7 +133,8 @@ nav{
 }
 
 /* ─── TOC Sidebar ─── */
-.toc{position:sticky;top:88px;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:12px}
+.toc{position:relative;height:100%;padding-right:12px}
+.toc-inner{position:sticky;top:88px;max-height:calc(100vh - 100px);overflow-y:auto}
 .toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
 .toc ul{list-style:none;padding:0}
 .toc li{margin-bottom:2px}
@@ -329,7 +330,7 @@ footer{
 </div>
 
 <div class="article-layout">
-  <aside class="toc">
+  <aside class="toc"><div class="toc-inner">
     <h4>目录</h4>
     <ul>
       <li><a href="#section-1">一、AI 能力的三个层级</a></li>
@@ -347,7 +348,7 @@ footer{
       <li><a href="#section-4">四、为什么 2026 是 Agent 元年</a></li>
       <li><a href="#section-next">接下来</a></li>
     </ul>
-  </aside>
+  </div></aside>
 
   <main class="article">
     <div class="article-meta">
