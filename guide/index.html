@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>从大模型到 Agent：深度技术科普指南 (2026)</title>
+<meta name="description" content="15000字深度科普：从大模型原理到 AI Agent 架构，涵盖 RAG、MCP、多智能体协作，适合产品经理和技术人员系统学习。">
+<link rel="canonical" href="https://allen00.top/guide/">
+<meta property="og:title" content="从大模型到 Agent：深度技术科普指南 (2026)">
+<meta property="og:description" content="15000字深度科普：从大模型原理到 AI Agent 架构，涵盖 RAG、MCP、多智能体协作，适合产品经理和技术人员系统学习。">
+<meta property="og:url" content="https://allen00.top/guide/">
+<meta property="og:image" content="https://allen00.top/guide/images/hero-brain.jpg">
+<meta property="og:type" content="article">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
@@ -333,12 +340,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:13px 24px;backgroun
   .fb{padding:12px 16px}
   .fb .ic{font-size:18px}
   .fb .lb{font-size:11px}
-  .fb .sb{font-size:9px}
+  .fb .sb{font-size:11px}
 
   /* RAG flow */
   .rs{max-width:100%;padding:14px 12px}
   .rs .ti{font-size:11px}
-  .rs .de{font-size:9px}
+  .rs .de{font-size:11px}
 
   /* Arch flow */
   .arch-node{padding:10px 12px;gap:8px}
@@ -426,7 +433,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:13px 24px;backgroun
 
   /* Table */
   .ct{font-size:10px;min-width:600px}
-  .ct th{padding:8px 6px;font-size:9px}
+  .ct th{padding:8px 6px;font-size:11px}
   .ct td{padding:7px 6px}
 
   /* Nav mobile menu */
@@ -672,7 +679,7 @@ footer{padding:48px 0;border-top:1px solid var(--bd);text-align:center}
 </div>
 </div>
 
-<img class="glow rv" src="images/agent-loop.jpg" alt="Agent Loop" style="max-width:600px;">
+<img class="glow rv" loading="lazy" src="images/agent-loop.jpg" alt="Agent Loop" style="max-width:600px;">
 
 <div class="mp rv">
 <div class="em">🔁</div>
@@ -716,7 +723,7 @@ footer{padding:48px 0;border-top:1px solid var(--bd);text-align:center}
 <p>MCP 使用 JSON-RPC 2.0 作为通信协议，支持 stdio（标准输入输出，用于本地工具）和 HTTP+SSE（用于远程工具）两种传输方式。这意味着一个 MCP Server 既可以是运行在你本地的一个小脚本（比如读取本地文件），也可以是部署在云端的一个微服务（比如访问 Jira API）。统一协议层让<strong>工具的开发者和 AI 应用的开发者可以完全独立工作</strong>——只要双方遵循 MCP 规范，就一定能对接上。</p>
 </div>
 
-<img class="glow rv" src="images/mcp-architecture.jpg" alt="MCP Architecture" style="max-width:600px;">
+<img class="glow rv" loading="lazy" src="images/mcp-architecture.jpg" alt="MCP Architecture" style="max-width:600px;">
 
 <div class="ma rv">
 <div class="mat">MCP 四层架构</div>
@@ -922,7 +929,7 @@ footer{padding:48px 0;border-top:1px solid var(--bd);text-align:center}
 <div class="prog-step"><div class="num">L4</div><div class="prog-body"><h5>执行操作（实际执行时）</h5><p>调用 scripts/ 中的脚本、加载 assets/ 资源。脚本代码本身不进入上下文——Agent 只执行它，不阅读它。就像按照手册指引操作机器，而不是先读完机器的设计图纸。</p></div></div>
 </div>
 
-<img class="glow rv" src="images/skills-progressive.jpg" alt="Skills Progressive Disclosure" style="max-width:560px;">
+<img class="glow rv" loading="lazy" src="images/skills-progressive.jpg" alt="Skills Progressive Disclosure" style="max-width:560px;">
 
 <div class="tb rv">
 <h4>为什么必须这样设计？—— Token 经济学</h4>
@@ -1378,7 +1385,7 @@ footer{padding:48px 0;border-top:1px solid var(--bd);text-align:center}
 </ul>
 </div>
 
-<img class="glow rv" src="images/openclaw-vs-claude.jpg" alt="OpenClaw vs Claude" style="max-width:600px;">
+<img class="glow rv" loading="lazy" src="images/openclaw-vs-claude.jpg" alt="OpenClaw vs Claude" style="max-width:600px;">
 
 </div><!-- end 4.2 -->
 
@@ -1511,7 +1518,7 @@ footer{padding:48px 0;border-top:1px solid var(--bd);text-align:center}
 <p class="sd">Agent 不只是一个技术概念，它正在重塑我们与数字世界交互的方式。</p>
 </div>
 
-<img class="glow rv" src="images/future-agent.jpg" alt="Future Agent" style="max-width:500px;">
+<img class="glow rv" loading="lazy" src="images/future-agent.jpg" alt="Future Agent" style="max-width:500px;">
 
 <div class="ftc">
 
@@ -1550,7 +1557,7 @@ footer{padding:48px 0;border-top:1px solid var(--bd);text-align:center}
 <div class="fls">
 <a href="https://allen00.top">🏠 返回主页</a>
 <a href="mailto:19512249774yangliu@gmail.com">📧 联系作者</a>
-<a href="https://github.com/Allenyang007" target="_blank">GitHub</a>
+<a href="https://github.com/Allenyang007" target="_blank" rel="noopener noreferrer">GitHub</a>
 <a href="#hero">回到顶部</a>
 </div>
 <div class="fcp">&copy; 2026 Allen &middot; 19512249774yangliu@gmail.com &middot; 内容仅供学习参考</div>

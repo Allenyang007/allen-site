@@ -1,0 +1,200 @@
+<!-- 
+  Allen's Tech Blog 文章模板
+  使用时替换所有 {{PLACEHOLDER}} 占位符
+  CSS 完整复制自现有文章，确保风格一致
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} - Allen's Tech</title>
+<meta name="description" content="{{DESCRIPTION}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === 完整 CSS 从现有文章复制 === */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fff;--bg-card:#f8f9fa;--text:#1a1a2e;--ts:#6b7280;--tm:#9ca3af;--bd:#e5e7eb;--bl:#f0f0f0;--nav-bg:rgba(255,255,255,.85);--primary:#1a1a2e;--green:#22c55e;--orange:#f97316;--blue:#3b82f6;--code-bg:#1e1e2e;--code-text:#cdd6f4}
+[data-theme="dark"]{--bg:#0f0f1a;--bg-card:#1a1a2e;--text:#e5e7eb;--ts:#9ca3af;--tm:#6b7280;--bd:#2d2d44;--bl:#232340;--nav-bg:rgba(15,15,26,.9)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.ni{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nl{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;letter-spacing:-.5px}
+[data-theme="dark"] .nl{color:var(--green)}
+.nk{display:flex;align-items:center;gap:24px}
+.nk a{text-decoration:none;color:var(--ts);font-size:.9rem;font-weight:500;transition:color .2s}
+.nk a:hover,.nk a.active{color:var(--text)}
+.tb{background:none;border:1px solid var(--bd);border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text)}
+.tb:hover{border-color:var(--ts);background:var(--bg-card)}
+.hamburger{display:none;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:6px}
+.hamburger span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+.mobile-menu{display:none;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--bd);z-index:99}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{padding:14px 24px;text-decoration:none;color:var(--ts);font-size:.9rem;border-bottom:1px solid var(--bd)}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+@media(max-width:640px){.nk{display:none}.hamburger{display:flex}}
+.lay{max-width:1200px;margin:0 auto;padding:80px 24px 60px;display:grid;grid-template-columns:220px 1fr;gap:48px}
+@media(max-width:960px){.lay{grid-template-columns:1fr;gap:0;padding-top:72px}}
+.toc{position:sticky;top:80px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:16px}
+.toc h4{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}.toc li{margin-bottom:2px}
+.toc a{display:block;padding:4px 12px;font-size:.82rem;color:var(--ts);text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5}
+.toc a:hover{color:var(--text);border-left-color:var(--bd)}
+.toc a.active{color:var(--green);border-left-color:var(--green);font-weight:500}
+.toc .t2{padding-left:24px;font-size:.78rem}
+@media(max-width:960px){.toc{display:none}}
+.art{max-width:740px}
+.meta{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--bd)}
+.meta .bc{font-size:.82rem;color:var(--tm);margin-bottom:16px}
+.meta .bc a{color:var(--ts);text-decoration:none}.meta .bc a:hover{color:var(--green)}
+.meta h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.meta .sub{font-size:1.05rem;color:var(--ts);margin-bottom:16px}
+.meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--tm);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(34,197,94,.1);color:var(--green)}
+.ct h2{font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--bl);letter-spacing:-.3px}
+.ct h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.ct h3{font-size:1.15rem;font-weight:600;margin:32px 0 12px}
+.ct p{margin-bottom:16px;line-height:1.9}
+.ct a{color:var(--green);text-decoration:none;font-weight:500}.ct a:hover{text-decoration:underline}
+.ct ul,.ct ol{margin:0 0 16px 20px}.ct li{margin-bottom:6px;line-height:1.8}
+.ct blockquote{margin:20px 0;padding:16px 20px;border-left:3px solid var(--green);background:var(--bg-card);border-radius:0 8px 8px 0;font-size:.95rem}
+.ct blockquote p{margin-bottom:0;color:var(--ts)}
+.ct hr{border:none;border-top:1px solid var(--bd);margin:40px 0}
+.ct strong{font-weight:600}
+.co{margin:24px 0;padding:20px 24px;border-radius:10px;border:1px solid;font-size:.92rem;line-height:1.8}
+.co-i{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
+.co-t{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2)}
+.co-w{background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.2)}
+.co b{display:block;margin-bottom:4px}.co p{margin-bottom:0}
+footer{border-top:1px solid var(--bd);padding:32px 24px;text-align:center;color:var(--ts);font-size:.82rem}
+footer a{color:var(--ts);text-decoration:none;margin:0 8px}footer a:hover{color:var(--text)}
+@media(max-width:640px){.meta h1{font-size:1.5rem}.ct h2{font-size:1.25rem}.nk{gap:14px}.nk a{font-size:.82rem}}
+</style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav><div class="ni">
+  <a href="/" class="nl">Allen's Tech</a>
+  <div class="nk">
+    <a href="/">首页</a>
+    <a href="/guide/">AI 指南</a>
+    <a href="/blog/" class="active">博客</a>
+    <button class="tb" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</div>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+</nav>
+
+<!-- 主布局 -->
+<div class="lay">
+
+<!-- 目录侧栏 -->
+<aside class="toc" id="toc">
+  <h4>目录</h4>
+  <ul>
+    {{TOC_ITEMS}}
+    <!-- 示例:
+    <li><a href="#section1">第一节标题</a></li>
+    <li><a href="#section1-1" class="t2">子节标题</a></li>
+    -->
+  </ul>
+</aside>
+
+<!-- 文章主体 -->
+<article class="art">
+
+<!-- 元信息 -->
+<div class="meta">
+  <div class="bc"><a href="/">首页</a> / <a href="/blog/">博客</a> / {{TITLE_SHORT}}</div>
+  <h1>{{TITLE}}</h1>
+  <div class="sub">{{SUBTITLE}}</div>
+  <div class="info">
+    <span>Allen</span>
+    <span>{{DATE}}</span>
+    <span>{{READ_TIME}} 分钟阅读</span>
+    <span class="tag">{{TAG}}</span>
+  </div>
+</div>
+
+<!-- 正文内容 -->
+<div class="ct">
+  {{CONTENT}}
+  <!-- 
+  使用的 HTML 元素：
+  <h2 id="xxx">章节标题</h2>
+  <h3 id="xxx">子节标题</h3>
+  <p>段落文本</p>
+  <ul><li>列表项</li></ul>
+  <ol><li>有序列表项</li></ol>
+  <blockquote><p>引用文本</p></blockquote>
+  <strong>加粗</strong>
+  <a href="url">链接</a>
+  
+  提示框:
+  <div class="co co-i"><b>💡 洞察</b><p>内容</p></div>  (蓝色-信息)
+  <div class="co co-t"><b>✅ 要点</b><p>内容</p></div>  (绿色-提示)
+  <div class="co co-w"><b>⚠️ 注意</b><p>内容</p></div>  (橙色-警告)
+  -->
+</div>
+
+</article>
+</div>
+
+<!-- 页脚 -->
+<footer>
+  <p>&copy; 2026 Allen</p>
+  <p style="margin-top:8px">
+    <a href="https://github.com/Allenyang007" target="_blank">GitHub</a>
+    <a href="mailto:allen@allen00.top">联系我</a>
+  </p>
+</footer>
+
+<!-- 脚本 -->
+<script>
+function toggleTheme(){
+  var d=document.documentElement,n=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',n);localStorage.setItem('theme',n);
+  document.querySelector('.tb').textContent=n==='dark'?'☀️':'🌙';
+}
+(function(){
+  var s=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.querySelector('.tb').textContent='☀️';}
+})();
+// TOC active highlight
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href').slice(1);
+  var el=document.getElementById(id);
+  if(el)headings.push({el:el,a:a});
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+100;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>

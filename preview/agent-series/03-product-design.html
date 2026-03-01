@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>产品经理的 Agent 设计心得：从三款产品中我学到了什么 - Allen's Tech</title>
+<meta name="description" content="Agent 系列文章第三篇：从产品经理视角拆解 Agent 产品的五个核心设计决策，以及如何从零设计一个 Agent 产品。">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fff;--bg-card:#f8f9fa;--text:#1a1a2e;--ts:#6b7280;--tm:#9ca3af;--bd:#e5e7eb;--bl:#f0f0f0;--nav-bg:rgba(255,255,255,.85);--primary:#1a1a2e;--green:#22c55e;--orange:#f97316;--blue:#3b82f6;--code-bg:#1e1e2e;--code-text:#cdd6f4}
+[data-theme="dark"]{--bg:#0f0f1a;--bg-card:#1a1a2e;--text:#e5e7eb;--ts:#9ca3af;--tm:#6b7280;--bd:#2d2d44;--bl:#232340;--nav-bg:rgba(15,15,26,.9)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.ni{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nl{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;letter-spacing:-.5px}
+[data-theme="dark"] .nl{color:var(--green)}
+.nk{display:flex;align-items:center;gap:24px}
+.nk a{text-decoration:none;color:var(--ts);font-size:.9rem;font-weight:500;transition:color .2s}
+.nk a:hover,.nk a.active{color:var(--text)}
+.tb{background:none;border:1px solid var(--bd);border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text)}
+.tb:hover{border-color:var(--ts);background:var(--bg-card)}
+.lay{max-width:1200px;margin:0 auto;padding:80px 24px 60px;display:grid;grid-template-columns:220px 1fr;gap:48px}
+@media(max-width:960px){.lay{grid-template-columns:1fr;gap:0;padding-top:72px}}
+.toc{position:sticky;top:80px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:16px}
+.toc h4{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}.toc li{margin-bottom:2px}
+.toc a{display:block;padding:4px 12px;font-size:.82rem;color:var(--ts);text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5}
+.toc a:hover{color:var(--text);border-left-color:var(--bd)}
+.toc a.active{color:var(--green);border-left-color:var(--green);font-weight:500}
+.toc .t2{padding-left:24px;font-size:.78rem}
+@media(max-width:960px){.toc{display:none}}
+.art{max-width:740px}
+.meta{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--bd)}
+.meta .bc{font-size:.82rem;color:var(--tm);margin-bottom:16px}
+.meta .bc a{color:var(--ts);text-decoration:none}.meta .bc a:hover{color:var(--green)}
+.meta h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.meta .sub{font-size:1.05rem;color:var(--ts);margin-bottom:16px}
+.meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--tm);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(34,197,94,.1);color:var(--green)}
+.ct h2{font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--bl);letter-spacing:-.3px}
+.ct h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.ct h3{font-size:1.15rem;font-weight:600;margin:32px 0 12px}
+.ct p{margin-bottom:16px;line-height:1.9}
+.ct a{color:var(--green);text-decoration:none;font-weight:500}.ct a:hover{text-decoration:underline}
+.ct ul,.ct ol{margin:0 0 16px 20px}.ct li{margin-bottom:6px;line-height:1.8}
+.ct blockquote{margin:20px 0;padding:16px 20px;border-left:3px solid var(--green);background:var(--bg-card);border-radius:0 8px 8px 0;font-size:.95rem}
+.ct blockquote p{margin-bottom:0;color:var(--ts)}
+.ct hr{border:none;border-top:1px solid var(--bd);margin:40px 0}
+.ct code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--bg-card);border:1px solid var(--bd);border-radius:4px;padding:1px 6px}
+.ct strong{font-weight:600}
+.series-nav{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:24px;border-top:1px solid var(--bd);gap:16px}
+.series-nav a{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:1px solid var(--bd);border-radius:8px;text-decoration:none;color:var(--ts);font-size:.9rem;font-weight:500;transition:all .2s}
+.series-nav a:hover{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.05)}
+footer{border-top:1px solid var(--bd);padding:32px 24px;text-align:center;color:var(--ts);font-size:.82rem}
+footer a{color:var(--ts);text-decoration:none;margin:0 8px}footer a:hover{color:var(--text)}
+@media(max-width:640px){.meta h1{font-size:1.5rem}.ct h2{font-size:1.25rem}.nk{gap:14px}.nk a{font-size:.82rem}.series-nav{flex-direction:column}.series-nav a{width:100%;justify-content:center}}
+</style>
+</head>
+<body>
+<nav><div class="ni"><a href="/" class="nl">Allen's Tech</a><div class="nk"><a href="/">首页</a><a href="/guide/">AI 指南</a><a href="/blog/" class="active">博客</a><a href="/about/">关于</a><button class="tb" onclick="toggleTheme()" aria-label="切换主题">🌙</button></div></div></nav>
+<div class="lay">
+<aside class="toc" id="toc"><h4>目录</h4><ul>
+<li><a href="#s1">一、五个核心设计决策</a></li>
+<li><a href="#d1" class="t2">本地还是云端</a></li>
+<li><a href="#d2" class="t2">单任务还是多任务</a></li>
+<li><a href="#d3" class="t2">工具系统怎么设计</a></li>
+<li><a href="#d4" class="t2">记忆怎么做</a></li>
+<li><a href="#d5" class="t2">安全边界在哪</a></li>
+<li><a href="#s2">二、懂业务比懂技术更重要</a></li>
+<li><a href="#s3">三、用户场景分层</a></li>
+<li><a href="#s4">四、Agent 的进化路径</a></li>
+<li><a href="#s4-1" class="t2">从被动到主动</a></li>
+<li><a href="#s4-2" class="t2">从健忘到记忆</a></li>
+<li><a href="#s4-3" class="t2">从单一到协作</a></li>
+<li><a href="#s4-4" class="t2">从封闭到开放</a></li>
+<li><a href="#s5">五、如果我来设计</a></li>
+</ul></aside>
+<article class="art">
+<div class="meta">
+<div class="bc"><a href="/">首页</a> / <a href="/blog/">博客</a> / <a href="/blog/">Agent 系列</a> / 第三篇</div>
+<h1>产品经理的 Agent 设计心得：从三款产品中我学到了什么</h1>
+<p class="sub">系列文章（3/4）——如果我要做一个 Agent 产品，应该怎么想、怎么选、怎么设计？</p>
+<div class="info"><span>Allen</span><span>2026</span><span>约 5500 字</span><span>阅读约 15 分钟</span><span class="tag">Agent</span><span class="tag">产品设计</span><span class="tag">MCP</span></div>
+</div>
+<div class="ct" id="content">
+
+<p>前两篇我们聊了 Agent 是什么、三款产品的架构怎么设计的。这一篇回到产品经理最关心的问题：<strong>如果我要做一个 Agent 产品，应该怎么想、怎么选、怎么设计？</strong></p>
+
+<p>这不是一篇教你写代码的文章。这是一篇帮你做产品决策的文章。</p>
+
+<hr>
+
+<h2 id="s1">一、Agent 产品的五个核心设计决策</h2>
+
+<p>做 Agent 产品，有五个绕不开的选择题。每个选择都没有标准答案，取决于你的场景和用户。</p>
+
+<h3 id="d1">决策一：本地运行还是云端运行？</h3>
+
+<p>Claude Code 选了本地，Codex 选了云端，OpenClaw 选了自部署服务器。三种选择，三种取舍。</p>
+
+<p><strong>本地运行（Claude Code 模式）：</strong></p>
+<ul>
+<li>优势：数据不出本机，隐私有保障；响应快，没有网络延迟；不依赖云服务的稳定性</li>
+<li>代价：受限于本机算力；不能后台运行（关了终端就停了）；不能并行</li>
+</ul>
+
+<p><strong>云端运行（Codex 模式）：</strong></p>
+<ul>
+<li>优势：算力几乎无限；可以并行处理多个任务；不占用本机资源</li>
+<li>代价：代码要上传到云端（隐私顾虑）；依赖网络；有使用成本</li>
+</ul>
+
+<p><strong>自部署（OpenClaw 模式）：</strong></p>
+<ul>
+<li>优势：数据在自己的服务器上；7×24 小时在线；完全可控</li>
+<li>代价：需要运维能力；服务器有成本；配置门槛高</li>
+</ul>
+
+<p>怎么选？问自己三个问题：</p>
+<ol>
+<li>用户对数据隐私的敏感度有多高？</li>
+<li>任务需要并行处理吗？</li>
+<li>Agent 需要一直在线还是用的时候才启动？</li>
+</ol>
+
+<p>如果是企业内部的代码 Agent，隐私优先，选本地。如果是面向开发者的效率工具，并行和易用优先，选云端。如果是个人 AI 助手，需要全天候在线，选自部署。</p>
+
+<h3 id="d2">决策二：单任务还是多任务并行？</h3>
+
+<p>Claude Code 一次只做一件事。Codex 可以同时做五件事。</p>
+
+<p>单任务的好处是简单可控——你能清楚地看到 Agent 在干什么，出了问题容易排查。对于需要深度思考的复杂任务（比如重构一个大模块），单任务反而更可靠。</p>
+
+<p>多任务并行的好处是效率——同时修三个 bug，比一个一个修快三倍。但并行带来了复杂性：任务之间会不会冲突？两个任务同时改了同一个文件怎么办？</p>
+
+<p>Codex 的解决方案是完全隔离——每个任务一个独立沙盒，互不干扰。代价是每个沙盒都要复制一份代码仓库，资源消耗大。</p>
+
+<p>产品设计的启发：不要为了并行而并行。先想清楚你的用户场景里，并行是真需求还是伪需求。如果用户的任务天然是串行的（比如"先分析数据，再写报告"），强行做并行反而增加复杂度。</p>
+
+<h3 id="d3">决策三：工具系统怎么设计？</h3>
+
+<p>Agent 的能力边界取决于它能用什么工具。工具系统的设计直接决定了产品的扩展性。</p>
+
+<p>三款产品给出了三种思路：</p>
+
+<p><strong>Claude Code：内置 + Skills + MCP 三层</strong></p>
+<ul>
+<li>内置工具覆盖核心场景（文件、命令、搜索）</li>
+<li>Skills 让用户自定义工作流</li>
+<li>MCP 连接外部服务</li>
+</ul>
+
+<p><strong>Codex：内置 + AGENTS.md 配置</strong></p>
+<ul>
+<li>内置工具（文件、命令、测试）</li>
+<li>通过 AGENTS.md 告诉 Agent 项目的工具链怎么用</li>
+<li>GitHub 集成作为核心外部工具</li>
+</ul>
+
+<p><strong>OpenClaw：Skill 插件生态</strong></p>
+<ul>
+<li>少量内置工具</li>
+<li>大量功能通过 Skill 插件提供</li>
+<li>社区生态（clawhub.com）</li>
+</ul>
+
+<p>我的观点：<strong>MCP 是趋势</strong>。</p>
+
+<p>MCP（Model Context Protocol）做的事情就像 USB-C 统一了充电接口——以前每个 AI 产品接工具都要写一套定制代码，现在有了统一标准。写一次 MCP 适配，所有支持 MCP 的 Agent 都能用。</p>
+
+<p>如果你现在开始做 Agent 产品，工具系统一定要支持 MCP。这不是可选项，是必选项。</p>
+
+<h3 id="d4">决策四：记忆怎么做？</h3>
+
+<p>Agent 没有记忆，就像一个每天失忆的员工——每次都要从头交代背景。</p>
+
+<p>三款产品的记忆设计差异很大：</p>
+
+<p><strong>Claude Code：项目级记忆</strong></p>
+<ul>
+<li>CLAUDE.md 存项目配置和约定</li>
+<li>上下文压缩保留关键信息</li>
+<li>没有跨会话的长期记忆</li>
+</ul>
+
+<p><strong>Codex：任务级记忆</strong></p>
+<ul>
+<li>AGENTS.md 存项目说明</li>
+<li>每个任务独立，任务之间不共享记忆</li>
+<li>依赖 GitHub 的 issue/PR 作为"外部记忆"</li>
+</ul>
+
+<p><strong>OpenClaw：三层记忆体系</strong></p>
+<ul>
+<li>会话内上下文（短期）</li>
+<li>每日工作日志（中期）</li>
+<li>MEMORY.md 长期记忆（长期）</li>
+<li>还有 SOUL.md 定义"性格"</li>
+</ul>
+
+<p>记忆系统的深度直接决定了 Agent 能不能"成长"。如果你的产品定位是一次性工具（用完就走），简单的项目级记忆够了。如果定位是长期助手（越用越懂你），必须做多层记忆。</p>
+
+<p>我的体会是：<strong>记忆是 Agent 的灵魂</strong>。没有记忆的 Agent 只是一个高级工具；有记忆的 Agent 才是真正的助手。</p>
+
+<h3 id="d5">决策五：安全边界在哪？</h3>
+
+<p>Agent 能自主行动，这既是它的价值，也是它的风险。</p>
+
+<p>用户最大的恐惧是：Agent 会不会做出我不想让它做的事？会不会删了我的文件？会不会把我的代码发到外面？</p>
+
+<p>三款产品的安全策略：</p>
+
+<p><strong>Claude Code：多层权限 + 沙盒</strong></p>
+<ul>
+<li>权限模式分级（从每次都问到完全放开）</li>
+<li>权限规则精确到命令和文件路径</li>
+<li>OS 级沙盒隔离</li>
+</ul>
+
+<p><strong>Codex：沙盒隔离 + 默认断网</strong></p>
+<ul>
+<li>每个任务独立沙盒</li>
+<li>默认不能访问互联网</li>
+<li>所有改动需要人工审查后才能合并</li>
+</ul>
+
+<p><strong>OpenClaw：信任模型 + 行为规范</strong></p>
+<ul>
+<li>AGENTS.md 定义行为边界</li>
+<li>外部操作（发消息、发邮件）需要确认</li>
+<li>内部操作（读文件、写代码）默认允许</li>
+</ul>
+
+<p>产品设计的原则：<strong>安全感比安全更重要</strong>。</p>
+
+<p>技术上做到安全是基础，但用户要能"感受到"安全。Claude Code 每次敏感操作都弹确认框，虽然有点烦，但用户心里踏实。Codex 默认断网，用户知道代码不会泄露。</p>
+
+<p>给用户控制权，让他们能看到 Agent 在做什么、能随时叫停、能设置边界。这比任何技术手段都重要。</p>
+
+<hr>
+
+<h2 id="s2">二、懂业务比懂技术更重要</h2>
+
+<p>这是我从这三款产品中得到的最大感悟。</p>
+
+<p>技术人做 Agent 产品，容易陷入一个误区：堆功能、堆工具、堆模型能力。"我们支持 100 个工具！""我们用最强的模型！""我们的 Agent Loop 比别人快 3 倍！"</p>
+
+<p>但用户不关心这些。用户关心的是：<strong>这个东西能帮我解决什么问题？</strong></p>
+
+<p>举几个例子：</p>
+
+<p><strong>OpenClaw 的心跳机制。</strong> 从技术角度看，就是一个定时器定期触发 Agent。没什么技术含量。但从产品角度看，这是对"用户希望 Agent 主动关心我"这个需求的精准洞察。大部分 Agent 是被动的——你找它，它才响应。心跳让 Agent 变成了主动的——它会自己检查有没有需要处理的事情，有重要的事主动告诉你。</p>
+
+<p>这不是技术创新，是产品创新。</p>
+
+<p><strong>Codex 的并行任务。</strong> 不是为了炫技"看我能同时跑 5 个 Agent"。而是因为开发者真的有这个痛点——手头同时有好几个 bug 要修，一个一个排队太慢了。并行是从用户场景倒推出来的架构决策。</p>
+
+<p><strong>Claude Code 的权限确认框。</strong> 技术上完全可以做成"全自动不打扰"。但产品团队选择了"每次都问"作为默认模式。因为他们理解：对于一个能读写你代码的 AI，信任需要慢慢建立。先让用户觉得安全，再逐步放开权限。</p>
+
+<p>这些设计背后的共同点是：<strong>从用户场景出发，而不是从技术能力出发</strong>。</p>
+
+<p>产品经理在 Agent 时代的优势恰恰在这里。你可能不会写 Agent Loop，但你知道用户在什么场景下需要什么。你知道哪些功能是"看起来酷但没人用"的，哪些是"看起来简单但真正解决问题"的。</p>
+
+<hr>
+
+<h2 id="s3">三、Agent 的用户场景分层</h2>
+
+<p>不是所有场景都需要 Agent。这句话很重要，再说一遍：<strong>不是所有场景都需要 Agent。</strong></p>
+
+<p>我把 AI 的使用场景分成三层：</p>
+
+<p><strong>轻量场景：问答、翻译、总结</strong><br>
+用户需求简单明确，一问一答就能解决。Chatbot 完全够用。<br>
+硬要上 Agent 反而过度设计——用户只是想翻译一句话，你给他启动一个 Agent Loop？</p>
+
+<p><strong>中等场景：辅助编码、文档协作</strong><br>
+用户需要 AI 在旁边实时帮忙，但主导权在用户手里。Copilot 模式最合适。<br>
+比如写代码时的自动补全、写文档时的润色建议。用户不需要 Agent 自己做决策。</p>
+
+<p><strong>重度场景：自主完成复杂任务</strong><br>
+任务复杂、步骤多、需要灵活应对。这才是 Agent 的主场。<br>
+比如"帮我研究竞品并写分析报告""帮我重构这个模块并确保测试通过""每天帮我整理行业新闻"。</p>
+
+<p>产品经理要做的判断是：<strong>你的用户真的需要 Agent 吗？</strong></p>
+
+<p>别为了 Agent 而 Agent。如果你的产品场景 80% 是轻量问答，做一个好的 Chatbot 比做一个半吊子 Agent 强十倍。</p>
+
+<p>Agent 的价值在重度场景里才能体现。如果你的用户确实有复杂的、多步骤的、需要灵活应对的任务，那 Agent 是正确的选择。</p>
+
+<hr>
+
+<h2 id="s4">四、Agent 的进化路径</h2>
+
+<p>Agent 产品不是一步到位的。从三款产品的发展轨迹中，我总结了四条进化路径：</p>
+
+<h3 id="s4-1">从被动到主动</h3>
+
+<p>大部分 Agent 一开始都是被动的——用户说话，Agent 响应。</p>
+
+<p>下一步是主动。OpenClaw 的心跳机制就是一个例子：Agent 定期自己检查有没有需要处理的事情。Codex 的 GitHub 集成也是——有人提了 issue，Agent 自动去处理。</p>
+
+<p>主动性是 Agent 从"工具"变成"助手"的关键一步。</p>
+
+<h3 id="s4-2">从健忘到记忆</h3>
+
+<p>早期的 Agent 每次对话都是全新的开始。</p>
+
+<p>现在的趋势是多层记忆：短期（对话上下文）→ 中期（工作日志）→ 长期（经验总结）。OpenClaw 的三层记忆体系是目前我见过最完整的设计。</p>
+
+<p>记忆让 Agent 能"成长"。用了三个月的 Agent 应该比第一天用的时候更懂你。</p>
+
+<h3 id="s4-3">从单一到协作</h3>
+
+<p>一个 Agent 搞不定所有事。</p>
+
+<p>Claude Code 和 OpenClaw 都支持子代理（Sub-agents）——主 Agent 把子任务派给独立的 Agent 处理，做完后汇总结果。就像项目经理把任务分配给团队成员。</p>
+
+<p>再往前走是 Multi-Agent 协作——多个 Agent 各有专长，互相配合完成复杂任务。一个负责研究，一个负责写作，一个负责审核。</p>
+
+<h3 id="s4-4">从封闭到开放</h3>
+
+<p>早期的 Agent 工具是写死的，能做什么不能做什么，开发时就定了。</p>
+
+<p>MCP 协议的出现改变了这一点。现在 Agent 可以动态接入新工具，不需要改代码。今天接一个 GitHub 工具，明天接一个 Notion 工具，后天接一个自己公司的内部 API。</p>
+
+<p>开放的工具生态让 Agent 的能力边界不断扩展。</p>
+
+<hr>
+
+<h2 id="s5">五、如果我来设计一个 Agent 产品</h2>
+
+<p>结合三款产品的经验，如果让我从零开始设计一个 Agent 产品，我会按这六步走：</p>
+
+<p><strong>第一步：明确场景，不做万能 Agent。</strong><br>
+先想清楚解决什么问题、服务什么人。"什么都能做"等于"什么都做不好"。Claude Code 专注编程，所以编程体验做到了极致。</p>
+
+<p><strong>第二步：选择架构，匹配场景。</strong><br>
+编程工具 → 本地优先（隐私+低延迟）。效率工具 → 云端优先（并行+免运维）。个人助手 → 自部署或混合（全天候+可控）。</p>
+
+<p><strong>第三步：设计记忆系统。</strong><br>
+这是 Agent 的灵魂。至少做两层：项目/任务级记忆 + 跨会话的长期记忆。让 Agent 能记住用户的偏好和历史。</p>
+
+<p><strong>第四步：拥抱 MCP。</strong><br>
+工具系统一定要支持 MCP 协议。这是行业趋势，也是降低工具接入成本的最佳方案。</p>
+
+<p><strong>第五步：安全和信任优先。</strong><br>
+默认保守，逐步放开。让用户能看到 Agent 在做什么、能随时叫停、能设置边界。信任是 Agent 产品的生命线。</p>
+
+<p><strong>第六步：让 Agent 能进化。</strong><br>
+设计自我改进机制。Agent 应该能从错误中学习、从用户反馈中调整、随着使用时间变得更好。OpenClaw 的 SOUL.md + MEMORY.md + 自我改进 Skill 是一个很好的参考。</p>
+
+<hr>
+
+<h2 id="ending">结尾</h2>
+
+<p>Agent 时代，产品经理的价值不是被削弱了，而是被放大了。</p>
+
+<p>技术人能搭出 Agent 的骨架，但只有懂业务、懂用户的人才能给它注入灵魂。知道什么功能该做、什么功能不该做、用户在什么场景下需要什么样的体验——这些判断力，是 Agent 时代最稀缺的能力。</p>
+
+<p>不是每个产品都需要 Agent，但每个产品经理都需要理解 Agent。</p>
+
+<p>下一篇是这个系列的最后一篇——实战操作指南。手把手教你用 Claude Code、Codex 和 OpenClaw，从安装到进阶配置。</p>
+
+<p style="color:var(--tm);font-style:italic;margin-top:32px">Allen | AI 产品经理 | allen00.top</p>
+
+</div><!-- .ct -->
+
+<div class="series-nav">
+<a href="02-architecture.html" class="prev">← 上一篇：架构拆解</a>
+<a href="04-hands-on.html" class="next">下一篇：实战指南 →</a>
+</div>
+
+</article>
+</div><!-- .lay -->
+
+<footer>© 2026 Allen · <a href="/">allen00.top</a></footer>
+
+<script>
+function toggleTheme(){
+  const d=document.documentElement;
+  const t=d.getAttribute('data-theme')==='dark'?'':'dark';
+  d.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  document.querySelector('.tb').textContent=t==='dark'?'☀️':'🌙';
+}
+(function(){
+  const t=localStorage.getItem('theme')||
+    (window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'');
+  if(t)document.documentElement.setAttribute('data-theme',t);
+  if(t==='dark')document.querySelector('.tb').textContent='☀️';
+})();
+
+// TOC active highlight on scroll
+(function(){
+  const toc=document.getElementById('toc');
+  if(!toc)return;
+  const links=toc.querySelectorAll('a[href^="#"]');
+  const ids=Array.from(links).map(a=>a.getAttribute('href').slice(1));
+  function update(){
+    let cur='';
+    for(const id of ids){
+      const el=document.getElementById(id);
+      if(el&&el.getBoundingClientRect().top<=120)cur=id;
+    }
+    links.forEach(a=>{
+      a.classList.toggle('active',a.getAttribute('href')==='#'+cur);
+    });
+  }
+  window.addEventListener('scroll',update,{passive:true});
+  update();
+})();
+</script>
+</body>
+</html>

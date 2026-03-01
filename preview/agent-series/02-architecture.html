@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三款 Agent 产品架构深度拆解 - Allen's Tech</title>
+<meta name="description" content="Agent 系列文章第一篇：从 Claude Code、OpenAI Codex、OpenClaw 三款产品出发，讲清楚 Agent 到底是什么。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fff;--bg-card:#f8f9fa;--text:#1a1a2e;--ts:#6b7280;--tm:#9ca3af;--bd:#e5e7eb;--bl:#f0f0f0;--nav-bg:rgba(255,255,255,.85);--primary:#1a1a2e;--green:#22c55e;--orange:#f97316;--blue:#3b82f6;--code-bg:#1e1e2e;--code-text:#cdd6f4}
+[data-theme="dark"]{--bg:#0f0f1a;--bg-card:#1a1a2e;--text:#e5e7eb;--ts:#9ca3af;--tm:#6b7280;--bd:#2d2d44;--bl:#232340;--nav-bg:rgba(15,15,26,.9)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.8;transition:background .3s,color .3s}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.ni{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nl{font-size:1.2rem;font-weight:700;color:var(--primary);text-decoration:none;letter-spacing:-.5px}
+[data-theme="dark"] .nl{color:var(--green)}
+.nk{display:flex;align-items:center;gap:24px}
+.nk a{text-decoration:none;color:var(--ts);font-size:.9rem;font-weight:500;transition:color .2s}
+.nk a:hover,.nk a.active{color:var(--text)}
+.tb{background:none;border:1px solid var(--bd);border-radius:8px;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:var(--text)}
+.tb:hover{border-color:var(--ts);background:var(--bg-card)}
+.lay{max-width:1200px;margin:0 auto;padding:80px 24px 60px;display:grid;grid-template-columns:220px 1fr;gap:48px}
+@media(max-width:960px){.lay{grid-template-columns:1fr;gap:0;padding-top:72px}}
+.toc{position:sticky;top:80px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:16px}
+.toc h4{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--tm);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}.toc li{margin-bottom:2px}
+.toc a{display:block;padding:4px 12px;font-size:.82rem;color:var(--ts);text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5}
+.toc a:hover{color:var(--text);border-left-color:var(--bd)}
+.toc a.active{color:var(--green);border-left-color:var(--green);font-weight:500}
+.toc .t2{padding-left:24px;font-size:.78rem}
+@media(max-width:960px){.toc{display:none}}
+.art{max-width:740px}
+.meta{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid var(--bd)}
+.meta .bc{font-size:.82rem;color:var(--tm);margin-bottom:16px}
+.meta .bc a{color:var(--ts);text-decoration:none}.meta .bc a:hover{color:var(--green)}
+.meta h1{font-size:2rem;font-weight:700;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.meta .sub{font-size:1.05rem;color:var(--ts);margin-bottom:16px}
+.meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--tm);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px;background:rgba(34,197,94,.1);color:var(--green)}
+.ct h2{font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;border-top:1px solid var(--bl);letter-spacing:-.3px}
+.ct h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.ct h3{font-size:1.15rem;font-weight:600;margin:32px 0 12px}
+.ct p{margin-bottom:16px;line-height:1.9}
+.ct a{color:var(--green);text-decoration:none;font-weight:500}.ct a:hover{text-decoration:underline}
+.ct ul,.ct ol{margin:0 0 16px 20px}.ct li{margin-bottom:6px;line-height:1.8}
+.ct blockquote{margin:20px 0;padding:16px 20px;border-left:3px solid var(--green);background:var(--bg-card);border-radius:0 8px 8px 0;font-size:.95rem}
+.ct blockquote p{margin-bottom:0;color:var(--ts)}
+.ct hr{border:none;border-top:1px solid var(--bd);margin:40px 0}
+.ct code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:var(--bg-card);border:1px solid var(--bd);border-radius:4px;padding:1px 6px}
+.cb{margin:20px 0;border-radius:10px;overflow:hidden;border:1px solid var(--bd);background:var(--code-bg)}
+.cbd{padding:16px 20px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.9;color:var(--code-text);white-space:pre}
+.cbd code{background:none;border:none;padding:0;font-size:inherit}
+.cpt{margin:24px 0;overflow-x:auto;border-radius:10px;border:1px solid var(--bd)}
+.cpt table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:600px}
+.cpt th{background:var(--bg-card);padding:12px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--bd);font-size:.8rem;white-space:nowrap}
+.cpt td{padding:10px 14px;border-bottom:1px solid var(--bl)}
+.cpt tr:last-child td{border-bottom:none}
+.cpt tr:hover td{background:var(--bg-card)}
+.cpt tr:nth-child(even) td{background:var(--bl)}
+.series-nav{margin:48px 0 0;padding:24px;border:1px solid var(--bd);border-radius:10px;background:var(--bg-card);display:flex;justify-content:flex-end;align-items:center}
+.series-nav a{color:var(--green);text-decoration:none;font-weight:600;font-size:.95rem;display:flex;align-items:center;gap:6px}
+.series-nav a:hover{text-decoration:underline}
+footer{text-align:center;padding:40px 24px;border-top:1px solid var(--bd);font-size:.82rem;color:var(--tm)}
+</style>
+</head>
+<body>
+<nav><div class="ni">
+<a href="/" class="nl">Allen's Tech</a>
+<button class="hm" onclick="document.querySelector('.nk').classList.toggle('open')">☰</button>
+<div class="nk">
+<a href="/">首页</a><a href="/guide/">指南</a><a href="/blog/">博客</a><a href="/about/">关于</a>
+<button class="tb" onclick="let t=document.documentElement;t.dataset.theme=t.dataset.theme==='dark'?'light':'dark'">🌓</button>
+</div>
+</div></nav>
+<div class="wrap">
+<div class="bc"><a href="/">首页</a> &gt; <a href="/blog/">博客</a> &gt; Agent 系列 &gt; 第2篇（2/4）</div>
+<div class="meta">
+<h1>三款 Agent 产品架构深度拆解</h1>
+<div class="sub">系列文章 2/4</div>
+<div class="info"><span class="tag">Agent 系列</span> Allen | allen00.top</div>
+</div>
+<div class="ct">
+<h1 id="三款-agent-产品架构深度拆解claude-codecodexopenclaw">三款 Agent
+产品架构深度拆解：Claude Code、Codex、OpenClaw</h1>
+<blockquote>
+<p>系列文章（2/4）| 作者：Allen | allen00.top</p>
+</blockquote>
+<hr />
+<p>上一篇我们聊了 Agent
+是什么，以及三款产品的基本面貌。这一篇往深了走，拆开它们的引擎盖，看看里面到底是怎么运转的。</p>
+<p>我不会贴源码，但会把架构讲清楚。如果你是产品经理，理解这些架构差异能帮你做出更好的产品决策；如果你是开发者，这些设计思路可以直接借鉴。</p>
+<hr />
+<h2 id="一agent-的通用架构先画一张底图">一、Agent
+的通用架构：先画一张底图</h2>
+<p>不管是哪款 Agent 产品，底层都遵循同一个模式，就是 Agent
+Loop（智能体循环）。</p>
+<pre><code>用户给出目标
+    ↓
+┌─────────────────────┐
+│  收集上下文（Gather） │
+│  ↓                   │
+│  模型推理（Think）    │
+│  ↓                   │
+│  执行动作（Act）      │
+│  ↓                   │
+│  检查结果（Verify）   │
+│  ↓                   │
+│  是否完成？           │
+│  否 → 回到收集上下文  │
+│  是 → 返回结果给用户  │
+└─────────────────────┘</code></pre>
+<p>这个循环是所有 Agent
+的心脏。据我观察，区别在于：每个产品怎么实现这个循环、循环里塞了什么东西、循环跑在哪里。</p>
+<hr />
+<h2 id="二claude-code极致专注的单线程架构">二、Claude
+Code：极致专注的单线程架构</h2>
+<h3 id="整体架构">2.1 整体架构</h3>
+<p>我拆解下来发现，Claude Code
+的架构哲学可以用四个字概括：简单直接。</p>
+<p>一个终端进程，一个 Agent
+Loop，一个上下文窗口。所有事情都在这一个进程里完成。</p>
+<pre><code>用户终端
+  ↓
+CLI 进程（Node.js）
+  ├── Agent Loop 引擎
+  ├── 工具执行层（文件/命令/网络）
+  ├── 上下文管理器
+  └── Claude API 调用</code></pre>
+<p>你在终端输入 <code>claude</code>，启动一个 Node.js
+进程。这个进程里跑着完整的 Agent Loop，接收你的输入、调用 Claude API
+推理、执行工具操作、把结果喂回模型、继续下一轮。</p>
+<p>整个过程是同步阻塞的。模型在想的时候，你等着；工具在执行的时候，模型等着。一次只做一件事，但做得很深。</p>
+<p>这种设计的好处是可预测，你能清楚地知道它在干什么、干到哪一步了。坏处是不能并行，一个会话同时只能处理一个任务。</p>
+<h3 id="agent-loop-的三阶段">2.2 Agent Loop 的三阶段</h3>
+<p>Claude Code 的 Agent Loop
+分三个阶段，但不是严格线性的，更像是交织在一起的：</p>
+<p>阶段一：收集上下文（Gather Context）</p>
+<p>每一轮循环开始时，Agent 要搞清楚”我现在面对的是什么情况”。它会： -
+读取你的输入 - 加载 CLAUDE.md（项目级配置文件，类似项目的”使用说明书”）
+- 加载已启用的 Skills 描述 - 加载 MCP 服务器的工具定义 -
+回顾之前的对话历史</p>
+<p>阶段二：执行动作（Take Action）</p>
+<p>把上下文打包发给 Claude API，模型返回下一步操作。可能是： -
+调用一个工具（读文件、执行命令、搜索代码等） - 直接给你一个回答 -
+请求更多信息</p>
+<p>如果是工具调用，执行完后把结果加入上下文，进入下一轮循环。</p>
+<p>阶段三：验证结果（Verify Results）</p>
+<p>模型拿到工具执行结果后，判断： - 任务完成了吗？ - 结果对不对？ -
+需要继续操作吗？</p>
+<p>如果没完成，回到阶段一继续。如果完成了，生成最终回复。</p>
+<p>这三个阶段会循环很多轮。一个复杂任务可能要转几十圈，读代码、分析、改代码、跑测试、发现测试失败、再改、再跑，直到通过。</p>
+<h3 id="工具系统三层设计">2.3 工具系统：三层设计</h3>
+<p>Claude Code 的工具分三层，我觉得这个设计很值得学习：</p>
+<p><strong>第一层：内置工具（Built-in Tools）</strong></p>
+<p>最核心的一组，开箱即用： - 文件操作：Read、Edit、Write -
+搜索：Grep、Glob（文件名匹配） - 命令执行：Bash -
+网络：WebFetch、WebSearch - 代码智能：跳转定义、查找引用</p>
+<p>这些覆盖了 80% 的编程场景。</p>
+<p><strong>第二层：Skills（技能）</strong></p>
+<p>用户自定义的工作流模板。每个 Skill 是一个目录，里面有个 SKILL.md
+文件描述这个技能能做什么、怎么做。</p>
+<p>聪明的地方在于按需加载。系统提示词里只放 Skills
+的名字和简短描述，不放完整内容。只有当模型判断需要用某个 Skill
+时，才会去读取完整的 SKILL.md。</p>
+<p>这样做的好处是省上下文。如果你装了 50 个 Skills，不可能把 50
+个完整说明都塞进提示词里，上下文窗口会爆。</p>
+<p><strong>第三层：MCP 服务器（外部工具）</strong></p>
+<p>通过 MCP 协议连接外部服务。每个 MCP Server 暴露一组工具，Claude Code
+把这些工具定义合并到系统提示词中。</p>
+<p>但这里有个坑：每个 MCP Server
+的工具定义都会占用上下文空间，即使你没在用它。当工具定义超过上下文窗口的
+10% 时，Claude Code
+会启动”工具搜索”机制，延迟加载工具，只在模型需要时才注入。</p>
+<h3 id="权限控制安全是第一优先级">2.4 权限控制：安全是第一优先级</h3>
+<p>Claude Code 的权限系统设计得很细致，分几个层级：</p>
+<p>权限模式： - <code>default</code>：每次敏感操作都问你（默认） -
+<code>acceptEdits</code>：自动接受文件编辑，但命令还是要确认 -
+<code>plan</code>：只读模式，只分析不动手 -
+<code>bypassPermissions</code>：完全跳过权限检查（危险，不建议）</p>
+<p>权限规则： 可以精确到具体命令和文件路径。比如允许
+<code>npm run test</code> 但禁止 <code>rm -rf</code>，允许读
+<code>.env</code> 但禁止读 <code>.env.production</code>。</p>
+<p>规则按 deny → ask → allow 的顺序匹配，第一个命中的生效。</p>
+<p>沙盒机制： 在操作系统层面限制 Agent
+能访问的文件和网络。权限控制的是”Agent 想做什么”，沙盒控制的是”Agent
+实际能碰什么”。两层防护。</p>
+<p>我从这套设计里学到的是：Agent
+产品的安全不能只靠一层，要多层叠加。用户信任是 Agent 产品的生命线。</p>
+<h3 id="上下文管理">2.5 上下文管理</h3>
+<p>大模型有上下文窗口限制（Claude 目前是 200K
+token）。长时间工作后，对话历史会越来越长，最终撑满窗口。</p>
+<p>Claude Code 的应对策略：</p>
+<p>自动压缩（Compact）：当上下文接近上限时，自动总结之前的对话，用精简版替换原始内容。就像人的记忆，你不会记住每句话的原文，但记得关键信息。我在长时间使用中发现，压缩后偶尔会丢失一些细节，但整体体验还是流畅的。</p>
+<p>子代理（Sub-agents）：把子任务派给独立的 Agent
+会话处理。子代理有自己的上下文窗口，不会污染主会话。做完后只把结果返回。我用
+Claude Code 的体验是，子代理在处理大文件重构时特别好用。</p>
+<p>CLAUDE.md
+项目记忆：项目级别的持久化配置。不管开多少次新会话，CLAUDE.md
+里的内容都会被加载。适合存放项目约定、代码规范、常用命令等。</p>
+<h3 id="小结">2.6 小结</h3>
+<p>Claude Code
+的架构就像一个专注的手艺人，一次只做一件事，但做得精细。简单的架构带来了可预测性和可靠性，代价是不能并行、不能后台运行。</p>
+<hr />
+<h2 id="三openai-codex云端并行的工厂模式">三、OpenAI
+Codex：云端并行的工厂模式</h2>
+<h3 id="整体架构-1">3.1 整体架构</h3>
+<p>Codex 的架构思路跟 Claude Code 完全不同。如果说 Claude Code
+是一个手艺人，我觉得 Codex 更像一座工厂。</p>
+<pre><code>用户（ChatGPT / CLI / IDE）
+  ↓
+Codex 调度层
+  ├── 任务 A → 云端沙盒 A（独立环境 + 代码仓库副本）
+  ├── 任务 B → 云端沙盒 B（独立环境 + 代码仓库副本）
+  ├── 任务 C → 云端沙盒 C（独立环境 + 代码仓库副本）
+  └── ...</code></pre>
+<p>每个任务跑在独立的云端沙盒里，预加载了你的代码仓库。任务之间完全隔离，互不影响。</p>
+<p>这意味着你可以同时给 Codex 5 个任务，它在 5
+个独立环境里并行处理。一个任务失败了不影响其他的。</p>
+<h3 id="codex-1-模型">3.2 codex-1 模型</h3>
+<p>Codex 底层用的不是通用的 GPT 模型，而是专门为编程优化的 codex-1。</p>
+<p>codex-1 基于 o3 模型，通过强化学习在真实编程任务上训练。它的特点是：
+- 生成的代码风格接近人类（不是那种一看就是 AI 写的） - 能理解项目的 PR
+偏好和代码规范 - 遇到测试失败会自己迭代修改，直到测试通过</p>
+<p>在 SWE-Bench Verified 基准测试上，codex-1 拿到了 75.6% 的通过率。</p>
+<h3 id="三种使用形态">3.3 三种使用形态</h3>
+<p>Codex 不是一个产品，是一个产品家族：</p>
+<p>Web 版（chatgpt.com/codex）：在 ChatGPT 里直接用。侧边栏点
+Codex，连接 GitHub 仓库，给任务就行。最方便，适合日常使用。</p>
+<p>CLI
+版（命令行）：<code>npm install -g @openai/codex</code>，在终端里用。开源的（Apache-2.0），代码在
+github.com/openai/codex。适合喜欢终端的开发者。</p>
+<p>IDE 插件：VS Code、Cursor、Windsurf 都能装。在编辑器里直接跟 Codex
+交互，还能把任务委托到云端执行。</p>
+<p>三种形态共享同一个后端，选哪个看个人习惯。</p>
+<h3 id="github-深度集成">3.4 GitHub 深度集成</h3>
+<p>Codex 跟 GitHub 的集成是它的一大卖点。</p>
+<p>你可以在 GitHub 的 Issue 或 PR 里 <span class="citation"
+data-cites="codex">@codex</span>，它会自动创建一个云端任务去处理。比如有人提了一个
+bug issue，你在评论里写 <code>@codex 请修复这个 bug</code>，它就会： 1.
+克隆仓库到沙盒 2. 分析 issue 描述 3. 定位问题代码 4. 修复并跑测试 5.
+创建一个 PR 给你审查</p>
+<p>整个过程你不需要打开编辑器。</p>
+<h3 id="agents.md-配置">3.5 AGENTS.md 配置</h3>
+<p>跟 Claude Code 的 CLAUDE.md 类似，Codex 用 AGENTS.md
+文件来配置项目级别的指令。</p>
+<p>你可以在里面写： - 项目的目录结构说明 - 测试怎么跑 - 代码规范和偏好 -
+哪些文件不要动</p>
+<p>Codex 每次执行任务前都会读这个文件，就像新员工入职先看公司手册。</p>
+<h3 id="安全沙盒隔离">3.6 安全：沙盒隔离</h3>
+<p>每个任务跑在独立的云端沙盒里，默认不能访问互联网。这意味着： -
+任务之间完全隔离 - Agent 不能把你的代码发到外面 - 不能下载恶意依赖</p>
+<p>如果任务确实需要网络访问（比如安装依赖），可以手动开启。</p>
+<h3 id="小结-1">3.7 小结</h3>
+<p>Codex 的架构像一座现代化工厂，标准化、可并行、有隔离。它把”编程
+Agent”这件事做到了产品化的极致，但也因此局限在编程场景里。</p>
+<hr />
+<h2
+id="四openclaw全场景的瑞士军刀架构">四、OpenClaw：全场景的瑞士军刀架构</h2>
+<h3 id="整体架构-2">4.1 整体架构</h3>
+<p>OpenClaw
+的架构是三者中最复杂的，因为它要解决的问题也最复杂。我自己在用
+OpenClaw，所以这部分我会讲得更细一些。它不只是编程，而是”成为一个全能 AI
+助手”。</p>
+<pre><code>多渠道入口（飞书/QQ/钉钉/Telegram/Discord/...）
+  ↓
+Gateway（网关守护进程）
+  ├── 会话路由（哪个渠道来的消息，发到哪个会话）
+  ├── 模型调度（选哪个模型处理这个请求）
+  ├── 主会话 Agent Loop
+  ├── 子代理会话池
+  ├── Cron 定时任务引擎
+  └── 心跳调度器</code></pre>
+<p>最大的架构特点是 Gateway + Client 分离。Gateway
+是一个常驻后台的守护进程（daemon），7×24
+小时运行。它负责接收各个渠道的消息、管理会话、调度模型。</p>
+<p>这跟 Claude Code 和 Codex
+都不一样。它们是”用的时候启动，用完就关”，OpenClaw
+是”一直在线，随时待命”。</p>
+<h3 id="多渠道路由">4.2 多渠道路由</h3>
+<p>OpenClaw 能同时连接十几个聊天渠道：飞书、QQ
+Bot、钉钉、企业微信、Telegram、Discord、Signal、WhatsApp……</p>
+<p>Gateway
+里有一个路由层，负责把不同渠道来的消息分发到正确的会话。你在飞书上跟它说的话和在
+QQ 上说的话，可以是同一个会话（共享上下文），也可以是独立的会话。</p>
+<p>这个设计让 Agent 真正变成了一个”跨平台助手”。我自己就是飞书和 QQ
+两个渠道都在用，不管在哪个 App 里，都能找到它。</p>
+<h3 id="skill-插件系统">4.3 Skill 插件系统</h3>
+<p>OpenClaw 的工具扩展机制叫 Skill。跟 Claude Code 的 Skills
+类似，但生态更开放。</p>
+<p>每个 Skill 是一个独立目录，包含
+SKILL.md（说明文件）和可能的脚本、配置。社区有一个 Skill
+市场（clawhub.com），你可以一键安装别人做的 Skill。</p>
+<p>我装了不少：天气查询、股票分析、YouTube 字幕提取、图片生成、PDF
+处理……</p>
+<p>Skill
+的加载也是按需的，系统提示词里只放描述，用到时才读完整内容。</p>
+<h3 id="记忆系统三层架构">4.4 记忆系统：三层架构</h3>
+<p>这是 OpenClaw 最有意思的设计之一。</p>
+<p><strong>第一层：会话内记忆（短期）</strong>
+就是当前对话的上下文。跟所有 Agent 一样，有窗口限制，会自动压缩。</p>
+<p><strong>第二层：日志记忆（中期）</strong> 每天的工作记录存在
+<code>memory/YYYY-MM-DD.md</code> 文件里。Agent
+每次启动会读最近两天的日志，了解近期发生了什么。</p>
+<p><strong>第三层：长期记忆（MEMORY.md）</strong> Agent
+自己维护的”人生经验”。它会定期回顾日志，把重要的事情提炼到 MEMORY.md
+里，比如用户的偏好、项目的状态、踩过的坑、学到的教训。</p>
+<p>这三层记忆让 OpenClaw
+有了”成长”的能力。用得越久，它越了解你。我用了一个多月，明显感觉它对我的工作习惯和偏好越来越熟悉。</p>
+<p>还有一个 SOUL.md 文件，定义 Agent
+的”性格”，包括说话风格、行为准则、价值观。你可以让它变得幽默、严肃、或者像某个特定的角色。</p>
+<h3 id="心跳机制">4.5 心跳机制</h3>
+<p>大部分 Agent 是被动的，你找它，它才响应。OpenClaw
+不一样，它有心跳（Heartbeat）。</p>
+<p>Gateway 会定期（默认每 30 分钟）给 Agent 发一个心跳信号。Agent
+收到后，会按照 HEARTBEAT.md 里的清单做检查： - 有没有新的 GitHub 通知？
+- 有没有即将到来的日程？ - 有没有需要跟进的任务？ -
+记忆文件需不需要整理？</p>
+<p>如果有需要处理的事情，它会主动给你发消息。如果没有，就安静地回一个”一切正常”。</p>
+<p>这个设计让 Agent
+从”被动工具”变成了”主动伙伴”。它不只是等你吩咐，还会主动关心你的事情。</p>
+<h3 id="cron-定时任务">4.6 Cron 定时任务</h3>
+<p>OpenClaw 内置了一个 Cron 引擎，可以设置定时任务。</p>
+<p>比如： - 每天早上 9 点检查邮件 - 每周一和周四自动整理 AI 热文到
+Notion - 每周三晚上 9 点做产品深度研究 - 5 分钟后提醒我喝水</p>
+<p>每个 Cron 任务跑在独立的会话里（isolated
+session），不影响主会话。任务完成后可以通过各个渠道把结果推送给你。</p>
+<h3 id="模型无关">4.7 模型无关</h3>
+<p>OpenClaw
+不绑定任何一家模型厂商。你可以配置多个模型提供商，设置故障转移链：</p>
+<p>主力模型挂了 → 自动切到备用模型 → 备用也挂了 → 切到第三个</p>
+<p>我的配置是：Kimi K2.5 → Claude（代理）→ Gemini →
+Moonshot。哪个能用用哪个，用户无感知。</p>
+<p>这在产品设计上是一个重要决策，不把鸡蛋放在一个篮子里。</p>
+<h3 id="子代理系统">4.8 子代理系统</h3>
+<p>跟 Claude Code 的子代理类似，OpenClaw
+也能派子代理处理子任务。但它的子代理更灵活： -
+可以指定不同的模型（主会话用 Opus，子代理用 Flash 省钱） -
+可以设置超时时间 - 完成后自动把结果汇报回主会话 -
+可以给子代理贴标签，方便管理</p>
+<h3 id="小结-2">4.9 小结</h3>
+<p>OpenClaw
+的架构像一个操作系统，有进程管理（会话）、有文件系统（记忆）、有定时器（Cron）、有网络（多渠道）、有插件（Skills）。它不是为某个场景优化的工具，而是一个通用的
+Agent 运行平台。</p>
+<hr />
+<h2 id="五架构对比一张表看清差异">五、架构对比：一张表看清差异</h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Claude Code</th>
+<th>OpenAI Codex</th>
+<th>OpenClaw</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>架构模式</td>
+<td>单进程单会话</td>
+<td>云端多沙盒</td>
+<td>Gateway 守护进程</td>
+</tr>
+<tr>
+<td>运行位置</td>
+<td>本地终端</td>
+<td>云端</td>
+<td>自部署服务器</td>
+</tr>
+<tr>
+<td>并发能力</td>
+<td>单任务</td>
+<td>多任务并行</td>
+<td>子代理并行</td>
+</tr>
+<tr>
+<td>工具扩展</td>
+<td>Skills + MCP</td>
+<td>AGENTS.md + 内置</td>
+<td>Skills + MCP</td>
+</tr>
+<tr>
+<td>记忆系统</td>
+<td>CLAUDE.md + 上下文压缩</td>
+<td>AGENTS.md</td>
+<td>三层记忆 + SOUL.md</td>
+</tr>
+<tr>
+<td>主动性</td>
+<td>被动响应</td>
+<td>被动响应</td>
+<td>心跳 + Cron 主动</td>
+</tr>
+<tr>
+<td>模型绑定</td>
+<td>Claude 系列</td>
+<td>codex-1 / OpenAI</td>
+<td>任意模型</td>
+</tr>
+<tr>
+<td>多渠道</td>
+<td>仅终端</td>
+<td>Web/CLI/IDE</td>
+<td>10+ 聊天渠道</td>
+</tr>
+<tr>
+<td>安全模型</td>
+<td>权限规则 + 沙盒</td>
+<td>云端沙盒隔离</td>
+<td>权限 + 沙盒</td>
+</tr>
+<tr>
+<td>开源</td>
+<td>否</td>
+<td>CLI 开源</td>
+<td>完全开源</td>
+</tr>
+<tr>
+<td>持久运行</td>
+<td>否</td>
+<td>任务期间</td>
+<td>7×24 常驻</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="六mcp-协议agent-的usb-c-接口">六、MCP 协议：Agent 的”USB-C
+接口”</h2>
+<p>三款产品都涉及到一个关键问题：Agent 怎么连接外部工具？</p>
+<p>以前的做法是每个工具写一套定制代码。接 GitHub
+写一套，接数据库写一套，接邮件写一套。换个 AI 平台，全部重写。</p>
+<p>MCP（Model Context Protocol）改变了这个局面。Anthropic 在 2024 年 11
+月发布了这个开放协议，到 2026 年已经成了事实标准。</p>
+<p>MCP 的核心思路很简单：统一 Agent 连接工具的接口。就像 USB-C
+统一了充电线，以前手机、电脑、耳机各用各的线，现在一根线搞定。</p>
+<p>MCP 有三个角色： - <strong>Client（客户端）</strong>：Agent
+这边。Claude Code、OpenClaw 都是 Client。 -
+<strong>Server（服务端）</strong>：工具那边。每个 MCP Server
+封装一个或一组工具。 -
+<strong>Protocol（协议）</strong>：两边怎么对话的规矩。基于 JSON-RPC
+2.0，格式统一。</p>
+<p>写一个 MCP Server，所有支持 MCP 的 Agent 都能用。不用为每个 AI
+平台单独适配。</p>
+<p>Claude Code 和 OpenClaw 都原生支持 MCP。Codex 目前主要通过内置工具和
+AGENTS.md 配置来扩展能力，MCP 支持在逐步完善中。</p>
+<hr />
+<h2 id="七写在最后">七、写在最后</h2>
+<p>三款产品，三种架构，三种设计哲学：</p>
+<ul>
+<li>Claude Code 选择了极致专注，做好终端编程这一件事</li>
+<li>Codex 选择了平台生态，融入 ChatGPT，用云端算力换并行能力</li>
+<li>OpenClaw 选择了开放自由，让你自己定义 Agent 应该是什么样的</li>
+</ul>
+<p>没有哪个架构是”最好的”。选择取决于你要解决什么问题、面向什么用户、愿意做什么取舍。</p>
+<p>下一篇，我们从架构跳到产品设计。作为产品经理，能从这三款产品中学到什么？怎么把这些设计思路用到自己的产品里？</p>
+<hr />
+<p><em>Allen | AI 产品经理 | allen00.top</em></p>
+
+</div>
+<div class="series-nav">
+<a href="01-what-is-agent.html">← 上一篇</a>
+<a href="03-product-design.html">下一篇 →</a>
+</div>
+</div>
+<footer>© 2026 Allen</footer>
+</body>
+</html>

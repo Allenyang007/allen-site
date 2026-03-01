@@ -1,31 +1,30 @@
-# Allen's Tech - 个人技术博客
+# Allen's Tech 个人网站 — allen00.top
 
-🌐 **域名**: [allen00.top](https://allen00.top)
+## 项目概述
+Allen 的个人技术网站，包含首页、AI 指南、博客、工具、关于页面。
 
-AI 产品经理杨柳（Allen Yang）的个人技术博客。
-
-## 结构
-
+## 目录结构
 ```
-├── index.html      # 首页
-├── guide/          # AI Agent 终极指南
-├── blog/           # 技术博客（规划中）
-└── README.md
-```
-
-## 技术栈
-
-- 纯静态 HTML/CSS/JS
-- 零后端依赖
-- 支持深色/浅色模式
-- 响应式设计
-
-## 本地预览
-
-```bash
-npx serve .
+allen-site/
+├── index.html          # 首页（卡片式布局）
+├── README.md           # 本文件
+├── package.json
+├── favicon.*           # 网站图标
+├── guide/              # AI Agent 深度指南
+├── blog/               # 博客（详见 blog/BLOG-PLAN.md）
+├── about/              # 关于页面
+└── preview/            # 预览/测试
 ```
 
 ## 部署
+- 域名: allen00.top → 43.153.49.71
+- Nginx: root 指向本目录
+- HTTPS: Let's Encrypt 自动续期
+- 缓存: HTML no-cache, 静态资源 7d
 
-支持任何静态托管服务（Vercel / Netlify / GitHub Pages / Cloudflare Pages）。
+## GitHub
+- 仓库: https://github.com/Allenyang007/allen-site
+- 本地: /root/.openclaw/workspace/projects/allen-site/
+
+## 博客写作
+详见 `blog/BLOG-PLAN.md`，包含已完成和待写文章的完整规划。
