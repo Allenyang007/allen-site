@@ -196,3 +196,109 @@ allen-site/
 - 版本管理：功能变更打 tag，加文章只 commit
 - 图片单张不超过 300KB
 - 外链加 `rel="noopener"`
+
+---
+
+## 常见问题与解决方案 (2026-03-08更新)
+
+### 问题1: 博客首页文章不显示
+**现象:** 访问/blog/页面空白,但HTML中有post-card元素
+
+**根本原因:**
+1. CSS设置`.fade-in{opacity:0}`,需要JavaScript添加`.visible`类才显示
+2. 页面初始化只设置了按钮样式,没有调用`filterPosts('all')`
+3. 文章默认隐藏,需要JavaScript显示
+
+**解决方案:**
+```javascript
+// 页面加载时调用
+filterPosts('all');  // 而不是只设置 opacity
+```
+
+### 问题2: 分类筛选器不工作
+**现象:** 点击"产品思考"/"技术博客"无法筛选文章
+
+**根本原因:**
+- 筛选器按钮: `filterPosts('thinking')` 和 `filterPosts('tech')`
+- 文章标签: `data-category="product"` 和 `data-category="tech"`
+- 名称不匹配: `thinking` ≠ `product`
+
+**解决方案:**
+统一命名,筛选器改为:
+```html
+<button onclick="filterPosts('product')">产品思考</button>
+<button onclick="filterPosts('tech')">技术博客</button>
+```
+
+### 问题3: Stats Bar显示错误
+**现象:** 显示"6篇文章"但实际有12篇
+
+**解决方案:**
+手动更新stats-bar,移除字数统计:
+```html
+<div class="stats-bar">
+  <div class="stat"><strong>12</strong> 篇文章</div>
+  <div class="stat"><strong>6</strong> 个标签</div>
+</div>
+```
+
+### 问题4: JavaScript语法错误
+**现象:** 控制台报错,filterPosts函数有多余的`}else{`
+
+**根本原因:**
+多次修改导致代码重复和语法错误
+
+**解决方案:**
+完整替换filterPosts函数,确保语法正确
+
+---
+
+## 部署验证增强版
+
+在原有验证基础上,新增:
+
+### JavaScript验证
+```bash
+# 检查filterPosts函数语法
+curl -s https://allen00.top/blog/ | grep -A20 "function filterPosts"
+
+# 检查初始化调用
+curl -s https://allen00.top/blog/ | grep "filterPosts('all')"
+```
+
+### 功能验证
+```bash
+# 在浏览器控制台测试
+filterPosts('all');    // 应显示12篇
+filterPosts('product'); // 应显示产品类文章
+filterPosts('tech');    // 应显示技术类文章
+```
+
+### 视觉验证
+- 页面加载后文章立即可见(不需要滚动触发)
+- 点击分类按钮可以正确筛选
+- Stats Bar显示正确的文章数量
+
+---
+
+## 项目管理改进建议
+
+### 1. 版本管理规范
+- 每次修改前先创建备份分支
+- 使用`git tag`标记稳定版本
+- 出问题时可以快速回滚: `git checkout v1.7.2`
+
+### 2. 测试流程
+- 本地修改后先在开发环境测试
+- 使用浏览器开发者工具检查JavaScript错误
+- 部署到生产前运行完整验证脚本
+
+### 3. 文档维护
+- 每次遇到问题都记录到AGENTS.md
+- 更新验证清单,避免重复问题
+- 保持AGENTS.md与实际代码同步
+
+### 4. 代码审查
+- 修改JavaScript前先备份原函数
+- 使用正则替换时要精确匹配
+- 避免手动拼接HTML,容易出错
