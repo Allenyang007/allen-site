@@ -540,3 +540,209 @@ chmod +x /root/.openclaw/workspace/projects/allen-site/blog/verify-blog.sh
 /root/.openclaw/workspace/projects/allen-site/blog/verify-blog.sh
 ```
 
+
+---
+
+## 2026-03-08 部署经验总结
+
+### 本次部署遇到的8个问题
+
+1. **博客首页空白** - JavaScript初始化缺失
+2. **文章分类不匹配** - thinking/product/tech混用
+3. **Stats Bar显示错误** - 未更新统计数字
+4. **文章日期都是同一天** - 未分散日期
+5. **筛选按钮样式反复修改** - 未本地预览
+6. **文章页面右侧空白** - max-width设置不当
+7. **文章标题错误** - HTML生成时内容混乱
+8. **移动端左侧大量空白** - padding未移除
+
+详细记录见: `ISSUES-TRACKING.md`
+
+### 强制执行的规则(2026-03-08更新)
+
+#### 规则1: 本地预览优先
+```bash
+# 启动本地服务器
+cd /root/.openclaw/workspace/projects/allen-site
+python3 -m http.server 8000 &
+
+# 浏览器访问 http://localhost:8000/blog/
+# 确认无误后再部署
+```
+
+#### 规则2: 验证脚本必跑
+```bash
+# 发布前必须运行
+./blog/verify-blog.sh
+
+# 所有检查项必须通过
+```
+
+#### 规则3: 样式决策一次到位
+- 参考现有页面的样式
+- 在本地预览中确认效果
+- 不要发布后再反复调整
+
+#### 规则4: 文档先行
+- 新功能先写文档
+- 按文档执行
+- 执行后更新文档
+
+### 文章分类规范(强制)
+
+**只允许两种分类:**
+- `product` - 产品思考
+- `tech` - 技术博客
+
+**禁止使用:**
+- ❌ `thinking` (已废弃)
+- ❌ `default` (必须明确分类)
+- ❌ 任何自定义分类
+
+**检查方法:**
+```bash
+# 检查是否有非法分类
+curl -s https://allen00.top/blog/ | grep 'data-category=' | grep -o 'data-category="[^"]*"' | sort -u
+
+# 应该只输出:
+# data-category="product"
+# data-category="tech"
+```
+
+### 移动端适配规范(强制)
+
+**响应式断点:**
+- 1100px: TOC隐藏,padding改为对称
+- 768px: 汉堡菜单,字号缩小
+- 480px: 最小屏幕,进一步优化
+
+**关键规则:**
+- TOC隐藏时,必须移除padding-left
+- 所有padding必须对称(上右下左)
+- 最小字号不低于11px
+
+**检查方法:**
+```bash
+# 检查移动端padding
+curl -s https://allen00.top/blog/[article]/ | grep -A2 "@media(max-width:1100px)" | grep "padding"
+
+# 应该是对称的,如: padding:88px 24px 60px 24px
+```
+
+### HTML生成规范(避免内容混乱)
+
+**问题:** 生成HTML时可能混入其他文章的标题/描述
+
+**预防措施:**
+1. 使用统一的模板文件
+2. 每次只生成一篇文章
+3. 生成后立即检查H1标题和subtitle
+4. 不要批量替换,容易出错
+
+**检查方法:**
+```bash
+# 检查文章标题是否正确
+curl -s https://allen00.top/blog/[article]/ | grep "<h1>" | grep -o ">.*<"
+
+# 对比Markdown源文件的标题
+head -10 blog/drafts/draft-[article].md | grep "^# "
+```
+
+### 样式规范(避免反复修改)
+
+**筛选按钮样式(最终版):**
+```css
+.filter-btn.active{
+  background:linear-gradient(135deg,var(--accent-green),var(--accent-blue));
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 2px 8px rgba(34,197,94,0.3)
+}
+```
+
+**原则:**
+- 使用主题色(绿色/蓝色渐变)
+- 与页面整体风格协调
+- 有明显的选中状态区分
+
+### 部署检查清单(完整版)
+
+#### 阶段1: 发布前(本地)
+```bash
+# 1. 启动本地服务器
+python3 -m http.server 8000 &
+
+# 2. 浏览器预览
+# http://localhost:8000/blog/
+
+# 3. 检查清单
+- [ ] 文章列表显示正常
+- [ ] 筛选按钮功能正常
+- [ ] 筛选按钮样式协调
+- [ ] Stats Bar数字正确
+- [ ] 文章分类正确(只有product/tech)
+- [ ] 文章日期已分散
+- [ ] 随机点开3篇文章检查内容
+- [ ] 文章标题正确
+- [ ] 文章内页无空白
+- [ ] 移动端预览正常(F12设备模拟)
+
+# 4. 运行验证脚本
+./blog/verify-blog.sh
+```
+
+#### 阶段2: 部署
+```bash
+# 1. 同步到生产
+rsync -av --delete \
+  --exclude='.git' --exclude='node_modules' --exclude='drafts' \
+  /root/.openclaw/workspace/projects/allen-site/ \
+  /var/www/allen-site/
+
+# 2. 重载nginx
+systemctl reload nginx
+
+# 3. Git提交
+git add .
+git commit -m "类型: 简述"
+git tag -a vX.Y.Z -m "版本说明"
+git push origin main --tags
+```
+
+#### 阶段3: 发布后验证
+```bash
+# 1. 运行线上验证
+./blog/verify-blog.sh
+
+# 2. 浏览器测试
+- [ ] 访问 https://allen00.top/blog/
+- [ ] 测试筛选功能(全部/产品/技术)
+- [ ] 随机点开3篇文章
+- [ ] 移动端测试(375px/768px/1024px)
+
+# 3. 问题记录
+# 如有问题立即记录到ISSUES-TRACKING.md
+```
+
+### 常用命令速查
+
+```bash
+# 启动本地服务器
+cd /root/.openclaw/workspace/projects/allen-site && python3 -m http.server 8000 &
+
+# 验证博客
+./blog/verify-blog.sh
+
+# 同步到生产
+rsync -av --delete --exclude='.git' --exclude='node_modules' --exclude='drafts' \
+  /root/.openclaw/workspace/projects/allen-site/ /var/www/allen-site/
+
+# 重载nginx
+systemctl reload nginx
+
+# 检查文章分类
+curl -s https://allen00.top/blog/ | grep 'data-category=' | grep -o 'data-category="[^"]*"' | sort | uniq -c
+
+# 检查移动端padding
+curl -s https://allen00.top/blog/[article]/ | grep -A2 "@media(max-width:1100px)"
+```
