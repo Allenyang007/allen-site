@@ -4,9 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<title>大模型项目为什么难交付——不是技术问题,是认知问题 - Allen on AI</title>
-<link rel="canonical" href="https://allen00.top/blog/llm-project-delivery-mindset/">
-<meta property="og:title" content="大模型项目为什么难交付——不是技术问题,是认知问题">
+<title>大模型项目为什么难交付——不是技术问题，是认知问题 - Allen on AI</title>
+<meta name="description" content="大模型项目交付难，根因不在技术，而在团队用传统软件思维管理AI项目。">
+<link rel="canonical" href="https://allen00.top/blog/workflow-vs-agent-decision-framework/">
+<meta property="og:title" content="大模型项目为什么难交付——不是技术问题，是认知问题">
+<meta property="og:description" content="大模型项目交付难，根因不在技术，而在团队用传统软件思维管理AI项目。">
 <meta property="og:url" content="https://allen00.top/blog/llm-project-delivery-mindset/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Allen">
@@ -66,9 +68,7 @@ body{overflow-x:hidden;
   mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
   -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
 }
-</style>
-<style>
-/* ─── Nav (same as homepage) ─── */
+
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
@@ -133,13 +133,8 @@ nav{
 .mobile-menu a.disabled{opacity:0.4;cursor:default}
 .mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
 
-/* ─── Article Layout ─── */
-.article-layout{position:relative;display:block;max-width:1100px;margin:0 auto;padding:88px 24px 60px 260px;
-  max-width:1100px;margin:0 auto;padding:88px 24px 60px;
-  display:block;max-width:1100px;margin:0 auto;padding:88px 24px 60px 260px
-}
+.article-layout{position:relative;display:block;max-width:900px;margin:0 auto;padding:88px 24px 60px 260px}
 
-/* ─── TOC Sidebar ─── */
 .toc{position:fixed;top:64px;left:0;width:220px;height:calc(100vh - 64px);padding:24px 12px 24px 24px;border-right:1px solid var(--border);background:var(--bg);z-index:10}
 .toc-inner{height:100%;overflow-y:auto;padding-right:8px}
 .toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
@@ -151,12 +146,9 @@ nav{
 }
 .toc a:hover{color:var(--text);border-left-color:var(--border)}
 .toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
-.toc .t2{padding-left:24px;font-size:.76rem}
 
-/* ─── Article ─── */
 .article{max-width:800px;width:100%;min-width:0;overflow:hidden;margin-left:auto;margin-right:auto;overflow-wrap:break-word;word-wrap:break-word}
 
-/* Meta header */
 .article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
 .breadcrumb{font-size:.82rem;color:var(--text-muted);margin-bottom:16px}
 .breadcrumb a{color:var(--text-secondary);text-decoration:none}
@@ -166,72 +158,16 @@ nav{
 .article-meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--text-muted);flex-wrap:wrap}
 .tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px}
 .tag-ai{background:rgba(34,197,94,0.1);color:var(--accent-green)}
-.tag-agent{background:rgba(59,130,246,0.1);color:var(--accent-blue)}
 .tag-product{background:rgba(249,115,22,0.1);color:var(--accent-orange)}
-.tag-thinking{background:rgba(236,72,153,0.1);color:var(--accent-pink)}
-.tag-tech{background:rgba(6,182,212,0.1);color:var(--accent-cyan)}
-.tag-mcp{background:rgba(139,92,246,0.1);color:var(--accent-purple)}
 
-/* Content typography */
 .content h2{
   font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
   border-top:1px solid var(--border);letter-spacing:-.3px
 }
 .content h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
-.content h3{font-size:1.15rem;font-weight:600;margin:32px 0 12px}
 .content p{overflow-wrap:break-word;margin-bottom:16px;line-height:1.9}
-.content a{color:var(--accent-green);text-decoration:none;font-weight:500}
-.content a:hover{text-decoration:underline}
-.content ul,.content ol{margin:0 0 16px 20px}
-.content li{margin-bottom:6px;line-height:1.8}
 .content strong{font-weight:600}
-.content blockquote{
-  margin:20px 0;padding:16px 20px;border-left:3px solid var(--accent-green);
-  background:var(--bg-card);border-radius:0 8px 8px 0;font-size:.95rem
-}
-.content blockquote p{margin-bottom:0;color:var(--text-secondary)}
-.content hr{border:none;border-top:1px solid var(--border);margin:40px 0}
-.content img{max-width:100%;border-radius:8px;margin:16px 0}
 
-/* Code blocks */
-.content code{
-  font-family:'JetBrains Mono',monospace;font-size:.85em;
-  background:var(--code-bg);color:var(--code-text);
-  padding:2px 6px;border-radius:4px;border:1px solid var(--code-border)
-}
-.content pre{
-  margin:20px 0;padding:20px 24px;border-radius:12px;overflow-x:auto;
-  background:var(--code-bg);border:1px solid var(--code-border);
-  font-size:.85rem;line-height:1.7
-}
-.content pre code{background:none;border:none;padding:0;font-size:inherit}
-
-/* Callout boxes */
-.callout{
-  margin:24px 0;padding:20px 24px;border-radius:12px;border:1px solid;
-  font-size:.92rem;line-height:1.8
-}
-.callout-info{background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.2)}
-.callout-tip{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2)}
-.callout-warn{background:rgba(249,115,22,.06);border-color:rgba(249,115,22,.2)}
-.callout b{display:block;margin-bottom:4px}
-.callout p{margin-bottom:0}
-
-/* Comparison table */
-.content table{
-  width:100%;border-collapse:collapse;margin:20px 0;font-size:.88rem
-}
-.content th,.content td{
-  padding:12px 16px;text-align:left;border-bottom:1px solid var(--border)
-}
-.content th{font-weight:600;background:var(--bg-card);font-size:.82rem;color:var(--text-secondary)}
-.content tr:hover{background:var(--bg-card)}
-
-.table-wrap{overflow-x:auto;margin:20px 0;border-radius:12px;border:1px solid var(--border)}
-.table-wrap table{margin:0;border-radius:0}
-.table-wrap th:first-child,.table-wrap td:first-child{position:sticky;left:0;background:var(--bg);z-index:1}
-
-/* ─── Footer (same as homepage) ─── */
 footer{
   border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
   color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
@@ -249,15 +185,9 @@ footer{
 .footer-links a:hover{color:var(--accent-green)}
 .footer-copy{font-size:.8rem;color:var(--text-muted)}
 
-/* ─── Responsive ─── */
 @media(max-width:1100px){
   .toc{display:none}
-  .article-layout{padding:88px 24px 60px 24px}
-}
-
-@media(max-width:1024px){
-  .nav-links{gap:18px}
-  .nav-links a{font-size:.85rem}
+  .article-layout{padding:88px 24px 60px 260px}
 }
 
 @media(max-width:768px){
@@ -267,10 +197,7 @@ footer{
   .article-meta h1{font-size:1.6rem}
   .article-meta .subtitle{font-size:.95rem}
   .content h2{font-size:1.25rem;margin:36px 0 14px;padding-top:20px}
-  .content h3{font-size:1.05rem;margin:24px 0 10px}
   .content p{font-size:.95rem;line-height:1.85}
-  .content pre{padding:16px;font-size:.8rem;border-radius:8px}
-  .callout{padding:16px 18px;border-radius:8px}
   .footer-links{gap:16px}
 }
 
@@ -280,8 +207,6 @@ footer{
   .article-meta .info{gap:10px}
   .content h2{font-size:1.15rem}
   .content p{font-size:.9rem}
-  .content pre{padding:14px 12px;font-size:.78rem}
-  .table-wrap{font-size:.82rem}
   .footer-links{flex-direction:column;gap:8px}
   footer{padding:36px 16px 32px}
 }
@@ -319,196 +244,91 @@ footer{
 <aside class="toc" id="toc">
   <h4>目录</h4>
   <ul>
-    <li><a href="#traditional-assumptions">传统软件交付的底层假设</a></li>
-    <li><a href="#probability-not-rules">大模型项目的底层逻辑:概率,不是规则</a></li>
-    <li><a href="#systemic-bias">为什么认知偏差是系统性的,而不是个人问题</a></li>
-    <li><a href="#root-cause">AI项目交付失控的根因</a></li>
-    <li><a href="#unanswered">一个没有答案的问题</a></li>
+    <li><a href="#certainty">确定性 vs 不确定性:Workflow的根本差异</a></li>
+    <li><a href="#logic">AI的逻辑不是人写的,是学出来的</a></li>
+    <li><a href="#change">Workflow上线后还会「自己变」</a></li>
+    <li><a href="#design">不确定性不是bug,是设计对象</a></li>
+    <li><a href="#control">放弃「完全掌控」的预设</a></li>
   </ul>
-</div></aside>
+</aside>
 
 <article class="article">
 
 <div class="article-meta">
-  <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / 大模型项目</div>
-  <h1>大模型项目为什么难交付——不是技术问题,是认知问题</h1>
+  <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / Workflow</div>
+  <h1>大模型项目为什么难交付——不是技术问题，是认知问题</h1>
   <div class="info">
     <span>Allen</span>
     <span>2026年3月8日</span>
     <span>6 分钟阅读</span>
-    <span class="tag tag-product">大模型项目</span>
+    <span class="tag tag-ai">Workflow</span>
   </div>
+</div>
 
 <div class="content">
 
-<p>
-<hr>
 <h2 id="traditional-assumptions">传统软件交付的底层假设</h2>
-<p>
-传统软件的交付逻辑可以简化成一句话:你定义规则,机器执行规则。
-</p>
+<p>传统软件的交付逻辑可以简化成一句话：你定义规则，机器执行规则。</p>
 
-<p>
-这个世界观里,系统是确定的。你写了什么,它就做什么。边界情况可以用if-else枚举,测试用例可以穷举,"功能完成"有一个清晰的终点。产品经理的核心工作是把需求翻译成规格,开发的工作是把规格翻译成代码。质量管理的本质是验证代码是否符合规格。
-</p>
+<p>这个世界观里，系统是确定的。你写了什么，它就做什么。边界情况可以用if-else枚举，测试用例可以穷举，"功能完成"有一个清晰的终点。产品经理的核心工作是把需求翻译成规格，开发的工作是把规格翻译成代码。质量管理的本质是验证代码是否符合规格。</p>
 
-<p>
-这套逻辑运转了几十年,行得通,而且行得非常好。整个行业的协作流程——需求文档、技术评审、测试验收、上线回归——都是基于这个预设建起来的。
-</p>
+<p>这套逻辑运转了几十年，行得通，而且行得非常好。整个行业的协作流程——需求文档、技术评审、测试验收、上线回归——都是基于这个预设建起来的。</p>
 
-<p>
-大模型进来之后,这个预设悄悄失效了。
-</p>
+<p>大模型进来之后，这个预设悄悄失效了。</p>
 
 <hr>
-<h2 id="probability-not-rules">大模型项目的底层逻辑:概率,不是规则</h2>
-<p>
-大模型不执行规则,它根据统计规律生成最可能的输出。
-</p>
+<h2 id="probability-not-rules">大模型项目的底层逻辑：概率，不是规则</h2>
+<p>大模型不执行规则，它根据统计规律生成最可能的输出。</p>
 
-<p>
-这一个字的差别,影响是根本性的。
-</p>
+<p>这一个字的差别，影响是根本性的。</p>
 
-<p>
-<strong>"确定性"消失了。</strong> 同样的输入,不同时刻可能给出不同输出。不是bug,是模型的工作方式。传统软件里,一个功能要么正确要么错误,是二元判断。AI的输出是一个分布——大多数时候对,偶尔错,极少数情况出现离谱的错误。
-</p>
+<p><strong>"确定性"消失了。</strong> 同样的输入，不同时刻可能给出不同输出。不是bug，是模型的工作方式。传统软件里，一个功能要么正确要么错误，是二元判断。AI的输出是一个分布——大多数时候对，偶尔错，极少数情况出现离谱的错误。</p>
 
-<p>
-<strong>"完成"的定义变了。</strong> 传统软件做完了就是做完了。AI功能永远没有"做完"——Prompt可以继续调,知识库可以继续扩,模型可以继续迭代。上线不是终点,是另一段工作的起点。
-</p>
+<p><strong>"完成"的定义变了。</strong> 传统软件做完了就是做完了。AI功能永远没有"做完"——Prompt可以继续调，知识库可以继续扩，模型可以继续迭代。上线不是终点，是另一段工作的起点。</p>
 
-<p>
-<strong>"测试"失效了。</strong> 传统测试的逻辑是"覆盖所有情况"。AI的输入空间是无限的,你永远无法穷举。黄金测试集能告诉你核心场景通过了,但阻止不了用户输入你完全没想到的东西。
-</p>
+<p><strong>"测试"失效了。</strong> 传统测试的逻辑是"覆盖所有情况"。AI的输入空间是无限的，你永远无法穷举。黄金测试集能告诉你核心场景通过了，但阻止不了用户输入你完全没想到的东西。</p>
 
-<p>
-<strong>"估时间"变难了。</strong> 开发一个传统功能,有经验的工程师能给出较准的工期。调一个Prompt优化效果,没人知道要调多少轮。可能三天就搞定,可能三周还没进展。这不是工程师的能力问题,是不确定性问题。
-</p>
+<p><strong>"估时间"变难了。</strong> 开发一个传统功能，有经验的工程师能给出较准的工期。调一个Prompt优化效果，没人知道要调多少轮。可能三天就搞定，可能三周还没进展。这不是工程师的能力问题，是不确定性问题。</p>
 
-<p>
-把这四点放在一起,你会发现传统软件交付体系的核心假设——确定性、可测、有终点、可规划——在AI项目里一条都站不住。
-</p>
+<p>把这四点放在一起，你会发现传统软件交付体系的核心假设——确定性、可测、有终点、可规划——在AI项目里一条都站不住。</p>
 
 <hr>
-<h2 id="systemic-bias">为什么认知偏差是系统性的,而不是个人问题</h2>
-<p>
-我一开始以为这是个别PM的问题。后来发现不是。
-</p>
+<h2 id="systemic-bias">为什么认知偏差是系统性的，而不是个人问题</h2>
+<p>我一开始以为这是个别PM的问题。后来发现不是。</p>
 
-<p>
-认知偏差是系统性的,因为整个组织的协作结构都是按传统软件的范式设计的。
-</p>
+<p>认知偏差是系统性的，因为整个组织的协作结构都是按传统软件的范式设计的。</p>
 
-<p>
-产品经理的培训告诉你:写清楚需求,工程师就能实现。但AI项目的Prompt调优需要PM自己下场,需求文档写得再清楚,工程师也无法保证效果。
-</p>
+<p>产品经理的培训告诉你：写清楚需求，工程师就能实现。但AI项目的Prompt调优需要PM自己下场，需求文档写得再清楚，工程师也无法保证效果。</p>
 
-<p>
-技术评审的框架是确认"技术上能不能做到"。但AI项目的关键问题是"做到什么程度算可以",评审会上几乎没人能回答,因为标准本身就是模糊的。
-</p>
+<p>技术评审的框架是确认"技术上能不能做到"。但AI项目的关键问题是"做到什么程度算可以"，评审会上几乎没人能回答，因为标准本身就是模糊的。</p>
 
-<p>
-项目计划表按里程碑排。AI效果调优没有明确里程碑,只有一轮一轮的测试和迭代。当项目经理问"这个功能什么时候能完成",没人能给出诚实的答案,于是大家编了一个听起来合理的日期,然后全员对齐到那个日期跑。
-</p>
+<p>项目计划表按里程碑排。AI效果调优没有明确里程碑，只有一轮一轮的测试和迭代。当项目经理问"这个功能什么时候能完成"，没人能给出诚实的答案，于是大家编了一个听起来合理的日期，然后全员对齐到那个日期跑。</p>
 
-<p>
-这不是个人的失职,是整个协作框架失配的必然结果。一个PM就算自己想清楚了AI项目的逻辑,也要在组织节点上一次次应付来自传统框架的要求:需求文档何时冻结?测试通过率是多少?上线时间是哪天?这些问题本身就预设了确定性,让人无法诚实回答。
-</p>
-
-<hr>
-<p>
-说几个我见过的真实撞墙点。
-</p>
-
-<p>
-</p>
-
-<p>
-PM用传统方式准备了需求文档,列了功能点、用户路径、验收标准。老板问:准确率能到多少?
-</p>
-
-<p>
-回答不了。不是PM没做功课,是在立项阶段,没有真实数据预研,这个问题本来就没答案。但组织期待一个数字,于是PM说了"预计85%",老板点头,项目启动了。
-</p>
-
-<p>
-这个85%从哪来的?没人说得清楚。
-</p>
-
-<p>
-</p>
-
-<p>
-预研时用了五个case,效果很好,大家信心满满。真实数据进来,60%的准确率,比预期低了25个百分点。
-</p>
-
-<p>
-传统软件的中期回顾是确认进度——做完了多少。AI项目的中期回顾要面对一个难受的真相:效果不达标,说不清为什么,也说不清再给多少时间能解决。
-</p>
-
-<p>
-会议室里所有人都不知道该怎么往下推。
-</p>
-
-<p>
-</p>
-
-<p>
-用传统软件的思维,Bug是本不该出现的,修完就消失了。AI的Bad Case不是Bug,是模型在当前能力边界内的正常表现。修一个可能带出另一个,改了Prompt一个地方效果变好,另一个地方效果变差。
-</p>
-
-<p>
-PM每周开Bad Case Review,记录一条条问题,却越开越绝望——问题清单在增长,不在收缩。
-</p>
-
-<p>
-这不是管理失控,是对AI迭代规律的理解还停留在传统打补丁的框架里。
-</p>
+<p>这不是个人的失职，是整个协作框架失配的必然结果。一个PM就算自己想清楚了AI项目的逻辑，也要在组织节点上一次次应付来自传统框架的要求：需求文档何时冻结？测试通过率是多少？上线时间是哪天？这些问题本身就预设了确定性，让人无法诚实回答。</p>
 
 <hr>
 <h2 id="root-cause">AI项目交付失控的根因</h2>
-<p>
-如果只能说一句话:<strong>传统软件交付管理的是执行不确定性,AI项目交付管理的是结果不确定性。</strong>
-</p>
+<p>如果只能说一句话：<strong>传统软件交付管理的是执行不确定性，AI项目交付管理的是结果不确定性。</strong></p>
 
-<p>
-传统项目的不确定性来自"能不能按时完成",结果是确定的。AI项目的不确定性来自"完成了结果会是什么",这个问题到上线那天都没有确定的答案。
-</p>
+<p>传统项目的不确定性来自"能不能按时完成"，结果是确定的。AI项目的不确定性来自"完成了结果会是什么"，这个问题到上线那天都没有确定的答案。</p>
 
-<p>
-两种不确定性需要完全不同的应对策略。前者的核心是计划和进度管理,后者的核心是快速验证和容错设计。用进度管理的工具去处理结果不确定性,必然失控。
-</p>
+<p>两种不确定性需要完全不同的应对策略。前者的核心是计划和进度管理，后者的核心是快速验证和容错设计。用进度管理的工具去处理结果不确定性，必然失控。</p>
 
-<p>
-这也是为什么做传统软件越久的PM,转AI项目时反而适应得更慢——过去的经验形成了直觉,但这套直觉在概率世界里会持续误导判断。
-</p>
+<p>这也是为什么做传统软件越久的PM，转AI项目时反而适应得更慢——过去的经验形成了直觉，但这套直觉在概率世界里会持续误导判断。</p>
 
 <hr>
 <h2 id="unanswered">一个没有答案的问题</h2>
-<p>
-我没有整齐的结论。
-</p>
+<p>我没有整齐的结论。</p>
 
-<p>
-传统交付思维和AI交付思维之间的差距是真实的,但弥合这个差距,靠培训够吗?
-</p>
+<p>传统交付思维和AI交付思维之间的差距是真实的，但弥合这个差距，靠培训够吗？</p>
 
-<p>
-我倾向于认为,只有真正在AI项目里撞过墙的人,才会形成不同的认知。理解"AI输出是概率分布"不需要什么基础,但连续三周调Prompt没有进展、还要对老板解释为什么没完成——经历过那种场景之后,理解才会真正内化。
-</p>
+<p>我倾向于认为，只有真正在AI项目里撞过墙的人，才会形成不同的认知。理解"AI输出是概率分布"不需要什么基础，但连续三周调Prompt没有进展、还要对老板解释为什么没完成——经历过那种场景之后，理解才会真正内化。</p>
 
-<p>
-所以问题变成了:在还没有足够多的人经历过这种撞墙之前,组织怎么做出正确的决策?
-</p>
+<p>所以问题变成了：在还没有足够多的人经历过这种撞墙之前，组织怎么做出正确的决策？</p>
 
-<p>
-我不知道答案。但我觉得这个问题,比"怎么做好AI项目交付"更值得想。
-</p>
+<p>我不知道答案。但我觉得这个问题，比"怎么做好AI项目交付"更值得想。</p>
 
-</div>
-
-</article>
+</div></article>
 </div>
 
 <footer>
@@ -555,7 +375,6 @@ document.querySelectorAll('.mobile-menu a').forEach(function(a){
     }
   });
 });
-/* TOC scroll spy */
 var tocLinks=document.querySelectorAll('.toc a');
 var headings=[];
 tocLinks.forEach(function(a){
