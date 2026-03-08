@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>AI产品和传统软件,思维上的断层在哪 - Allen on AI</title>
+<meta name="description" content="从传统软件转做AI产品,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个AI产品经理的实战复盘。">
+<link rel="canonical" href="https://allen00.top/blog/ai-product-vs-traditional-software/">
+<meta property="og:title" content="AI产品和传统软件,思维上的断层在哪">
+<meta property="og:description" content="从传统软件转做AI产品,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个AI产品经理的实战复盘。">
+<meta property="og:url" content="https://allen00.top/blog/ai-product-vs-traditional-software/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Allen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://allen00.top/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#ffffff;--bg-card:#f8f9fa;--bg-card-hover:#ffffff;
+  --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+  --border:#e5e7eb;--border-hover:#d1d5db;
+  --nav-bg:rgba(255,255,255,0.85);
+  --primary:#1a1a2e;
+  --accent-green:#22c55e;--accent-orange:#f97316;--accent-blue:#3b82f6;--accent-purple:#8b5cf6;--accent-red:#ef4444;--accent-pink:#ec4899;--accent-cyan:#06b6d4;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.1);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.04);
+  --radius:16px;
+  --grid-color:transparent;
+  --code-bg:#f6f8fa;--code-text:#1a1a2e;--code-border:#e5e7eb
+}
+
+[data-theme="dark"]{
+  --bg:#0a0a14;--bg-card:#141425;--bg-card-hover:#1a1a30;
+  --text:#e5e7eb;--text-secondary:#9ca3af;--text-muted:#6b7280;
+  --border:#1e1e36;--border-hover:#2d2d4a;
+  --nav-bg:rgba(10,10,20,0.88);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.5);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.2);
+  --grid-color:rgba(255,255,255,0.02);
+  --code-bg:#1e1e2e;--code-text:#cdd6f4;--code-border:#2d2d4a
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+
+body{overflow-x:hidden;
+  font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  transition:background .3s,color .3s;min-height:100vh;overflow-x:hidden
+}
+
+[data-theme="dark"] body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:background .3s,border .3s
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.nav-logo{
+  font-size:1.25rem;font-weight:800;color:var(--primary);
+  text-decoration:none;letter-spacing:-0.5px
+}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;
+  transition:color .2s;padding:4px 0
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{position:relative}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent-green),var(--accent-orange));border-radius:1px
+}
+.nav-links a.disabled{opacity:0.4;cursor:default;pointer-events:auto}
+.nav-links a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+.theme-btn{
+  background:none;border:1px solid var(--border);border-radius:10px;
+  width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .2s;color:var(--text)
+}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+
+.hamburger{
+  display:none;background:none;border:1px solid var(--border);border-radius:10px;
+  width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;transition:all .2s
+}
+.hamburger span{
+  display:block;width:20px;height:2px;background:var(--text);border-radius:2px;
+  transition:all .3s
+}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:var(--bg);
+  padding:16px 24px 40px;
+  flex-direction:column;gap:4px;overflow-y:auto;z-index:1000
+}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{
+  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
+  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
+  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
+}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+.mobile-menu a.disabled{opacity:0.4;cursor:default}
+.mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+
+.article-layout{position:relative;display:block;max-width:1100px;margin:0 auto;padding:88px 24px 60px 260px}
+
+.toc{position:fixed;top:64px;left:0;width:220px;height:calc(100vh - 64px);padding:24px 12px 24px 24px;border-right:1px solid var(--border);background:var(--bg);z-index:10}
+.toc-inner{height:100%;overflow-y:auto;padding-right:8px}
+.toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:2px}
+.toc a{
+  display:block;padding:5px 12px;font-size:.8rem;color:var(--text-secondary);
+  text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5
+}
+.toc a:hover{color:var(--text);border-left-color:var(--border)}
+.toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
+
+.article{max-width:800px;width:100%;min-width:0;overflow:hidden;margin-left:auto;margin-right:auto;overflow-wrap:break-word;word-wrap:break-word}
+
+.article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.82rem;color:var(--text-muted);margin-bottom:16px}
+.breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.breadcrumb a:hover{color:var(--accent-green)}
+.article-meta h1{word-break:break-word;font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.article-meta .subtitle{word-break:break-word;font-size:1.05rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6}
+.article-meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--text-muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px}
+.tag-ai{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.tag-product{background:rgba(249,115,22,0.1);color:var(--accent-orange)}
+
+.content h2{
+  font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
+  border-top:1px solid var(--border);letter-spacing:-.3px
+}
+.content h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.content p{overflow-wrap:break-word;margin-bottom:16px;line-height:1.9}
+.content strong{font-weight:600}
+
+footer{
+  border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
+  color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
+}
+.footer-inner{max-width:600px;margin:0 auto}
+.footer-brand{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:20px}
+.footer-links{
+  display:flex;justify-content:center;gap:24px;margin-bottom:20px;flex-wrap:wrap
+}
+.footer-links a{
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;color:var(--text-secondary);font-size:.88rem;
+  font-weight:500;transition:color .2s;min-height:44px
+}
+.footer-links a:hover{color:var(--accent-green)}
+.footer-copy{font-size:.8rem;color:var(--text-muted)}
+
+@media(max-width:1100px){
+  .toc{display:none}
+  .article-layout{padding:88px 24px 60px}
+}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .article-layout{padding:80px 20px 48px}
+  .article-meta h1{font-size:1.6rem}
+  .article-meta .subtitle{font-size:.95rem}
+  .content h2{font-size:1.25rem;margin:36px 0 14px;padding-top:20px}
+  .content p{font-size:.95rem;line-height:1.85}
+  .footer-links{gap:16px}
+}
+
+@media(max-width:480px){
+  .article-layout{padding:76px 16px 40px}
+  .article-meta h1{font-size:1.4rem;letter-spacing:-.5px}
+  .article-meta .info{gap:10px}
+  .content h2{font-size:1.15rem}
+  .content p{font-size:.9rem}
+  .footer-links{flex-direction:column;gap:8px}
+  footer{padding:36px 16px 32px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen on AI</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="/blog/" class="active">博客</a>
+      <a href="javascript:void(0)" class="disabled">工具</a>
+      <a href="/about/">关于</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" class="disabled">工具 · 即将上线</a>
+  <a href="/about/">关于</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+
+<div class="article-layout">
+
+<aside class="toc" id="toc">
+  <h4>目录</h4>
+  <ul>
+    <li><a href="#certainty">确定性 vs 不确定性:AI产品的根本差异</a></li>
+    <li><a href="#logic">AI的逻辑不是人写的,是学出来的</a></li>
+    <li><a href="#change">AI产品上线后还会「自己变」</a></li>
+    <li><a href="#design">不确定性不是bug,是设计对象</a></li>
+    <li><a href="#control">放弃「完全掌控」的预设</a></li>
+  </ul>
+</aside>
+
+<article class="article">
+
+<div class="article-meta">
+  <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / AI产品</div>
+  <h1>AI 产品和传统软件,思维上的断层在哪</h1>
+  <div class="subtitle">从传统软件转做AI产品,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个AI产品经理的实战复盘。</div>
+  <div class="info">
+    <span>Allen</span>
+    <span>2026年3月8日</span>
+    <span>7 分钟阅读</span>
+    <span class="tag tag-ai">AI产品</span>
+  </div>
+</div>
+
+<div class="content">
+
+<p>第一次做 AI 产品的时候,我完全按传统软件的思路走。PRD 写得很细,每个功能节点的输入输出都定好了,流程图画得清清楚楚。开发完一上测试,懵了——同样的输入,AI 每次给出的结果都不一样。</p>
+
+<p>我的第一反应是:这是 bug 吧?</p>
+
+<p>后来才明白,这不是 bug。这是 AI 产品的本质特征。而这一个认知,把我之前习惯的那套产品思维整个撬开了。</p>
+
+<h2 id="certainty">确定性 vs 不确定性:AI产品的根本差异</h2>
+
+<p>传统软件是确定性系统。你写一个计算器,1+1 永远等于 2。你写一个表单提交,点击保存就是保存。用户的每一步操作,对应的结果是可预期的。产品经理在写 PRD 的时候,可以把每个分支都穷举出来——用户点这个,系统做那个,例外情况走这条路,无一遗漏。</p>
+
+<p>AI 不是这样。同样的问题,AI 今天给一个答案,明天给另一个,都不算错,但就是不一样。比如智能客服场景,用户问「我的快递到哪了」,AI 直接告诉他在某个转运中心;两分钟后同一个人再问一遍,AI 却要求提供订单号。两次回答都有道理,但用户感受到的是混乱。</p>
+
+<p>这种不一致性,在传统软件里是必须消灭的缺陷。但在 AI 产品里,它是系统的固有属性。你没有办法把它消灭,你只能学会跟它共存,甚至把它设计进产品里。</p>
+
+<p>这就是我说的「思维断层」——<strong>不是 AI 多了什么功能,而是你对「产品该如何表现」的底层假设,从此不再成立了</strong>。</p>
+
+<h2 id="logic">AI的逻辑不是人写的,是学出来的</h2>
+
+<p>传统软件的逻辑是人写的。产品经理定规则,开发写 if-else,不管嵌套多深,每一条分支都是人拍板的,可以打开看,可以对着规则调试。</p>
+
+<p>AI 的逻辑是从数据里学出来的。你给它数据,它自己找规律,找到的规律是什么,有时候连写模型的人都说不清楚。</p>
+
+<p>一个做内容审核的团队跟我聊过。最早用关键词库,三千多个敏感词,人工维护,准确率 72%。换 AI 模型之后准确率到了 94%,因为 AI 在理解语义,不是匹配字符串。但代价是,你再也没法打开一个 Excel 看到所有判断规则。某天 AI 突然把一条正常内容标为违规,你想知道为什么——答案是「模型就是这么判断的」。</p>
+
+<p>这对产品设计的影响比大多数人意识到的深得多。你没有办法像调 bug 一样去调 AI 的行为,你能做的是调数据、调评估、调反馈机制。产品思维的作用点变了。</p>
+
+<h2 id="change">AI产品上线后还会「自己变」</h2>
+
+<p>还有一件事让我花了一段时间才真正接受:AI 产品上线之后,它还会继续变。</p>
+
+<p>一个医疗写作项目,帮医生写论文初稿。上线时医生对 AI 生成内容的采纳率是 62%,三个月后没做任何改版,涨到了 78%。系统在收集医生的反馈数据,模型一直在自动优化。</p>
+
+<p>听起来很完美。但又过了一个月,心内科医生开始投诉,说 AI 质量下降了。一查,心内科方向的采纳率从 75% 掉到了 60%。原因是那段时间混进去了一批低质量的训练数据,模型学偏了。</p>
+
+<p>「学坏了」这个词,我第一次听他们说的时候觉得有点荒谬。但后来想想,这是 AI 产品的真实处境:你不改代码,它也在变;你不改代码,它还能变差。</p>
+
+<p>这意味着上线不是终点。传统软件意义上的「上线后维护」,主要是修 bug、加功能。AI 产品的维护是另一回事——你需要持续监控模型的表现,像照看一个有自主行为的东西一样。</p>
+
+<h2 id="design">不确定性不是bug,是设计对象</h2>
+
+<p>所以当我说「不确定性不是 bug,是你要设计的对象」,这句话是什么意思?</p>
+
+<p>意思是,你的设计要把不确定性本身考虑进去。</p>
+
+<p>比如指标体系。传统产品通常定一个目标值——智能客服准确率达到 90%。但 AI 产品的表现会波动,定一个死数字会让团队不停地恐慌。更合理的做法是定三个层级:底线(低于这个值就是事故,比如低于 80%)、正常目标(90%)、理想值(95%)。这样正常波动就不会引发不必要的恐慌,真正触底才报警。</p>
+
+<p>比如用户体验设计。当 AI 判断某张影像「疑似肺结节」,直接给结论和同时展示「疑似肺结节(置信度 61%,建议结合 CT 进一步确认)」,对用户的价值是不同的。把 AI 的"底气"告诉用户,是一种设计选择,不是技术细节。</p>
+
+<p>比如降级方案。AI 一定有搞不定的情况,好的设计应该提前想清楚:AI 不确定的时候怎么给保守回答,AI 判断超出边界的时候怎么转人工,系统整体出问题的时候怎么切到规则兜底。这三件事不是上线后出了问题再临时想,是 PRD 里就该写清楚的。</p>
+
+<p>这些设计动作,在传统软件里要么不需要存在,要么只是边缘性考量。在 AI 产品里,它们是架构层面的东西。</p>
+
+<h2 id="control">放弃「完全掌控」的预设</h2>
+
+<p>从传统软件切换到 AI 产品思维,最难的一步不是学技术,是放弃「系统应该可以被完全掌控」这个预设。</p>
+
+<p>PRD 写不清每个输出,因为输出本身就是不确定的。测试没有唯一正确答案。迭代不能假设系统状态是稳定的,因为模型随时在变。</p>
+
+<p>但这不是让产品经理束手无策——是工作性质变了。从「定义系统应该怎么运行」,变成「定义系统在各种情况下应该如何表现,包括它表现不好的时候」。</p>
+
+<p>不确定性是你的工作对象,不是你的对手。</p>
+
+</div>
+
+</article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Allen on AI</div>
+    <div class="footer-links">
+      <a href="mailto:19512249774yangliu@gmail.com">📧 19512249774yangliu@gmail.com</a>
+      <a href="https://github.com/Allenyang007" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Allenyang007
+      </a>
+    </div>
+    <p class="footer-copy">© 2026 Allen</p>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement;
+  var next=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.querySelector('.theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  var saved=localStorage.getItem('theme')||
+    (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.theme-btn').textContent='☀️';
+  }
+})();
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
+document.querySelectorAll('.mobile-menu a').forEach(function(a){
+  a.addEventListener('click',function(){
+    if(!this.getAttribute('onclick')){
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobile-menu').classList.remove('show');
+    }
+  });
+});
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href');
+  if(id && id.startsWith('#')){
+    var el=document.getElementById(id.slice(1));
+    if(el)headings.push({el:el,a:a});
+  }
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+120;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>

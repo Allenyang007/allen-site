@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Workflow 和 Agent 的边界在哪——我的判断框架 - Allen on AI</title>
+<meta name="description" content="从传统软件转做Workflow,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个Workflow经理的实战复盘。">
+<link rel="canonical" href="https://allen00.top/blog/workflow-vs-agent-decision-framework/">
+<meta property="og:title" content="Workflow 和 Agent 的边界在哪——我的判断框架">
+<meta property="og:description" content="从传统软件转做Workflow,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个Workflow经理的实战复盘。">
+<meta property="og:url" content="https://allen00.top/blog/workflow-vs-agent-decision-framework/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Allen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://allen00.top/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#ffffff;--bg-card:#f8f9fa;--bg-card-hover:#ffffff;
+  --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+  --border:#e5e7eb;--border-hover:#d1d5db;
+  --nav-bg:rgba(255,255,255,0.85);
+  --primary:#1a1a2e;
+  --accent-green:#22c55e;--accent-orange:#f97316;--accent-blue:#3b82f6;--accent-purple:#8b5cf6;--accent-red:#ef4444;--accent-pink:#ec4899;--accent-cyan:#06b6d4;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.1);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.04);
+  --radius:16px;
+  --grid-color:transparent;
+  --code-bg:#f6f8fa;--code-text:#1a1a2e;--code-border:#e5e7eb
+}
+
+[data-theme="dark"]{
+  --bg:#0a0a14;--bg-card:#141425;--bg-card-hover:#1a1a30;
+  --text:#e5e7eb;--text-secondary:#9ca3af;--text-muted:#6b7280;
+  --border:#1e1e36;--border-hover:#2d2d4a;
+  --nav-bg:rgba(10,10,20,0.88);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.5);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.2);
+  --grid-color:rgba(255,255,255,0.02);
+  --code-bg:#1e1e2e;--code-text:#cdd6f4;--code-border:#2d2d4a
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+
+body{overflow-x:hidden;
+  font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  transition:background .3s,color .3s;min-height:100vh;overflow-x:hidden
+}
+
+[data-theme="dark"] body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:background .3s,border .3s
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.nav-logo{
+  font-size:1.25rem;font-weight:800;color:var(--primary);
+  text-decoration:none;letter-spacing:-0.5px
+}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;
+  transition:color .2s;padding:4px 0
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{position:relative}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent-green),var(--accent-orange));border-radius:1px
+}
+.nav-links a.disabled{opacity:0.4;cursor:default;pointer-events:auto}
+.nav-links a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+.theme-btn{
+  background:none;border:1px solid var(--border);border-radius:10px;
+  width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .2s;color:var(--text)
+}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+
+.hamburger{
+  display:none;background:none;border:1px solid var(--border);border-radius:10px;
+  width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;transition:all .2s
+}
+.hamburger span{
+  display:block;width:20px;height:2px;background:var(--text);border-radius:2px;
+  transition:all .3s
+}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:var(--bg);
+  padding:16px 24px 40px;
+  flex-direction:column;gap:4px;overflow-y:auto;z-index:1000
+}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{
+  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
+  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
+  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
+}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+.mobile-menu a.disabled{opacity:0.4;cursor:default}
+.mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+
+.article-layout{position:relative;display:block;max-width:1100px;margin:0 auto;padding:88px 24px 60px 260px}
+
+.toc{position:fixed;top:64px;left:0;width:220px;height:calc(100vh - 64px);padding:24px 12px 24px 24px;border-right:1px solid var(--border);background:var(--bg);z-index:10}
+.toc-inner{height:100%;overflow-y:auto;padding-right:8px}
+.toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:2px}
+.toc a{
+  display:block;padding:5px 12px;font-size:.8rem;color:var(--text-secondary);
+  text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5
+}
+.toc a:hover{color:var(--text);border-left-color:var(--border)}
+.toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
+
+.article{max-width:800px;width:100%;min-width:0;overflow:hidden;margin-left:auto;margin-right:auto;overflow-wrap:break-word;word-wrap:break-word}
+
+.article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.82rem;color:var(--text-muted);margin-bottom:16px}
+.breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.breadcrumb a:hover{color:var(--accent-green)}
+.article-meta h1{word-break:break-word;font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.article-meta .subtitle{word-break:break-word;font-size:1.05rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6}
+.article-meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--text-muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px}
+.tag-ai{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.tag-product{background:rgba(249,115,22,0.1);color:var(--accent-orange)}
+
+.content h2{
+  font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
+  border-top:1px solid var(--border);letter-spacing:-.3px
+}
+.content h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.content p{overflow-wrap:break-word;margin-bottom:16px;line-height:1.9}
+.content strong{font-weight:600}
+
+footer{
+  border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
+  color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
+}
+.footer-inner{max-width:600px;margin:0 auto}
+.footer-brand{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:20px}
+.footer-links{
+  display:flex;justify-content:center;gap:24px;margin-bottom:20px;flex-wrap:wrap
+}
+.footer-links a{
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;color:var(--text-secondary);font-size:.88rem;
+  font-weight:500;transition:color .2s;min-height:44px
+}
+.footer-links a:hover{color:var(--accent-green)}
+.footer-copy{font-size:.8rem;color:var(--text-muted)}
+
+@media(max-width:1100px){
+  .toc{display:none}
+  .article-layout{padding:88px 24px 60px}
+}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .article-layout{padding:80px 20px 48px}
+  .article-meta h1{font-size:1.6rem}
+  .article-meta .subtitle{font-size:.95rem}
+  .content h2{font-size:1.25rem;margin:36px 0 14px;padding-top:20px}
+  .content p{font-size:.95rem;line-height:1.85}
+  .footer-links{gap:16px}
+}
+
+@media(max-width:480px){
+  .article-layout{padding:76px 16px 40px}
+  .article-meta h1{font-size:1.4rem;letter-spacing:-.5px}
+  .article-meta .info{gap:10px}
+  .content h2{font-size:1.15rem}
+  .content p{font-size:.9rem}
+  .footer-links{flex-direction:column;gap:8px}
+  footer{padding:36px 16px 32px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen on AI</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="/blog/" class="active">博客</a>
+      <a href="javascript:void(0)" class="disabled">工具</a>
+      <a href="/about/">关于</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" class="disabled">工具 · 即将上线</a>
+  <a href="/about/">关于</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+
+<div class="article-layout">
+
+<aside class="toc" id="toc">
+  <h4>目录</h4>
+  <ul>
+    <li><a href="#certainty">确定性 vs 不确定性:Workflow的根本差异</a></li>
+    <li><a href="#logic">AI的逻辑不是人写的,是学出来的</a></li>
+    <li><a href="#change">Workflow上线后还会「自己变」</a></li>
+    <li><a href="#design">不确定性不是bug,是设计对象</a></li>
+    <li><a href="#control">放弃「完全掌控」的预设</a></li>
+  </ul>
+</aside>
+
+<article class="article">
+
+<div class="article-meta">
+  <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / Workflow</div>
+  <h1>AI 产品和传统软件,思维上的断层在哪</h1>
+  <div class="subtitle">从传统软件转做Workflow,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个Workflow经理的实战复盘。</div>
+  <div class="info">
+    <span>Allen</span>
+    <span>2026年3月8日</span>
+    <span>7 分钟阅读</span>
+    <span class="tag tag-ai">Workflow</span>
+  </div>
+</div>
+
+<div class="content"><p>我做过一个医学 AI 写作项目,里面一共搭了 59 个 Dify 工作流。项目结束后我数了一下:40 个是纯 Workflow,15 个是 Workflow + Agent 的混合模式,只有 4 个是纯 Agent 模式。</p>
+<p>比例悬殊,但不是因为 Agent 不好用,而是因为我真的只在 4 个场景里需要它。</p>
+<p>这件事让我意识到,关于"什么时候用 Workflow、什么时候用 Agent",业界讨论了很多,但大多停在技术层面——Agent 能调工具、能多步推理、能自主规划,Workflow 是固定的、可控的、适合批量任务。这些都对,但不是最关键的判断维度。</p>
+<p>---</p>
+<h2 id="section-1">Workflow 与 Agent 的核心区别:谁承担不确定性</h2>
+<p>Workflow 和 Agent 的本质区别,不在于谁更智能,而在于谁来承担不确定性。</p>
+<p>Workflow 里,不确定性由设计者承担。你在搭工作流的时候,已经把所有可能的路径想清楚了:用户输入什么、经过哪些节点、哪条分支走哪个方向、最终输出什么格式。执行期间,系统按图索骥。如果遇到你没预料到的情况,工作流要么报错,要么走到 ELSE 分支兜底。问题在你,不在系统。</p>
+<p>Agent 里,不确定性由模型承担。你给它目标,它自己决定下一步做什么:要不要搜索、搜什么关键词、结果够不够用、要不要换个角度再搜。每一步都是实时判断,依赖模型的推理能力。如果出了问题,你很难快速定位是哪个决策环节出的问题。</p>
+<p>这个区别,决定了一件更重要的事:<strong>谁对结果负责,以及谁有能力负责</strong>。</p>
+<p>医学写作对准确性要求极高,我不能把"判断这条文献是否值得引用"这个责任交给模型的实时推理。但我可以设计一个精确的流程——检索节点用混合检索、Top-K 设 4、返回结果过一遍摘要节点、再进入写作节点。出了问题,我能定位到具体的节点。这种可追溯性,是 Workflow 给我的。</p>
+<p>---</p>
+<h2 id="section-2">AI 产品经理最容易陷入的两个误区</h2>
+<p><strong>第一个误区:把"灵活"等同于"更好"。</strong></p>
+<p>Agent 听起来更聪明——它能自主规划、动态调整,像个真正的助手。但灵活的反面是不可预测。在大多数业务场景里,你需要的是稳定交付,而不是惊喜。</p>
+<p>我见过一些团队,明明只是做一个"用户提问→检索知识库→LLM 回答"的 FAQ 机器人,硬要上 Agent 框架,结果调了一堆工具、推理了好几步,最后回答比直接 RAG 慢三倍,准确率也没提升。原因很简单:这个任务本来就没有不确定性,流程完全可以提前定义。Agent 在这里不是赋能,是引入了额外的不可控因素。</p>
+<p><strong>第二个误区:把"步骤是否固定"当成唯一判断标准。</strong></p>
+<p>课件里的判断框架——"步骤固定用 Workflow,需要动态决策用 Agent"——是对的,但还不够用。实际情况更复杂:有些任务的步骤看起来固定,但每一步的内部逻辑其实需要灵活判断;有些任务看起来开放,但核心流程其实可以提前设计好,只有某个小环节需要 Agent 模式处理。</p>
+<p>比如在那个医学写作项目里,"文献检索"这一步的步骤不固定——关键词够不够、要不要扩大搜索范围、这批结果有没有偏差——这是判断,不是执行,需要 Agent。但检索之后的写作、格式化、引用标注,这些步骤完全可以用 Workflow 精确控制。</p>
+<p>所以判断不是非此即彼,而是看<strong>不确定性集中在任务的哪个环节</strong>,然后在那个环节用 Agent,其他地方用 Workflow 保持可控。</p>
+<p>---</p>
+<h2 id="section-3">我的 Workflow vs Agent 决策流程</h2>
+<p>接到一个 AI 任务需求,我会问自己几个问题:</p>
+<p>这个任务里,有没有某个环节"我自己也不知道该怎么做,只知道要达到什么结果"?如果有,那个环节可能需要 Agent。如果每一步我都能写出明确的操作步骤,用 Workflow 就够了。</p>
+<p>这个任务的错误代价是什么?如果出错了影响很小、能快速发现和纠正,Agent 的试错成本可以接受。如果出错代价高,比如发给用户错误信息、生成了有误导性的医学建议,Workflow 的可控性更重要。</p>
+<p>谁需要维护这个系统?如果是我自己,Agent 的复杂性我能接受。如果之后要交给不懂技术的运营同学,Workflow 的可视化流程更容易让他们理解和调整。</p>
+<p>这三个问题没有标准答案,但它们强迫我去面对任务本质,而不是凭第一感觉决定。</p>
+<p>---</p>
+<h2 id="section-4">这条边界还在移动</h2>
+<p>有件事让我有点不安:随着模型能力的提升,Agent 能处理的"不确定性阈值"在降低。两年前需要 Agent 模式才能处理的任务,现在一个精心设计的 Workflow + 更强的 LLM 可能就够了。</p>
+<p>这意味着"什么该用 Agent"这条线,不是固定的。它随着模型能力、工具生态、具体业务的容错空间,持续在移动。</p>
+<p>我现在产品侧给团队的建议是:先假设 Workflow 够用,真的遇到流程设计不了的地方,再引入 Agent。不是因为 Agent 不好,而是先用更简单的方案,能让你更清楚地看到任务的真实结构——哪些地方是真的需要灵活性,哪些地方你以为需要其实是设计没做到位。</p>
+<p>---</p>
+<p>从 Workflow 和 Agent 的选择往深了想,其实是另一个问题:当我们把越来越多的不确定性交给模型承担,我们对业务决策还有多少真正的理解和掌控?这个问题,比"用哪个框架"本身更值得想清楚。</p></div></article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Allen on AI</div>
+    <div class="footer-links">
+      <a href="mailto:19512249774yangliu@gmail.com">📧 19512249774yangliu@gmail.com</a>
+      <a href="https://github.com/Allenyang007" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Allenyang007
+      </a>
+    </div>
+    <p class="footer-copy">© 2026 Allen</p>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement;
+  var next=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.querySelector('.theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  var saved=localStorage.getItem('theme')||
+    (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.theme-btn').textContent='☀️';
+  }
+})();
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
+document.querySelectorAll('.mobile-menu a').forEach(function(a){
+  a.addEventListener('click',function(){
+    if(!this.getAttribute('onclick')){
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobile-menu').classList.remove('show');
+    }
+  });
+});
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href');
+  if(id && id.startsWith('#')){
+    var el=document.getElementById(id.slice(1));
+    if(el)headings.push({el:el,a:a});
+  }
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+120;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>

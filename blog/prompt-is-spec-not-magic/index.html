@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Prompt不是魔法咒语,是需求文档 - Allen on AI</title>
+<meta name="description" content="从传统软件转做Prompt,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个Prompt经理的实战复盘。">
+<link rel="canonical" href="https://allen00.top/blog/prompt-is-spec-not-magic/">
+<meta property="og:title" content="Prompt不是魔法咒语,是需求文档">
+<meta property="og:description" content="从传统软件转做Prompt,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个Prompt经理的实战复盘。">
+<meta property="og:url" content="https://allen00.top/blog/prompt-is-spec-not-magic/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Allen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://allen00.top/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#ffffff;--bg-card:#f8f9fa;--bg-card-hover:#ffffff;
+  --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+  --border:#e5e7eb;--border-hover:#d1d5db;
+  --nav-bg:rgba(255,255,255,0.85);
+  --primary:#1a1a2e;
+  --accent-green:#22c55e;--accent-orange:#f97316;--accent-blue:#3b82f6;--accent-purple:#8b5cf6;--accent-red:#ef4444;--accent-pink:#ec4899;--accent-cyan:#06b6d4;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.1);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.04);
+  --radius:16px;
+  --grid-color:transparent;
+  --code-bg:#f6f8fa;--code-text:#1a1a2e;--code-border:#e5e7eb
+}
+
+[data-theme="dark"]{
+  --bg:#0a0a14;--bg-card:#141425;--bg-card-hover:#1a1a30;
+  --text:#e5e7eb;--text-secondary:#9ca3af;--text-muted:#6b7280;
+  --border:#1e1e36;--border-hover:#2d2d4a;
+  --nav-bg:rgba(10,10,20,0.88);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.5);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.2);
+  --grid-color:rgba(255,255,255,0.02);
+  --code-bg:#1e1e2e;--code-text:#cdd6f4;--code-border:#2d2d4a
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+
+body{overflow-x:hidden;
+  font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  transition:background .3s,color .3s;min-height:100vh;overflow-x:hidden
+}
+
+[data-theme="dark"] body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:background .3s,border .3s
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.nav-logo{
+  font-size:1.25rem;font-weight:800;color:var(--primary);
+  text-decoration:none;letter-spacing:-0.5px
+}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;
+  transition:color .2s;padding:4px 0
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{position:relative}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent-green),var(--accent-orange));border-radius:1px
+}
+.nav-links a.disabled{opacity:0.4;cursor:default;pointer-events:auto}
+.nav-links a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+.theme-btn{
+  background:none;border:1px solid var(--border);border-radius:10px;
+  width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .2s;color:var(--text)
+}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+
+.hamburger{
+  display:none;background:none;border:1px solid var(--border);border-radius:10px;
+  width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;transition:all .2s
+}
+.hamburger span{
+  display:block;width:20px;height:2px;background:var(--text);border-radius:2px;
+  transition:all .3s
+}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:var(--bg);
+  padding:16px 24px 40px;
+  flex-direction:column;gap:4px;overflow-y:auto;z-index:1000
+}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{
+  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
+  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
+  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
+}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+.mobile-menu a.disabled{opacity:0.4;cursor:default}
+.mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+
+.article-layout{position:relative;display:block;max-width:1100px;margin:0 auto;padding:88px 24px 60px 260px}
+
+.toc{position:fixed;top:64px;left:0;width:220px;height:calc(100vh - 64px);padding:24px 12px 24px 24px;border-right:1px solid var(--border);background:var(--bg);z-index:10}
+.toc-inner{height:100%;overflow-y:auto;padding-right:8px}
+.toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:2px}
+.toc a{
+  display:block;padding:5px 12px;font-size:.8rem;color:var(--text-secondary);
+  text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5
+}
+.toc a:hover{color:var(--text);border-left-color:var(--border)}
+.toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
+
+.article{max-width:800px;width:100%;min-width:0;overflow:hidden;margin-left:auto;margin-right:auto;overflow-wrap:break-word;word-wrap:break-word}
+
+.article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.82rem;color:var(--text-muted);margin-bottom:16px}
+.breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.breadcrumb a:hover{color:var(--accent-green)}
+.article-meta h1{word-break:break-word;font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.article-meta .subtitle{word-break:break-word;font-size:1.05rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6}
+.article-meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--text-muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px}
+.tag-ai{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.tag-product{background:rgba(249,115,22,0.1);color:var(--accent-orange)}
+
+.content h2{
+  font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
+  border-top:1px solid var(--border);letter-spacing:-.3px
+}
+.content h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.content p{overflow-wrap:break-word;margin-bottom:16px;line-height:1.9}
+.content strong{font-weight:600}
+
+footer{
+  border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
+  color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
+}
+.footer-inner{max-width:600px;margin:0 auto}
+.footer-brand{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:20px}
+.footer-links{
+  display:flex;justify-content:center;gap:24px;margin-bottom:20px;flex-wrap:wrap
+}
+.footer-links a{
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;color:var(--text-secondary);font-size:.88rem;
+  font-weight:500;transition:color .2s;min-height:44px
+}
+.footer-links a:hover{color:var(--accent-green)}
+.footer-copy{font-size:.8rem;color:var(--text-muted)}
+
+@media(max-width:1100px){
+  .toc{display:none}
+  .article-layout{padding:88px 24px 60px}
+}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .article-layout{padding:80px 20px 48px}
+  .article-meta h1{font-size:1.6rem}
+  .article-meta .subtitle{font-size:.95rem}
+  .content h2{font-size:1.25rem;margin:36px 0 14px;padding-top:20px}
+  .content p{font-size:.95rem;line-height:1.85}
+  .footer-links{gap:16px}
+}
+
+@media(max-width:480px){
+  .article-layout{padding:76px 16px 40px}
+  .article-meta h1{font-size:1.4rem;letter-spacing:-.5px}
+  .article-meta .info{gap:10px}
+  .content h2{font-size:1.15rem}
+  .content p{font-size:.9rem}
+  .footer-links{flex-direction:column;gap:8px}
+  footer{padding:36px 16px 32px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen on AI</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="/blog/" class="active">博客</a>
+      <a href="javascript:void(0)" class="disabled">工具</a>
+      <a href="/about/">关于</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" class="disabled">工具 · 即将上线</a>
+  <a href="/about/">关于</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+
+<div class="article-layout">
+
+<aside class="toc" id="toc">
+  <h4>目录</h4>
+  <ul>
+    <li><a href="#certainty">确定性 vs 不确定性:Prompt的根本差异</a></li>
+    <li><a href="#logic">AI的逻辑不是人写的,是学出来的</a></li>
+    <li><a href="#change">Prompt上线后还会「自己变」</a></li>
+    <li><a href="#design">不确定性不是bug,是设计对象</a></li>
+    <li><a href="#control">放弃「完全掌控」的预设</a></li>
+  </ul>
+</aside>
+
+<article class="article">
+
+<div class="article-meta">
+  <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / Prompt</div>
+  <h1>AI 产品和传统软件,思维上的断层在哪</h1>
+  <div class="subtitle">从传统软件转做Prompt,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个Prompt经理的实战复盘。</div>
+  <div class="info">
+    <span>Allen</span>
+    <span>2026年3月8日</span>
+    <span>7 分钟阅读</span>
+    <span class="tag tag-ai">Prompt</span>
+  </div>
+</div>
+
+<div class="content"><p>我做 AI 产品有一段时间了,不止一次遇到这种场景:团队拿着 GPT-4 跑出一堆烂输出,然后有人说"这模型不行,换 Claude 试试?"</p>
+<p>我每次听到这话都觉得哪里不对。换模型当然可以试,但大多数时候,问题根本不在模型。</p>
+<p>---</p>
+<h2 id="section-1">一个真实案例:Prompt 重写带来的合格率跃升</h2>
+<p>之前有个内容生成项目,早期的 Prompt 就一行:「帮我写一篇关于×××的文章」。合格率 23%。不是模型的问题,是需求文档写得太烂——你跟供应商说"帮我做个产品",结果当然是灾难。后来系统重写了 Prompt,加上角色、背景、任务要求、格式规范,合格率直接到 89%。模型没换,工程师没换,就这一处变化。</p>
+<p>这个反差让我确信了一件事:Prompt 本质上是需求文档。</p>
+<p>写 PRD 的时候,产品经理会花时间定义用户是谁、场景是什么、要解决什么问题、输出标准长什么样。写 Prompt 的逻辑完全一样——你在告诉 AI 它要扮演什么角色、在什么背景下工作、要完成什么任务、输出要符合什么规格。把 Prompt 当成"打给 AI 的字条"的人,和把需求当成"随口说一句"的产品经理,犯的是同一种错误。</p>
+<p>---</p>
+<h2 id="section-2">Prompt 六要素框架:角色、上下文、任务、风格、格式、参考</h2>
+<p>我自己用的框架叫六要素:角色、上下文、任务、风格、格式、参考资料。六个不是每次都要全写,但每次都该想清楚。</p>
+<p>角色不是角色扮演游戏,它做的事情是激活模型里特定的知识分布。大模型训练时看过天量文本,不同角色的知识结构和表达方式都编码在参数里。你写"你是一位有十年经验的内分泌科医生",模型就从那个子空间里采样,而不是从通用写作空间里给你一个平均值。这跟建筑师给设计师指定方向一样——同一个人,做医院设计和做商业综合体,调用的规范体系完全不同。</p>
+<p>上下文是最容易省略、代价也最大的一块。你做的是给 45 到 65 岁用户看的健康科普,还是给医生看的专业文献综述?这两个场景的 Prompt 写出来应该完全不一样,但很多人直接跳过这步,然后抱怨 AI 不懂需求。</p>
+<p>格式要求常被当成可选项,其实它决定了后续处理成本。要三级标题还是 Markdown 列表,输出要不要 JSON,字数限制是多少——这些写清楚,省下来的不只是 AI 的时间,还有你 review 输出的时间。</p>
+<p>---</p>
+<h2 id="section-3">Few-shot 实测:3 个示例是性价比拐点</h2>
+<p>我曾在一个 B 端数据分析平台上专门测过 Few-shot 的效果,结论很直白:给 3 个示例,格式合规率从 61% 跳到 94%。给 5 个示例,只到 95%,几乎没有边际收益,但 token 消耗多了将近一半。</p>
+<p>这个数字有一个实际的指导意义:大多数场景下,3 个示例是性价比最高的点。不用堆,堆多了没用还费钱。</p>
+<p>Few-shot 有效的原因也很直觉:与其花大段文字描述"我要什么风格的输出",不如直接给三个样本让 AI 看。新员工入职,你给他看三份优秀周报,他写出来的东西会比你口头说"要有数据、要有重点"强得多。人类学习如此,模型的上下文学习(In-Context Learning)也是同一个逻辑。</p>
+<p>---</p>
+<h2 id="section-4">Prompt 迭代:为什么"工程"两个字不是摆设</h2>
+<p>有一个误区值得单独说:很多人觉得 Prompt 写好就完事了,一次到位。这个想法本身就暴露了对 Prompt Engineering 的理解层次。工程意味着试错、版本管理、效果评估、持续迭代。一个稳定的 Prompt,平均要经过七到十二个版本才能成型。我参与过的一个数据分析报告项目,Prompt 迭代了十七个版本。另一个项目只迭代了四个版本就上线,结果一周后问题不断,最后回滚重来。</p>
+<p>每个版本都值得记录:改了什么、为什么改、效果如何。这是工程师写变更日志的逻辑,也是产品经理写迭代记录的逻辑。不记录的迭代不叫工程,叫瞎改。</p>
+<p>---</p>
+<h2 id="section-5">"魔法咒语"思维为什么有害</h2>
+<p>回到开头那个问题——为什么那么多团队拿到烂输出后第一反应是换模型?</p>
+<p>一部分原因是"魔法咒语"思维在作怪。觉得 Prompt 是某种玄学,某些词汇有魔力,某些表达能触发 AI 的隐藏能力。只要找到正确的咒语,就能召唤完美输出。</p>
+<p>这个思维框架从根上就错了。Prompt 没有魔法,只有规格。你的需求越具体、约束越清晰、示例越准确,AI 的行为边界就越可控,输出质量就越稳定。这跟软件工程里写接口文档是一回事——接口文档写得烂,上下游对接就会出问题,怪接口框架没有意义。</p>
+<h2 id="section-6">产品经理写 Prompt 的天然优势</h2>
+<p>从产品经理的角度看,这其实是一件很熟悉的事。我们本来就是靠把模糊需求转化为清晰规格来推动事情发生的人。Prompt 只是把这个能力用到了一个新地方:你的"用户"变成了 AI,你的"产品"变成了 AI 的输出。规则没变,工具变了。</p>
+<p>---</p>
+<p>我不打算给出一个"五步写出完美 Prompt"的清单,因为那又回到魔法咒语的路子上了。真正有用的是建立一个习惯:每次写 Prompt 之前,先问自己——如果这是一份给人看的需求文档,它完整吗?</p>
+<p>角色定了吗?背景说清楚了吗?任务拆得足够具体吗?输出的格式和边界写出来了吗?有没有可以提供的参考示例?</p>
+<p>问完这几个问题,Prompt 的质量下限就已经比大多数人高了。</p>
+<p>剩下的,靠迭代。</p></div></article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Allen on AI</div>
+    <div class="footer-links">
+      <a href="mailto:19512249774yangliu@gmail.com">📧 19512249774yangliu@gmail.com</a>
+      <a href="https://github.com/Allenyang007" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Allenyang007
+      </a>
+    </div>
+    <p class="footer-copy">© 2026 Allen</p>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement;
+  var next=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.querySelector('.theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  var saved=localStorage.getItem('theme')||
+    (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.theme-btn').textContent='☀️';
+  }
+})();
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
+document.querySelectorAll('.mobile-menu a').forEach(function(a){
+  a.addEventListener('click',function(){
+    if(!this.getAttribute('onclick')){
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobile-menu').classList.remove('show');
+    }
+  });
+});
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href');
+  if(id && id.startsWith('#')){
+    var el=document.getElementById(id.slice(1));
+    if(el)headings.push({el:el,a:a});
+  }
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+120;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>

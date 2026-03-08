@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>RAG 解决了什么问题,又带来了什么新问题 - Allen on AI</title>
+<meta name="description" content="从传统软件转做RAG,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个RAG经理的实战复盘。">
+<link rel="canonical" href="https://allen00.top/blog/rag-benefits-and-engineering-pitfalls/">
+<meta property="og:title" content="RAG 解决了什么问题,又带来了什么新问题">
+<meta property="og:description" content="从传统软件转做RAG,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个RAG经理的实战复盘。">
+<meta property="og:url" content="https://allen00.top/blog/rag-benefits-and-engineering-pitfalls/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Allen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://allen00.top/apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#ffffff;--bg-card:#f8f9fa;--bg-card-hover:#ffffff;
+  --text:#1a1a2e;--text-secondary:#6b7280;--text-muted:#9ca3af;
+  --border:#e5e7eb;--border-hover:#d1d5db;
+  --nav-bg:rgba(255,255,255,0.85);
+  --primary:#1a1a2e;
+  --accent-green:#22c55e;--accent-orange:#f97316;--accent-blue:#3b82f6;--accent-purple:#8b5cf6;--accent-red:#ef4444;--accent-pink:#ec4899;--accent-cyan:#06b6d4;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.1);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.04);
+  --radius:16px;
+  --grid-color:transparent;
+  --code-bg:#f6f8fa;--code-text:#1a1a2e;--code-border:#e5e7eb
+}
+
+[data-theme="dark"]{
+  --bg:#0a0a14;--bg-card:#141425;--bg-card-hover:#1a1a30;
+  --text:#e5e7eb;--text-secondary:#9ca3af;--text-muted:#6b7280;
+  --border:#1e1e36;--border-hover:#2d2d4a;
+  --nav-bg:rgba(10,10,20,0.88);
+  --shadow:0 1px 3px rgba(0,0,0,0.4);
+  --shadow-hover:0 12px 32px rgba(0,0,0,0.5);
+  --shadow-card:0 2px 8px rgba(0,0,0,0.2);
+  --grid-color:rgba(255,255,255,0.02);
+  --code-bg:#1e1e2e;--code-text:#cdd6f4;--code-border:#2d2d4a
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+
+body{overflow-x:hidden;
+  font-family:'Inter','Noto Sans SC',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  transition:background .3s,color .3s;min-height:100vh;overflow-x:hidden
+}
+
+[data-theme="dark"] body::before{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent)
+}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);transition:background .3s,border .3s
+}
+.nav-inner{
+  max-width:1100px;margin:0 auto;padding:0 24px;height:64px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.nav-logo{
+  font-size:1.25rem;font-weight:800;color:var(--primary);
+  text-decoration:none;letter-spacing:-0.5px
+}
+[data-theme="dark"] .nav-logo{color:var(--accent-green)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{
+  text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;
+  transition:color .2s;padding:4px 0
+}
+.nav-links a:hover,.nav-links a.active{color:var(--text)}
+.nav-links a.active{position:relative}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent-green),var(--accent-orange));border-radius:1px
+}
+.nav-links a.disabled{opacity:0.4;cursor:default;pointer-events:auto}
+.nav-links a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+.theme-btn{
+  background:none;border:1px solid var(--border);border-radius:10px;
+  width:40px;height:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;transition:all .2s;color:var(--text)
+}
+.theme-btn:hover{border-color:var(--text-secondary);background:var(--bg-card)}
+
+.hamburger{
+  display:none;background:none;border:1px solid var(--border);border-radius:10px;
+  width:44px;height:44px;cursor:pointer;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;transition:all .2s
+}
+.hamburger span{
+  display:block;width:20px;height:2px;background:var(--text);border-radius:2px;
+  transition:all .3s
+}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.mobile-menu{
+  display:none;position:fixed;top:64px;left:0;right:0;bottom:0;
+  background:var(--bg);
+  padding:16px 24px 40px;
+  flex-direction:column;gap:4px;overflow-y:auto;z-index:1000
+}
+.mobile-menu.show{display:flex !important}
+.mobile-menu a{
+  display:flex;align-items:center;text-decoration:none;color:var(--text-secondary);
+  font-size:1.1rem;font-weight:500;padding:16px 20px;border-radius:12px;
+  transition:all .2s;min-height:48px;border-bottom:1px solid var(--border)
+}
+.mobile-menu a:last-child{border-bottom:none}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--text);background:var(--bg-card)}
+.mobile-menu a.disabled{opacity:0.4;cursor:default}
+.mobile-menu a.disabled:hover{background:transparent;color:var(--text-secondary);opacity:0.4}
+
+.article-layout{position:relative;display:block;max-width:1100px;margin:0 auto;padding:88px 24px 60px 260px}
+
+.toc{position:fixed;top:64px;left:0;width:220px;height:calc(100vh - 64px);padding:24px 12px 24px 24px;border-right:1px solid var(--border);background:var(--bg);z-index:10}
+.toc-inner{height:100%;overflow-y:auto;padding-right:8px}
+.toc h4{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.toc ul{list-style:none;padding:0}
+.toc li{margin-bottom:2px}
+.toc a{
+  display:block;padding:5px 12px;font-size:.8rem;color:var(--text-secondary);
+  text-decoration:none;border-left:2px solid transparent;transition:all .2s;line-height:1.5
+}
+.toc a:hover{color:var(--text);border-left-color:var(--border)}
+.toc a.active{color:var(--accent-green);border-left-color:var(--accent-green);font-weight:500}
+
+.article{max-width:800px;width:100%;min-width:0;overflow:hidden;margin-left:auto;margin-right:auto;overflow-wrap:break-word;word-wrap:break-word}
+
+.article-meta{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
+.breadcrumb{font-size:.82rem;color:var(--text-muted);margin-bottom:16px}
+.breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.breadcrumb a:hover{color:var(--accent-green)}
+.article-meta h1{word-break:break-word;font-size:2rem;font-weight:800;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px}
+.article-meta .subtitle{word-break:break-word;font-size:1.05rem;color:var(--text-secondary);margin-bottom:16px;line-height:1.6}
+.article-meta .info{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--text-muted);flex-wrap:wrap}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px}
+.tag-ai{background:rgba(34,197,94,0.1);color:var(--accent-green)}
+.tag-product{background:rgba(249,115,22,0.1);color:var(--accent-orange)}
+
+.content h2{
+  font-size:1.5rem;font-weight:700;margin:48px 0 16px;padding-top:24px;
+  border-top:1px solid var(--border);letter-spacing:-.3px
+}
+.content h2:first-of-type{border-top:none;margin-top:0;padding-top:0}
+.content p{overflow-wrap:break-word;margin-bottom:16px;line-height:1.9}
+.content strong{font-weight:600}
+
+footer{
+  border-top:1px solid var(--border);padding:48px 24px 40px;text-align:center;
+  color:var(--text-secondary);transition:border-color .3s;background:var(--bg)
+}
+.footer-inner{max-width:600px;margin:0 auto}
+.footer-brand{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:20px}
+.footer-links{
+  display:flex;justify-content:center;gap:24px;margin-bottom:20px;flex-wrap:wrap
+}
+.footer-links a{
+  display:inline-flex;align-items:center;gap:6px;
+  text-decoration:none;color:var(--text-secondary);font-size:.88rem;
+  font-weight:500;transition:color .2s;min-height:44px
+}
+.footer-links a:hover{color:var(--accent-green)}
+.footer-copy{font-size:.8rem;color:var(--text-muted)}
+
+@media(max-width:1100px){
+  .toc{display:none}
+  .article-layout{padding:88px 24px 60px}
+}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .article-layout{padding:80px 20px 48px}
+  .article-meta h1{font-size:1.6rem}
+  .article-meta .subtitle{font-size:.95rem}
+  .content h2{font-size:1.25rem;margin:36px 0 14px;padding-top:20px}
+  .content p{font-size:.95rem;line-height:1.85}
+  .footer-links{gap:16px}
+}
+
+@media(max-width:480px){
+  .article-layout{padding:76px 16px 40px}
+  .article-meta h1{font-size:1.4rem;letter-spacing:-.5px}
+  .article-meta .info{gap:10px}
+  .content h2{font-size:1.15rem}
+  .content p{font-size:.9rem}
+  .footer-links{flex-direction:column;gap:8px}
+  footer{padding:36px 16px 32px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Allen on AI</a>
+    <div class="nav-links">
+      <a href="/">首页</a>
+      <a href="/guide/">AI 指南</a>
+      <a href="/blog/" class="active">博客</a>
+      <a href="javascript:void(0)" class="disabled">工具</a>
+      <a href="/about/">关于</a>
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/">首页</a>
+  <a href="/guide/">AI 指南</a>
+  <a href="/blog/" class="active">博客</a>
+  <a href="javascript:void(0)" class="disabled">工具 · 即将上线</a>
+  <a href="/about/">关于</a>
+  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
+</div>
+
+<div class="article-layout">
+
+<aside class="toc" id="toc">
+  <h4>目录</h4>
+  <ul>
+    <li><a href="#certainty">确定性 vs 不确定性:RAG的根本差异</a></li>
+    <li><a href="#logic">AI的逻辑不是人写的,是学出来的</a></li>
+    <li><a href="#change">RAG上线后还会「自己变」</a></li>
+    <li><a href="#design">不确定性不是bug,是设计对象</a></li>
+    <li><a href="#control">放弃「完全掌控」的预设</a></li>
+  </ul>
+</aside>
+
+<article class="article">
+
+<div class="article-meta">
+  <div class="breadcrumb"><a href="/">首页</a> / <a href="/blog/">博客</a> / RAG</div>
+  <h1>AI 产品和传统软件,思维上的断层在哪</h1>
+  <div class="subtitle">从传统软件转做RAG,最大的认知冲击不是技术,而是对'系统该如何表现'的底层假设被颠覆。一个RAG经理的实战复盘。</div>
+  <div class="info">
+    <span>Allen</span>
+    <span>2026年3月8日</span>
+    <span>7 分钟阅读</span>
+    <span class="tag tag-ai">RAG</span>
+  </div>
+</div>
+
+<div class="content"><p>去年在一个医学 AI 写作项目里,我第一次认真用 RAG 解决生产问题。团队需要让模型引用真实的医学文献来写综述,而不是一本正经地编造 DOI 号和论文标题——大模型真的会这么干,而且编得像模像样,不仔细核查根本看不出来。</p>
+<p>RAG 上线之后,幻觉问题确实压下去了。模型开始老老实实地从我们灌进去的文献库里找引用,回答有了出处,准确率肉眼可见地提升。团队很高兴,觉得这事儿算是搞定了。</p>
+<p>但没过多久,新的麻烦就来了。</p>
+<h2 id="section-1">先说 RAG 到底解决了什么</h2>
+<p>RAG 解决的核心问题其实就三个,每个都很实际。</p>
+<p>第一个是知识截止日期。大模型的训练数据有时间边界,你问它上周发布的新政策,它不知道。这在很多业务场景里是硬伤——你总不能每出一个新规范就重新训练一次模型。</p>
+<p>第二个是幻觉。这个问题在专业领域尤其要命。我见过模型编造药物相互作用的描述,格式完美、逻辑自洽,就是这个结论压根没有文献支持。如果下游有人拿着这个"结论"去做临床决策,后果不堪设想。RAG 让模型的回答有了依据——知识库里有就说,没有就闭嘴,至少方向对了。</p>
+<p>第三个是私有数据。公司内部文档、项目记录、客户资料,这些东西从来没出现在任何模型的训练集里。你不喂给它,它永远不知道。</p>
+<p>这三个问题,RAG 的解法都很直觉:别让模型硬背,让它开卷考试。问题来了先去知识库里查,查到相关内容再回答。听起来简单,原理也确实不复杂。</p>
+<p>但"原理简单"和"做好"之间,隔着一条很深的沟。</p>
+<h2 id="section-2">第一个坑:文档分块策略,决定了 RAG 的上限</h2>
+<p>RAG 系统里有个看起来不起眼的环节叫"分块"——把文档切成小段存进向量数据库。这个环节我一开始没当回事,随手设了个固定长度,每 500 字切一刀,跑起来再说。</p>
+<p>结果很快就翻车了。</p>
+<p>某个项目里,我们把几十本建筑规范灌进知识库。用户问"高层住宅疏散走廊最小净宽度是多少",系统检索出来的文本块,刚好把那条规范从中间切断了——前半段在一个块里,后半段在另一个块里,两个块的相似度排名都不够靠前,结果模型拿到的上下文残缺不全,给了个模棱两可的回答。</p>
+<p>后来改成按条款切分,每个条款作为独立的块,准确率从 78% 跳到了 91%。同样的数据,同样的模型,换个切法,效果天差地别。</p>
+<p>这件事让我意识到一个判断:RAG 系统的瓶颈,往往不在模型,而在数据工程。你的文档清洗干不干净、分块策略合不合理、Embedding 模型和你的领域是不是匹配——这些"脏活"决定了系统的上限。很多团队把精力花在调模型参数上,其实方向搞反了。</p>
+<h2 id="section-3">第二个坑:向量检索的语义鸿沟与复杂查询</h2>
+<p>向量检索听起来很美好——把文本转成向量,用余弦相似度找最近的邻居,语义匹配,不依赖关键词。但实际用起来,你会发现语义匹配远没有想象中那么靠谱。</p>
+<p>最典型的问题是语义鸿沟。用户说"怎么退货",文档里写的是"商品退换货流程及注意事项"。人看一眼就知道是同一件事,但向量检索未必能匹配上——这取决于你用的 Embedding 模型在这个领域的表现。通用 Embedding 模型在垂直领域经常打折扣,比如法律文本里"不当得利"和"无因管理"在法律语境下强相关,但通用模型算出的向量距离可能很远。</p>
+<p>然后是复杂查询的问题。用户问"上个季度华东区哪个产品卖得最好"——这里面包含时间限定、地区限定、排序比较,一次检索根本搞不定。这就是为什么后来出现了 Agentic RAG:在检索流程里加一个 Agent,让它像研究员一样拆解问题、多轮检索、评估结果质量。我测试过,复杂查询的准确率从 60% 出头提升到了 82% 左右。</p>
+<p>但 Agentic RAG 又引入了新的复杂性——Agent 的行为不完全可控,有时候它会过度拆解一个简单问题,反而把事情搞复杂。检索链路越长,出错的环节越多,调试难度指数级上升。</p>
+<p>这就是 RAG 让我最头疼的地方:每解决一个问题,就冒出两个新问题。</p>
+<h2 id="section-4">第三个坑:RAG 系统的评估与持续迭代</h2>
+<p>传统软件的测试逻辑很清晰——给定输入,期望输出,对比结果。RAG 系统不是这样的。</p>
+<p>同一个问题,检索到不同的文本块组合,模型可能给出不同但都"说得过去"的回答。你怎么判断哪个更好?准确率只是一个维度,还有完整性、相关性、有没有遗漏关键信息。这些东西很难用自动化指标衡量,人工评估又贵又慢。</p>
+<p>更麻烦的是,RAG 系统的效果跟数据强相关。你在测试集上跑到 90% 的准确率,换一批用户的真实问题,可能直接掉到 70%。因为用户的提问方式千奇百怪,你的测试集永远覆盖不全。</p>
+<p>我现在的做法是:上线前用标注数据做基准测试,上线后持续收集用户的"踩空"案例(模型回答了"根据已有资料无法回答"或者用户给了差评的),定期用这些真实 bad case 来迭代。没有一劳永逸的评估方案,只有持续迭代的过程。</p>
+<h2 id="section-5">容易踩的坑:RAG 和微调的边界</h2>
+<p>还有一个我踩过的坑值得说。</p>
+<p>在那个医学项目早期,团队遇到一个问题:模型输出的文献综述格式不对,术语用法也不够专业。我们的第一反应是"知识库里的参考样本不够多",于是拼命往知识库里灌更多高质量文献,指望 RAG 能让模型学会正确的写法。</p>
+<p>折腾了两周,效果改善有限。后来换了个思路,用几百条标注数据做了一轮 LoRA 微调,专门教模型怎么写符合学术规范的综述段落。微调之后再配合 RAG 提供文献引用,效果立刻上了一个台阶。</p>
+<p>这件事的教训是:<strong>RAG 解决的是"知道什么"的问题,微调解决的是"怎么说"的问题。</strong> 把格式和风格的问题扔给 RAG,就像指望图书馆能教你写作——它能给你参考资料,但教不会你怎么组织语言。分清楚哪个问题用哪个工具,比把一个工具用到极致更重要。</p>
+<h2 id="section-6">知识库的数据治理才是真正的硬仗</h2>
+<p>做了几个 RAG 项目之后,我越来越觉得,技术方案本身不是最难的部分。最难的是数据治理。</p>
+<p>你的知识库里有几千份文档,谁来保证它们是最新版本?旧版文档没清理干净,模型检索到过时信息给了错误回答,这个责任算谁的?不同部门的文档格式五花八门,有的是 PDF 扫描件,有的是 Word,有的是网页截图——你怎么保证解析质量?</p>
+<p>技术上,一个 RAG 系统可以一周搭起来。但建立一套靠谱的知识库运营机制——谁上传、谁审核、多久更新、怎么淘汰过时内容——这件事可能要几个月,而且永远没有"完成"的那一天。</p>
+<h2 id="section-7">我的判断:80% 的场景 RAG 够用</h2>
+<p>RAG 不是银弹,但它是目前让大模型在企业场景落地最务实的方案。80% 的场景,RAG 够用。剩下 20% 的场景,需要 RAG 加微调,或者更重的方案比如 GraphRAG。</p>
+<p>但我想对正在做 RAG 项目的人说一句:不要低估工程复杂度。教程会让你觉得这事儿很简单——切块、向量化、检索、生成,四步搞定。实际落地的时候,你会发现 80% 的时间花在数据清洗、分块调优、评估迭代这些"不性感"的环节上。</p>
+<p>这些脏活决定了你的系统是 demo 还是产品。</p></div></article>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Allen on AI</div>
+    <div class="footer-links">
+      <a href="mailto:19512249774yangliu@gmail.com">📧 19512249774yangliu@gmail.com</a>
+      <a href="https://github.com/Allenyang007" target="_blank" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Allenyang007
+      </a>
+    </div>
+    <p class="footer-copy">© 2026 Allen</p>
+  </div>
+</footer>
+
+<script>
+function toggleTheme(){
+  var d=document.documentElement;
+  var next=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',next);
+  localStorage.setItem('theme',next);
+  document.querySelector('.theme-btn').textContent=next==='dark'?'☀️':'🌙';
+}
+(function(){
+  var saved=localStorage.getItem('theme')||
+    (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  if(saved==='dark'){
+    document.documentElement.setAttribute('data-theme','dark');
+    document.querySelector('.theme-btn').textContent='☀️';
+  }
+})();
+function toggleMenu(){
+  var btn=document.querySelector('.hamburger');
+  var menu=document.getElementById('mobile-menu');
+  btn.classList.toggle('active');
+  menu.classList.toggle('show');
+}
+document.querySelectorAll('.mobile-menu a').forEach(function(a){
+  a.addEventListener('click',function(){
+    if(!this.getAttribute('onclick')){
+      document.querySelector('.hamburger').classList.remove('active');
+      document.getElementById('mobile-menu').classList.remove('show');
+    }
+  });
+});
+var tocLinks=document.querySelectorAll('.toc a');
+var headings=[];
+tocLinks.forEach(function(a){
+  var id=a.getAttribute('href');
+  if(id && id.startsWith('#')){
+    var el=document.getElementById(id.slice(1));
+    if(el)headings.push({el:el,a:a});
+  }
+});
+window.addEventListener('scroll',function(){
+  var scrollY=window.pageYOffset+120;
+  var current=null;
+  headings.forEach(function(h){if(h.el.offsetTop<=scrollY)current=h;});
+  tocLinks.forEach(function(a){a.classList.remove('active');});
+  if(current)current.a.classList.add('active');
+});
+</script>
+</body>
+</html>

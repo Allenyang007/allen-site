@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://allen00.top/</loc>
@@ -45,4 +45,4 @@
     <lastmod>2026-03-01</lastmod>
     <priority>0.8</priority>
   </url>
-</urlset>
+<url><loc>https://allen00.top/blog/ai-product-vs-traditional-software/</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url><url><loc>https://allen00.top/blog/llm-project-delivery-mindset/</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url><url><loc>https://allen00.top/blog/rag-benefits-and-engineering-pitfalls/</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url><url><loc>https://allen00.top/blog/llm-knowledge-for-product-managers/</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url><url><loc>https://allen00.top/blog/prompt-is-spec-not-magic/</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url><url><loc>https://allen00.top/blog/workflow-vs-agent-decision-framework/</loc><lastmod>2026-03-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url></urlset>
