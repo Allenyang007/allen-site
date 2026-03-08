@@ -1091,3 +1091,181 @@ curl -s https://allen00.top/blog/[article]/ | grep "<h1>"
 - **质量检查脚本**: `blog/qa-check.sh` - 自动化验证工具
 - **博客验证脚本**: `blog/verify-blog.sh` - 首页验证工具
 - **写作规划**: `blog/BLOG-PLAN.md` - 文章规划和写作原则
+
+---
+
+## 🚨 关键注意事项 (必须遵守)
+
+### 1. 移动端适配 (最高优先级)
+
+**问题:** 移动端内容区域很窄,左右大量空白
+
+**原因:** padding-left还是260px(桌面端TOC宽度),在移动端没有改为对称
+
+**解决:**
+```css
+/* 桌面端 (>1100px) */
+.article-layout { padding: 88px 24px 60px 260px; }
+
+/* 移动端 (<1100px) - 必须对称! */
+@media(max-width:1100px) {
+  .article-layout { padding: 88px 24px 60px 24px; }  /* 不是260px! */
+}
+```
+
+**强制检查:**
+- 每次发布前F12测试移动端(375px/768px/1024px)
+- 检查padding: `grep -A5 "@media(max-width:1100px)" index.html | grep padding`
+- 如果看到260px立即修复: `sed -i 's/padding:88px 24px 60px 260px/padding:88px 24px 60px 24px/g' index.html`
+
+### 2. 网站风格统一
+
+**必须保持一致的元素:**
+- CSS变量: var(--bg), var(--text), var(--primary)
+- 深色模式: data-theme="dark"
+- 字体: -apple-system, BlinkMacSystemFont, "Segoe UI"
+- 主色调: #2563eb (蓝色)
+- 圆角: 12px
+- 阴影: 0 2px 8px rgba(0,0,0,0.1)
+- 导航栏样式
+- TOC样式
+- 代码块样式
+- 链接hover效果
+
+**检查方法:**
+```bash
+# 对比导航栏
+diff <(grep -A10 "class=\"nav\"" blog/index.html) \
+     <(grep -A10 "class=\"nav\"" blog/[article]/index.html)
+
+# 检查CSS变量
+grep "var(--" blog/[article]/index.html | head -5
+```
+
+### 3. 博客首页同步更新 (必须!)
+
+**每次发布新文章必须更新:**
+1. 添加文章卡片(放在最前面)
+2. 更新文章总数
+3. 更新分类统计
+4. 测试筛选功能
+
+**文章卡片模板:**
+```html
+<article class="blog-card" data-category="product" data-date="2026-03-08">
+  <div class="card-header">
+    <span class="category-tag product">产品思考</span>
+    <span class="date">2026-03-08</span>
+  </div>
+  <h2><a href="/blog/[article]/">文章标题</a></h2>
+  <p class="excerpt">文章摘要...</p>
+  <div class="card-footer">
+    <span>📖 8 分钟阅读</span>
+  </div>
+</article>
+```
+
+**验证:**
+```bash
+# 检查新文章是否在首页
+curl -s https://allen00.top/blog/ | grep "[article]"
+
+# 检查文章总数
+grep -c "class=\"blog-card\"" blog/index.html
+```
+
+### 4. 发布前后版本对比
+
+**部署前:**
+```bash
+# 1. 检查本地文件
+ls -lh blog/[article]/index.html
+
+# 2. 如果是更新,对比线上版本
+diff <(curl -s https://allen00.top/blog/[article]/ | grep "<h1>") \
+     <(grep "<h1>" blog/[article]/index.html)
+```
+
+**部署后:**
+```bash
+# 1. HTTP状态
+curl -I https://allen00.top/blog/[article]/ | grep "200 OK"
+
+# 2. H1标题
+curl -s https://allen00.top/blog/[article]/ | grep "<h1>" | sed 's/<[^>]*>//g'
+
+# 3. 章节数量
+curl -s https://allen00.top/blog/[article]/ | grep -c "<h2"
+
+# 4. 无乱码
+curl -s https://allen00.top/blog/[article]/ | grep "M-" && echo "❌ 有乱码" || echo "✅ 无乱码"
+
+# 5. 浏览器验证(无痕模式)
+# - 访问文章URL
+# - F12测试移动端
+# - 检查首页
+```
+
+### 5. 相关文件一起更新
+
+**每次发布必须更新:**
+- `blog/[article]/index.html` - 文章本身
+- `blog/index.html` - 博客首页(添加卡片)
+- `sitemap.xml` - SEO(添加URL)
+- `blog/BLOG-PLAN.md` - 规划文档(更新状态)
+
+**可选更新:**
+- `README.md` - 如果提到文章列表
+- `about/index.html` - 如果提到文章数量
+
+**部署命令:**
+```bash
+# 同步所有相关文件
+rsync -av blog/[article]/ /var/www/allen-site/blog/[article]/
+rsync -av blog/index.html /var/www/allen-site/blog/
+rsync -av sitemap.xml /var/www/allen-site/
+
+# 重启nginx
+systemctl restart nginx
+```
+
+---
+
+## 📋 发布检查清单 (打印使用)
+
+每次发布新文章时,逐项勾选:
+
+```
+□ 1. 内容完整(严格按照MD)
+□ 2. H1标题正确无乱码
+□ 3. Meta标签正确
+□ 4. 响应式断点完整(1100/768/480)
+□ 5. 移动端padding对称(无260px) ⚠️
+□ 6. F12测试移动端(375/768/1024) ⚠️
+□ 7. CSS变量和风格统一 ⚠️
+□ 8. 深色模式正常
+□ 9. 博客首页已更新 ⚠️
+□ 10. 文章卡片已添加
+□ 11. 统计数据已更新
+□ 12. sitemap.xml已更新 ⚠️
+□ 13. 本地预览正常
+□ 14. 部署到生产
+□ 15. 重启nginx(不是reload)
+□ 16. 线上验证(curl) ⚠️
+□ 17. 浏览器验证(无痕) ⚠️
+□ 18. 移动端实测 ⚠️
+□ 19. Git提交(清理备份)
+□ 20. 打版本tag
+```
+
+⚠️ = 最容易遗漏的步骤
+
+---
+
+## 🔗 相关文档
+
+- **完整检查清单**: `blog/skills/blog-publish-checklist/SKILL.md`
+- **质量检查**: `blog/skills/blog-qa/SKILL.md`
+- **代码审查**: `blog/skills/blog-code-review/SKILL.md`
+- **质量检查脚本**: `blog/qa-check.sh`
+- **代码审查脚本**: `blog/code-review.sh`
