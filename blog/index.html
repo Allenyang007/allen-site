@@ -343,15 +343,16 @@ footer{
 </section>
 
 <div class="stats-bar">
-  <div class="stat"><strong>6</strong> 篇文章</div>
-  <div class="stat"><strong>60000+</strong> 字</div>
+  <div class="stat"><strong>12</strong> 篇文章</div>
+  <div class="stat"><strong>6</strong> 个标签</div>
+</div>
   <div class="stat"><strong>6</strong> 个标签</div>
 </div>
 
 <!-- 分类筛选 -->
 <div style="max-width:900px;margin:0 auto 24px;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap">
   <button onclick="filterPosts('all')" class="post-tag tag-default" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-all">全部</button>
-  <button onclick="filterPosts('thinking')" class="post-tag tag-thinking" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-thinking">产品思考</button>
+  <button onclick="filterPosts('product')" class="post-tag tag-product" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-product">产品思考</button>
   <button onclick="filterPosts('tech')" class="post-tag tag-tech" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-tech">技术博客</button>
 </div>
 
@@ -661,20 +662,24 @@ document.querySelectorAll('.mobile-menu a').forEach(function(a){
 /* Post filter */
 function filterPosts(cat){
   var cards=document.querySelectorAll('.post-card');
-  cards.forEach(function(c){
-    if(cat==='all'||c.getAttribute('data-category')===cat){
-      c.style.display='';
+  cards.forEach(function(card){
+    if(cat==='all'){
+      card.style.display='block';
     }else{
-      c.style.display='none';
+      if(card.getAttribute('data-category')===cat){
+        card.style.display='block';
+      }else{
+        card.style.display='none';
+      }
     }
   });
-  // Update active button style
   document.querySelectorAll('[id^="filter-"]').forEach(function(b){b.style.opacity='0.5'});
   document.getElementById('filter-'+cat).style.opacity='1';
 }
 // Init: show all
 document.querySelectorAll('[id^="filter-"]').forEach(function(b){b.style.opacity='0.5'});
-document.getElementById('filter-all').style.opacity='1';
+filterPosts('all');
+
 
 /* Scroll fade-in */
 (function(){
