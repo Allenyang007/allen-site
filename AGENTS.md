@@ -302,3 +302,241 @@ filterPosts('tech');    // 应显示技术类文章
 - 修改JavaScript前先备份原函数
 - 使用正则替换时要精确匹配
 - 避免手动拼接HTML,容易出错
+
+---
+
+## 博客发布细节检查清单 (必须执行)
+
+### 发布前检查
+
+#### 1. 文章分类验证
+```bash
+# 检查所有文章的分类统计
+curl -s https://allen00.top/blog/ | grep 'data-category=' | grep -o 'data-category="[^"]*"' | sort | uniq -c
+
+# 验证总数
+curl -s https://allen00.top/blog/ | grep -c 'data-category='
+```
+
+**要求:**
+- 只能有两种分类: `product` 和 `tech`
+- 不能有 `thinking` 或其他分类
+- 产品思考 + 技术博客 = 总文章数
+
+#### 2. Stats Bar验证
+```bash
+curl -s https://allen00.top/blog/ | grep -A2 '<div class="stats-bar">'
+```
+
+**要求:**
+- 只显示文章总数,不显示字数
+- 不显示标签数
+- 格式: `<strong>N</strong> 篇文章`
+
+#### 3. 分类筛选按钮验证
+```bash
+curl -s https://allen00.top/blog/ | grep "filter-btn"
+```
+
+**要求:**
+- 三个按钮: 全部/产品思考/技术博客
+- 使用 `.filter-btn` 和 `.active` 类
+- 选中状态有明显视觉区分(绿色背景)
+
+#### 4. 文章日期验证
+```bash
+curl -s https://allen00.top/blog/ | grep "📅" | head -12
+```
+
+**要求:**
+- 新发布的多篇文章日期要分散(不能都是同一天)
+- 按日期倒序排列(最新的在前)
+- 日期格式: YYYY-MM-DD
+
+#### 5. JavaScript功能验证
+```bash
+# 检查filterPosts函数
+curl -s https://allen00.top/blog/ | grep -A20 "function filterPosts"
+
+# 检查初始化
+curl -s https://allen00.top/blog/ | grep "filterPosts('all')"
+```
+
+**要求:**
+- 页面加载时调用 `filterPosts('all')`
+- 使用 `.active` 类标记选中按钮
+- 无JavaScript语法错误
+
+### 发布后验证
+
+#### 浏览器功能测试
+1. 访问 https://allen00.top/blog/
+2. 检查文章是否全部显示(不是空白页)
+3. 点击"产品思考"按钮,验证筛选结果
+4. 点击"技术博客"按钮,验证筛选结果
+5. 点击"全部"按钮,验证显示所有文章
+6. 检查选中按钮是否有绿色高亮
+
+#### 响应式测试
+- 桌面端(>1100px): 正常布局
+- 平板端(768-1100px): 正常布局
+- 手机端(<768px): 正常布局,筛选按钮换行
+
+### 常见错误及修复
+
+#### 错误1: 文章分类不匹配
+**现象:** 点击筛选按钮后文章数量不对
+
+**检查:**
+```bash
+# 找出所有分类
+curl -s https://allen00.top/blog/ | grep 'data-category=' | grep -o 'data-category="[^"]*"' | sort -u
+```
+
+**修复:** 将所有 `thinking` 改为 `product` 或 `tech`
+
+#### 错误2: 筛选按钮无视觉反馈
+**现象:** 点击按钮后没有高亮效果
+
+**检查:**
+```bash
+# 检查是否有.active样式
+curl -s https://allen00.top/blog/ | grep "\.filter-btn\.active"
+```
+
+**修复:** 确保CSS中有 `.filter-btn.active` 样式定义
+
+#### 错误3: 文章不显示
+**现象:** 页面空白,但HTML中有post-card
+
+**检查:**
+```bash
+# 检查fade-in初始化
+curl -s https://allen00.top/blog/ | grep "filterPosts('all')"
+```
+
+**修复:** 确保页面加载时调用 `filterPosts('all')`
+
+---
+
+## 文章分类规范
+
+### 分类定义
+
+**product (产品思考):**
+- 产品设计方法论
+- 产品经理技能
+- 产品决策思考
+- 跨行业产品经验
+
+**tech (技术博客):**
+- 技术架构分析
+- 工具使用指南
+- 技术原理解析
+- 实战操作教程
+
+### 分类判断标准
+
+**优先看内容主题:**
+- 如果主要讲"怎么做产品决策" → product
+- 如果主要讲"技术如何实现" → tech
+- 如果既有产品又有技术,看哪个占比更大
+
+**示例:**
+- "AI产品和传统软件的思维断层" → product (产品思维)
+- "RAG解决了什么问题" → tech (技术原理)
+- "产品经理需要懂大模型原理吗" → product (产品视角)
+- "Prompt不是魔法咒语,是需求文档" → tech (技术应用)
+
+### 禁止使用的分类
+- ❌ `thinking` (已废弃,统一改为product或tech)
+- ❌ `default` (必须明确分类)
+- ❌ 自定义分类 (只能用product和tech)
+
+---
+
+## 部署流程完整版 (v1.7.4)
+
+### 1. 写作阶段
+1. 读 BLOG-PLAN.md 确认文章规划
+2. 在 drafts/ 写Markdown初稿
+3. 用 humanizer 去AI味
+4. 转HTML (基于_article-template.html)
+5. SEO优化 (meta标签)
+
+### 2. 分类与日期
+6. **确定文章分类** (product或tech)
+7. **设置发布日期** (多篇文章要分散日期)
+
+### 3. 更新首页
+8. 在 blog/index.html 正确位置插入文章卡片
+9. 设置正确的 `data-category`
+10. 更新 stats-bar 文章总数
+
+### 4. 部署
+11. 同步到生产环境
+12. 更新 sitemap.xml
+13. Git commit + tag
+
+### 5. 验证 (必须执行)
+14. 运行分类验证脚本
+15. 检查stats-bar显示
+16. 测试筛选按钮功能
+17. 浏览器实际测试
+18. 响应式布局测试
+
+### 6. 文档
+19. 更新 BLOG-PLAN.md 已发布列表
+20. 记录到 memory/YYYY-MM-DD.md
+
+---
+
+## 自动化验证脚本
+
+创建 `/root/.openclaw/workspace/projects/allen-site/blog/verify-blog.sh`:
+
+```bash
+#!/bin/bash
+echo "=========================================="
+echo "博客发布验证"
+echo "=========================================="
+echo ""
+
+# 1. 分类统计
+echo "【1】文章分类统计"
+curl -s https://allen00.top/blog/ | grep 'data-category=' | grep -o 'data-category="[^"]*"' | sort | uniq -c
+total=$(curl -s https://allen00.top/blog/ | grep -c 'data-category=')
+echo "总计: $total 篇"
+echo ""
+
+# 2. Stats Bar
+echo "【2】Stats Bar"
+curl -s https://allen00.top/blog/ | grep -A2 '<div class="stats-bar">'
+echo ""
+
+# 3. 筛选按钮
+echo "【3】筛选按钮"
+curl -s https://allen00.top/blog/ | grep "filter-btn" | grep -o 'id="filter-[^"]*"'
+echo ""
+
+# 4. JavaScript初始化
+echo "【4】JavaScript初始化"
+curl -s https://allen00.top/blog/ | grep "filterPosts('all')" && echo "✅ 初始化正常" || echo "❌ 初始化缺失"
+echo ""
+
+# 5. 文章可见性
+echo "【5】文章标题(前6篇)"
+curl -s https://allen00.top/blog/ | grep -o "<h2>.*</h2>" | head -6 | nl
+echo ""
+
+echo "=========================================="
+echo "验证完成"
+echo "=========================================="
+```
+
+使用方法:
+```bash
+chmod +x /root/.openclaw/workspace/projects/allen-site/blog/verify-blog.sh
+/root/.openclaw/workspace/projects/allen-site/blog/verify-blog.sh
+```
+
