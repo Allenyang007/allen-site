@@ -746,3 +746,348 @@ curl -s https://allen00.top/blog/ | grep 'data-category=' | grep -o 'data-catego
 # 检查移动端padding
 curl -s https://allen00.top/blog/[article]/ | grep -A2 "@media(max-width:1100px)"
 ```
+
+---
+
+## 博客发布规范化流程 (2026-03-08 更新)
+
+### 强制执行的质量保证流程
+
+基于实际部署经验,建立10阶段检查清单,避免反复修改和低级错误。
+
+#### 阶段1: 内容准备 (Markdown)
+
+```bash
+# 验证Markdown文件
+cat blog/drafts/draft-xxx.md | head -30
+
+# 必检项:
+✓ 标题使用中文破折号"——"(不是英文--)
+✓ description简洁(不超过100字)
+✓ 日期格式YYYY-MM-DD
+✓ 没有多余的引言段落
+✓ 章节结构清晰
+✓ 没有"三堵墙"等不需要的内容
+```
+
+#### 阶段2: HTML生成
+
+**方法1: 使用subagent (推荐)**
+```bash
+# 派发给subagent生成
+sessions_spawn(
+  task="从Markdown生成HTML",
+  runtime="subagent"
+)
+```
+
+**方法2: 手动转换**
+- 使用已有文章作为模板
+- 替换标题、内容、TOC
+- 确保UTF-8编码
+
+#### 阶段3: 内容验证 (必须)
+
+```bash
+cd blog/[article-name]
+
+# 1. 检查H1标题
+grep "<h1>" index.html
+# 必须: 标题正确,无乱码
+
+# 2. 检查subtitle
+grep "subtitle" index.html
+# 必须: 无结果(除非明确需要)
+
+# 3. 检查meta description
+grep "meta name=\"description\"" index.html
+# 必须: 简洁或无
+
+# 4. 检查章节数
+grep -c "<h2" index.html
+# 必须: 与Markdown一致
+
+# 5. 检查编码
+file index.html
+# 必须: UTF-8 Unicode text
+
+# 6. 检查特殊字符
+grep "——" index.html | cat -A
+# 必须: 无乱码(M-开头的字符)
+```
+
+#### 阶段4: 布局验证
+
+```bash
+# 检查响应式断点
+grep "@media" index.html | grep -o "max-width:[0-9]*px"
+
+# 必检项:
+✓ 有1100px断点(TOC隐藏)
+✓ 有768px断点(移动端)
+✓ 有480px断点(小屏幕)
+✓ 移动端padding对称(88px 24px 60px 24px)
+✓ 桌面端max-width: 900px
+```
+
+#### 阶段5: 本地预览 (必须)
+
+```bash
+# 启动本地服务器
+cd /root/.openclaw/workspace/projects/allen-site
+python3 -m http.server 8000 &
+
+# 浏览器访问: http://localhost:8000/blog/[article-name]/
+
+# 必检项:
+✓ 标题显示正确
+✓ 内容完整无混乱
+✓ TOC可点击跳转
+✓ F12切换移动端模式(375px/768px/1024px)
+✓ 深色模式正常
+✓ 无JavaScript错误
+```
+
+#### 阶段6: 质量检查脚本
+
+```bash
+# 运行自动化检查
+cd blog
+./qa-check.sh [article-name]
+
+# 脚本会检查:
+- 文件编码
+- 标题乱码
+- subtitle
+- meta标签
+- 章节数量
+- 响应式断点
+- 不该有的内容
+```
+
+#### 阶段7: 部署到生产
+
+```bash
+cd /root/.openclaw/workspace/projects/allen-site
+
+# 1. 先pull最新代码
+git pull
+
+# 2. 同步文件
+rsync -av blog/[article-name]/ /var/www/allen-site/blog/[article-name]/
+
+# 3. 重启nginx (不是reload!)
+systemctl restart nginx
+
+# 4. 等待生效
+sleep 2
+```
+
+#### 阶段8: 线上验证 (必须)
+
+```bash
+URL="https://allen00.top/blog/[article-name]/"
+
+# 1. 检查HTTP状态
+curl -I $URL | grep "200 OK"
+
+# 2. 检查H1标题
+curl -s $URL | grep "<h1>" | sed 's/<[^>]*>//g'
+
+# 3. 检查文件大小
+curl -s $URL | wc -c
+
+# 4. 检查乱码
+curl -s $URL | grep "M-" && echo "❌ 有乱码!" || echo "✅ 无乱码"
+
+# 5. 检查不该有的内容
+curl -s $URL | grep "我见过不少" && echo "⚠️ 有引言" || echo "✅ 正常"
+```
+
+#### 阶段9: 浏览器验证 (必须)
+
+```
+1. 打开无痕窗口 (Ctrl+Shift+N)
+2. 访问文章URL
+3. 检查标题、内容、布局
+4. F12切换移动端模式
+5. 测试375px/768px/1024px
+6. 检查深色模式
+7. 点击TOC链接测试
+```
+
+#### 阶段10: Git提交
+
+```bash
+cd /root/.openclaw/workspace/projects/allen-site
+
+git add blog/[article-name]/
+git commit -m "feat: 新增文章 [标题]
+
+- 内容: [简述]
+- 字数: [约XXX字]
+- 分类: product/tech
+- 日期: YYYY-MM-DD"
+
+git push origin main
+
+# 打tag
+git tag -a v1.x.x -m "新增文章: [标题]"
+git push origin --tags
+```
+
+---
+
+## 常见问题及解决方案
+
+### 问题1: 标题显示乱码
+
+**现象:** 中文破折号"——"显示为M-eM-$M-'等乱码
+
+**原因:** 文件编码不是UTF-8
+
+**解决:**
+```bash
+# 检查编码
+file index.html
+
+# 如果不是UTF-8,重新生成
+# Python脚本必须指定encoding='utf-8'
+```
+
+### 问题2: 删除内容不生效
+
+**现象:** 多次删除某段内容,浏览器仍显示
+
+**原因:** 浏览器缓存或nginx缓存
+
+**解决:**
+```bash
+# 1. 重启nginx(不是reload)
+systemctl restart nginx
+
+# 2. 告诉用户强制刷新
+# Ctrl+Shift+R (Windows)
+# Cmd+Shift+R (Mac)
+
+# 3. 或使用无痕模式验证
+```
+
+### 问题3: 移动端布局很窄
+
+**现象:** 桌面端正常,移动端内容区域很窄,左右大量空白
+
+**原因:** TOC隐藏后padding-left没有移除
+
+**解决:**
+```bash
+# 检查1100px断点的padding
+grep -A5 "@media(max-width:1100px)" index.html
+
+# 必须是对称的:
+# padding: 88px 24px 60px 24px
+# 不能是: padding: 88px 24px 60px 260px
+```
+
+### 问题4: 文章内容混乱
+
+**现象:** HTML中混入其他文章的标题或内容
+
+**原因:** 从备份恢复时没有验证,或正则表达式匹配错误
+
+**解决:**
+```bash
+# 不要盲目相信备份文件
+# 部署前必须验证H1标题
+grep "<h1>" index.html
+
+# 如果错误,从Markdown重新生成
+```
+
+### 问题5: Git推送失败
+
+**现象:** `! [rejected] main -> main (fetch first)`
+
+**原因:** 远程有新提交,本地和远程不一致
+
+**解决:**
+```bash
+git pull --rebase
+git push origin main
+```
+
+---
+
+## 10条核心原则 (必须遵守)
+
+1. **不要相信工具输出,要验证实际结果**
+   - 工具说"已删除",不代表真的删除了
+   - 必须用grep/curl验证
+
+2. **部署后必须重启nginx,不是reload**
+   - `systemctl restart nginx`
+   - 不是`systemctl reload nginx`
+
+3. **用户说"还在"就是真的还在**
+   - 不要争辩"我这边没有"
+   - 立即检查线上文件
+
+4. **所有文件操作指定UTF-8编码**
+   - Python: `open(file, 'r', encoding='utf-8')`
+   - 避免乱码问题
+
+5. **正则表达式用非贪婪匹配**
+   - 用`.*?`不用`.*`
+   - 明确指定结束标记
+
+6. **移动端必须测试**
+   - F12设备模拟
+   - 测试375px/768px/1024px
+
+7. **本地预览是必须的,不是可选的**
+   - `python3 -m http.server 8000`
+   - 部署前必须在浏览器中检查
+
+8. **Git操作前先pull**
+   - `git pull`
+   - 避免冲突
+
+9. **删除后立即验证**
+   - `grep -c "删除的内容" file`
+   - 确认结果为0
+
+10. **不要反复修改同一个问题,一次做对**
+    - 理解需求
+    - 验证结果
+    - 不要说10次"已删除"
+
+---
+
+## 快速命令参考
+
+```bash
+# 质量检查
+./blog/qa-check.sh [article-name]
+
+# 本地预览
+python3 -m http.server 8000 &
+
+# 部署
+rsync -av blog/[article]/ /var/www/allen-site/blog/[article]/
+systemctl restart nginx
+
+# 验证
+curl -s https://allen00.top/blog/[article]/ | grep "<h1>"
+
+# 博客首页验证
+./blog/verify-blog.sh
+```
+
+---
+
+## 相关文档
+
+- **Blog QA Skill**: `blog/skills/blog-qa/SKILL.md` - 完整的问题总结和解决方案
+- **质量检查脚本**: `blog/qa-check.sh` - 自动化验证工具
+- **博客验证脚本**: `blog/verify-blog.sh` - 首页验证工具
+- **写作规划**: `blog/BLOG-PLAN.md` - 文章规划和写作原则
