@@ -318,46 +318,152 @@ footer{
     <div class="nav-links">
       <a href="/">首页</a>
       <a href="/guide/">AI 指南</a>
-      <a href="/blog/" class="active">博客</a>
-      <a href="javascript:void(0)" class="disabled">工具</a>
-      <a href="/about/">关于</a>
-      <button class="theme-btn" onclick="toggleTheme()" aria-label="切换主题">🌙</button>
+      <a href="/blog/ai-product-vs-traditional-software/" class="post-card fade-in" data-category="product">
+    <div class="post-stripe" style="background:var(--accent-green)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-03-08</span>
+        <span class="dot">·</span>
+        <span>约 2800 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 6 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-ai">AI产品</span>
+      </div>
+      <h2>AI产品和传统软件,思维上的断层在哪</h2>
+      <p class="desc">从传统软件转做AI产品,最大的认知冲击不是技术,而是对"系统该如何表现"的底层假设被颠覆。</p>
+      <span class="arrow">阅读全文 →</span>
     </div>
-    <button class="hamburger" onclick="toggleMenu()" aria-label="菜单">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-</nav>
-<div class="mobile-menu" id="mobile-menu">
-  <a href="/">首页</a>
-  <a href="/guide/">AI 指南</a>
-  <a href="/blog/" class="active">博客</a>
-  <a href="javascript:void(0)" class="disabled">工具 · 即将上线</a>
-  <a href="/about/">关于</a>
-  <a href="javascript:void(0)" onclick="toggleTheme();toggleMenu()">🎨 切换主题</a>
-</div>
-
-<section class="hero">
-  <h1>Allen's<span> Blog</span></h1>
-  <p>产品思考、技术架构——记录我的思考与实践</p>
-</section>
-
-<div class="stats-bar">
-  <div class="stat"><strong>6</strong> 篇文章</div>
-  <div class="stat"><strong>60000+</strong> 字</div>
-  <div class="stat"><strong>6</strong> 个标签</div>
-</div>
-
-<!-- 分类筛选 -->
-<div style="max-width:900px;margin:0 auto 24px;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap">
-  <button onclick="filterPosts('all')" class="post-tag tag-default" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-all">全部</button>
-  <button onclick="filterPosts('thinking')" class="post-tag tag-thinking" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-thinking">产品思考</button>
-  <button onclick="filterPosts('tech')" class="post-tag tag-tech" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-tech">技术博客</button>
-</div>
-
-<section class="posts">
-
-  <!-- Agent 系列 1 -->
+  </a>
+  <a href="/blog/llm-project-delivery-mindset/" class="post-card fade-in" data-category="product">
+    <div class="post-stripe" style="background:var(--accent-orange)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-03-08</span>
+        <span class="dot">·</span>
+        <span>约 3200 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 7 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-product">项目管理</span>
+      </div>
+      <h2>大模型项目为什么难交付——不是技术问题,是认知问题</h2>
+      <p class="desc">大模型项目交付难,根因不在技术,而在团队用传统软件思维管理AI项目。</p>
+      <span class="arrow">阅读全文 →</span>
+    </div>
+  </a>
+  <a href="/blog/rag-benefits-and-engineering-pitfalls/" class="post-card fade-in" data-category="tech">
+    <div class="post-stripe" style="background:var(--accent-cyan)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-03-08</span>
+        <span class="dot">·</span>
+        <span>约 3600 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 8 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-tech">RAG</span>
+      </div>
+      <h2>RAG 解决了什么问题,又带来了什么新问题</h2>
+      <p class="desc">从医学 AI 写作项目实战出发,拆解 RAG 检索增强生成的真实收益与工程陷阱。</p>
+      <span class="arrow">阅读全文 →</span>
+    </div>
+  </a>
+  <a href="/blog/llm-knowledge-for-product-managers/" class="post-card fade-in" data-category="product">
+    <div class="post-stripe" style="background:var(--accent-orange)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-03-08</span>
+        <span class="dot">·</span>
+        <span>约 3200 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 7 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-product">产品经理</span>
+      </div>
+      <h2>产品经理需要懂大模型原理吗</h2>
+      <p class="desc">AI产品经理不需要会训练模型,但必须理解模型的行为边界。</p>
+      <span class="arrow">阅读全文 →</span>
+    </div>
+  </a>
+  <a href="/blog/prompt-is-spec-not-magic/" class="post-card fade-in" data-category="tech">
+    <div class="post-stripe" style="background:var(--accent-cyan)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-03-08</span>
+        <span class="dot">·</span>
+        <span>约 2800 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 6 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-tech">Prompt</span>
+      </div>
+      <h2>Prompt不是魔法咒语,是需求文档</h2>
+      <p class="desc">很多团队拿到AI烂输出就想换模型,但问题往往出在Prompt。</p>
+      <span class="arrow">阅读全文 →</span>
+    </div>
+  </a>
+  <a href="/blog/workflow-vs-agent-decision-framework/" class="post-card fade-in" data-category="tech">
+    <div class="post-stripe" style="background:var(--accent-green)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-03-08</span>
+        <span class="dot">·</span>
+        <span>约 2800 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 6 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-ai">Workflow</span>
+      </div>
+      <h2>Workflow 和 Agent 的边界在哪——我的判断框架</h2>
+      <p class="desc">基于 59 个 Dify 工作流的实战经验,分享 Workflow 与 Agent 的选型判断框架。</p>
+      <span class="arrow">阅读全文 →</span>
+    </div>
+  </a>
+  <a href="/blog/ai-agent-complete-guide/" class="post-card fade-in" data-category="tech">
+    <div class="post-stripe" style="background:var(--accent-cyan)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-02-19</span>
+        <span class="dot">·</span>
+        <span>约 16000 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 25 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-ai">AI</span>
+        <span class="post-tag tag-agent">Agent</span>
+        <span class="post-tag tag-mcp">MCP</span>
+      </div>
+      <h2>从大模型到 Agent：AI 应用的完整技术栈</h2>
+      <p class="desc">写给所有人的 AI 技术栈全景指南——从能聊天到能干活，从单兵到团队。深入浅出讲透大模型、RAG、Agent、MCP、Skills 的完整技术链路。</p>
+      <span class="arrow">阅读全文 →</span>
+    </div>
+  </a>
+  <a href="/blog/ai-pm-fundamentals/" class="post-card fade-in" data-category="thinking">
+    <div class="post-stripe" style="background:var(--accent-pink)"></div>
+    <div class="post-content">
+      <div class="post-meta">
+        <span>📅 2026-02-22</span>
+        <span class="dot">·</span>
+        <span>约 4000 字</span>
+        <span class="dot">·</span>
+        <span>⏱ 阅读约 10 分钟</span>
+      </div>
+      <div class="post-meta" style="margin-bottom:16px">
+        <span class="post-tag tag-thinking">产品思考</span>
+      </div>
+      <h2>工具越强，基本功越值钱</h2>
+      <p class="desc">AI 不会淘汰产品经理，但会淘汰没有基本功的产品经理。一个应用型 AI PM 在春节假期的思考——关于基本功、行业知识和放大器效应。</p>
+      <span class="arrow">阅读全文 →</span>
+    </div>
+  </a>
   <a href="/blog/agent-series-01/" class="post-card fade-in" data-category="tech">
     <div class="post-stripe" style="background:linear-gradient(90deg,var(--accent-green),var(--accent-blue))"></div>
     <div class="post-content">
@@ -377,8 +483,6 @@ footer{
       <span class="arrow">阅读全文 →</span>
     </div>
   </a>
-
-  <!-- Agent 系列 2 -->
   <a href="/blog/agent-series-02/" class="post-card fade-in" data-category="tech">
     <div class="post-stripe" style="background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple))"></div>
     <div class="post-content">
@@ -399,8 +503,6 @@ footer{
       <span class="arrow">阅读全文 →</span>
     </div>
   </a>
-
-  <!-- Agent 系列 3 -->
   <a href="/blog/agent-series-03/" class="post-card fade-in" data-category="thinking">
     <div class="post-stripe" style="background:linear-gradient(90deg,var(--accent-orange),var(--accent-pink))"></div>
     <div class="post-content">
@@ -421,8 +523,6 @@ footer{
       <span class="arrow">阅读全文 →</span>
     </div>
   </a>
-
-  <!-- Agent 系列 4 -->
   <a href="/blog/agent-series-04/" class="post-card fade-in" data-category="tech">
     <div class="post-stripe" style="background:linear-gradient(90deg,var(--accent-cyan),var(--accent-green))"></div>
     <div class="post-content">
@@ -440,163 +540,6 @@ footer{
       </div>
       <h2>Claude Code、Codex、OpenClaw 实战操作指南</h2>
       <p class="desc">从安装到进阶，三款 Agent 工具的完整实战教程。手把手带你上手。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <!-- 产品思考 -->
-  <a href="/blog/ai-pm-fundamentals/" class="post-card fade-in" data-category="thinking">
-    <div class="post-stripe" style="background:var(--accent-pink)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-02-22</span>
-        <span class="dot">·</span>
-        <span>约 4000 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 10 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-thinking">产品思考</span>
-      </div>
-      <h2>工具越强，基本功越值钱</h2>
-      <p class="desc">AI 不会淘汰产品经理，但会淘汰没有基本功的产品经理。一个应用型 AI PM 在春节假期的思考——关于基本功、行业知识和放大器效应。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <!-- 技术博客 -->
-
-  <a href="/blog/ai-product-vs-traditional-software/" class="post-card fade-in" data-category="product">
-    <div class="post-stripe" style="background:var(--accent-green)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-03-08</span>
-        <span class="dot">·</span>
-        <span>约 2800 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 6 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-ai">AI产品</span>
-      </div>
-      <h2>AI产品和传统软件,思维上的断层在哪</h2>
-      <p class="desc">从传统软件转做AI产品,最大的认知冲击不是技术,而是对"系统该如何表现"的底层假设被颠覆。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <a href="/blog/llm-project-delivery-mindset/" class="post-card fade-in" data-category="product">
-    <div class="post-stripe" style="background:var(--accent-orange)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-03-08</span>
-        <span class="dot">·</span>
-        <span>约 3200 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 7 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-product">项目管理</span>
-      </div>
-      <h2>大模型项目为什么难交付——不是技术问题,是认知问题</h2>
-      <p class="desc">大模型项目交付难,根因不在技术,而在团队用传统软件思维管理AI项目。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <a href="/blog/rag-benefits-and-engineering-pitfalls/" class="post-card fade-in" data-category="tech">
-    <div class="post-stripe" style="background:var(--accent-cyan)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-03-08</span>
-        <span class="dot">·</span>
-        <span>约 3600 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 8 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-tech">RAG</span>
-      </div>
-      <h2>RAG 解决了什么问题,又带来了什么新问题</h2>
-      <p class="desc">从医学 AI 写作项目实战出发,拆解 RAG 检索增强生成的真实收益与工程陷阱。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <a href="/blog/llm-knowledge-for-product-managers/" class="post-card fade-in" data-category="product">
-    <div class="post-stripe" style="background:var(--accent-orange)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-03-08</span>
-        <span class="dot">·</span>
-        <span>约 3200 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 7 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-product">产品经理</span>
-      </div>
-      <h2>产品经理需要懂大模型原理吗</h2>
-      <p class="desc">AI产品经理不需要会训练模型,但必须理解模型的行为边界。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <a href="/blog/prompt-is-spec-not-magic/" class="post-card fade-in" data-category="tech">
-    <div class="post-stripe" style="background:var(--accent-cyan)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-03-08</span>
-        <span class="dot">·</span>
-        <span>约 2800 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 6 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-tech">Prompt</span>
-      </div>
-      <h2>Prompt不是魔法咒语,是需求文档</h2>
-      <p class="desc">很多团队拿到AI烂输出就想换模型,但问题往往出在Prompt。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <a href="/blog/workflow-vs-agent-decision-framework/" class="post-card fade-in" data-category="tech">
-    <div class="post-stripe" style="background:var(--accent-green)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-03-08</span>
-        <span class="dot">·</span>
-        <span>约 2800 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 6 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-ai">Workflow</span>
-      </div>
-      <h2>Workflow 和 Agent 的边界在哪——我的判断框架</h2>
-      <p class="desc">基于 59 个 Dify 工作流的实战经验,分享 Workflow 与 Agent 的选型判断框架。</p>
-      <span class="arrow">阅读全文 →</span>
-    </div>
-  </a>
-
-  <a href="/blog/ai-agent-complete-guide/" class="post-card fade-in" data-category="tech">
-    <div class="post-stripe" style="background:var(--accent-cyan)"></div>
-    <div class="post-content">
-      <div class="post-meta">
-        <span>📅 2026-02-19</span>
-        <span class="dot">·</span>
-        <span>约 16000 字</span>
-        <span class="dot">·</span>
-        <span>⏱ 阅读约 25 分钟</span>
-      </div>
-      <div class="post-meta" style="margin-bottom:16px">
-        <span class="post-tag tag-ai">AI</span>
-        <span class="post-tag tag-agent">Agent</span>
-        <span class="post-tag tag-mcp">MCP</span>
-      </div>
-      <h2>从大模型到 Agent：AI 应用的完整技术栈</h2>
-      <p class="desc">写给所有人的 AI 技术栈全景指南——从能聊天到能干活，从单兵到团队。深入浅出讲透大模型、RAG、Agent、MCP、Skills 的完整技术链路。</p>
       <span class="arrow">阅读全文 →</span>
     </div>
   </a>
