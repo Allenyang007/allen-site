@@ -196,6 +196,18 @@ nav{
 .post-meta .dot{color:var(--border)}
 
 /* Tag colors */
+.filter-btn{
+  cursor:pointer;border:none;font-size:.85rem;padding:8px 18px;
+  border-radius:20px;font-weight:600;transition:all .2s;
+  background:var(--bg-card);color:var(--text-secondary);
+  border:1px solid var(--border)
+}
+.filter-btn:hover{
+  background:var(--bg-card-hover);color:var(--text)
+}
+.filter-btn.active{
+  background:var(--accent-green);color:#fff;border-color:var(--accent-green)
+}
 .post-tag{
   font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:8px;
   display:inline-block;transition:transform .2s
@@ -298,7 +310,19 @@ footer{
   .post-card h2{font-size:1.1rem}
 
   .post-meta{gap:6px}
-  .post-tag{font-size:.65rem;padding:2px 8px}
+  .filter-btn{
+  cursor:pointer;border:none;font-size:.85rem;padding:8px 18px;
+  border-radius:20px;font-weight:600;transition:all .2s;
+  background:var(--bg-card);color:var(--text-secondary);
+  border:1px solid var(--border)
+}
+.filter-btn:hover{
+  background:var(--bg-card-hover);color:var(--text)
+}
+.filter-btn.active{
+  background:var(--accent-green);color:#fff;border-color:var(--accent-green)
+}
+.post-tag{font-size:.65rem;padding:2px 8px}
 
   .footer-links{flex-direction:column;gap:8px}
   footer{padding:36px 16px 32px}
@@ -348,10 +372,10 @@ footer{
   </div>
 
 <!-- 分类筛选 -->
-<div style="max-width:900px;margin:0 auto 24px;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap">
-  <button onclick="filterPosts('all')" class="post-tag tag-default" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-all">全部</button>
-  <button onclick="filterPosts('product')" class="post-tag tag-product" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-product">产品思考</button>
-  <button onclick="filterPosts('tech')" class="post-tag tag-tech" style="cursor:pointer;border:none;font-size:.8rem;padding:6px 16px;border-radius:20px;font-weight:600" id="filter-tech">技术博客</button>
+<div class="filter-buttons" style="max-width:900px;margin:0 auto 24px;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap">
+  <button onclick="filterPosts('all')" class="filter-btn" id="filter-all">全部</button>
+  <button onclick="filterPosts('product')" class="filter-btn" id="filter-product">产品思考</button>
+  <button onclick="filterPosts('tech')" class="filter-btn" id="filter-tech">技术博客</button>
 </div>
 
 <section class="posts">
@@ -671,8 +695,8 @@ function filterPosts(cat){
       }
     }
   });
-  document.querySelectorAll('[id^="filter-"]').forEach(function(b){b.style.opacity='0.5'});
-  document.getElementById('filter-'+cat).style.opacity='1';
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active')});
+  document.getElementById('filter-'+cat).classList.add('active');
 }
 // Init: show all
 document.querySelectorAll('[id^="filter-"]').forEach(function(b){b.style.opacity='0.5'});
